@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xm06.pms.dao.ProjectMapper" >
+  <resultMap id="BaseResultMap" type="org.xm06.pms.vo.Project" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="project_desc" property="projectDesc" jdbcType="VARCHAR" />
+    <result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="completion_degree" property="completionDegree" jdbcType="DOUBLE" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="is_valid" property="isValid" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_name, project_desc, creator_id, group_id, completion_degree, create_date, 
+    update_date, is_valid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_project
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_project
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.xm06.pms.vo.Project" >
+    insert into t_project (id, project_name, project_desc, 
+      creator_id, group_id, completion_degree, 
+      create_date, update_date, is_valid
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{projectDesc,jdbcType=VARCHAR}, 
+      #{creatorId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{completionDegree,jdbcType=DOUBLE}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xm06.pms.vo.Project" >
+    insert into t_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="projectDesc != null" >
+        project_desc,
+      </if>
+      <if test="creatorId != null" >
+        creator_id,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="completionDegree != null" >
+        completion_degree,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDesc != null" >
+        #{projectDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="completionDegree != null" >
+        #{completionDegree,jdbcType=DOUBLE},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Project" >
+    update t_project
+    <set >
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDesc != null" >
+        project_desc = #{projectDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null" >
+        creator_id = #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="completionDegree != null" >
+        completion_degree = #{completionDegree,jdbcType=DOUBLE},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Project" >
+    update t_project
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      project_desc = #{projectDesc,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      completion_degree = #{completionDegree,jdbcType=DOUBLE},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_valid = #{isValid,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="queryByProjectNameAndGroupId" resultType="org.xm06.pms.vo.Project">
+    select * from t_project
+    where
+    project_name = #{projectName, jdbcType=VARCHAR}
+    and
+    group_id = #{groupId, jdbcType=INTEGER}
+  </select>
+
+  <select id="queryByGroupId" resultType="org.xm06.pms.vo.Project">
+    select * from t_project
+    where
+        group_id = #{groupId, jdbcType=INTEGER}
+  </select>
+
+  <select id="queryByCreatorId" resultType="org.xm06.pms.vo.Project">
+    select * from t_project
+    where
+        creator_id = #{creatorId, jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xm06.pms.dao.GroupMapper" >
+  <resultMap id="BaseResultMap" type="org.xm06.pms.vo.Group" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="group_name" property="groupName" jdbcType="VARCHAR" />
+    <result column="described" property="described" jdbcType="VARCHAR" />
+    <result column="manager_id" property="managerId" jdbcType="INTEGER" />
+    <result column="is_valid" property="isValid" jdbcType="BIT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, group_name, described, manager_id, is_valid, create_date, update_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_group
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_group
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.xm06.pms.vo.Group" >
+    insert into t_group (id, group_name, described, 
+      manager_id, is_valid, create_date, 
+      update_date)
+    values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{described,jdbcType=VARCHAR}, 
+      #{managerId,jdbcType=INTEGER}, #{isValid,jdbcType=BIT}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xm06.pms.vo.Group" >
+    insert into t_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="groupName != null" >
+        group_name,
+      </if>
+      <if test="described != null" >
+        described,
+      </if>
+      <if test="managerId != null" >
+        manager_id,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="groupName != null" >
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="described != null" >
+        #{described,jdbcType=VARCHAR},
+      </if>
+      <if test="managerId != null" >
+        #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=BIT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Group" >
+    update t_group
+    <set >
+      <if test="groupName != null" >
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="described != null" >
+        described = #{described,jdbcType=VARCHAR},
+      </if>
+      <if test="managerId != null" >
+        manager_id = #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=BIT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Group" >
+    update t_group
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      described = #{described,jdbcType=VARCHAR},
+      manager_id = #{managerId,jdbcType=INTEGER},
+      is_valid = #{isValid,jdbcType=BIT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="findGroupByGroupName" resultMap="groupMap">
+    select * from t_group where group_name = #{groupName}
+  </select>
+
+  <insert id="userAddInGroup" parameterType="Integer">
+    insert into t_user_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="queryIdByName" resultType="Integer">
+    select t_group.id from t_group where group_name = #{groupName}
+  </select>
+
+  <resultMap id="groupMap" type="org.xm06.pms.vo.Group">
+    <id column="id" property="id"/>
+    <result column="group_name" property="groupName"/>
+    <result column="described" property="described"/>
+    <result column="manager_id" property="managerId"/>
+    <result column="create_date" property="createDate"/>
+    <result column="update_date" property="updateDate"/>
+    <result column="is_valid" property="isValid"/>
+    <collection property="memberList" ofType="org.xm06.pms.vo.User"
+      select="findUserInGroup" column="{groupId=id}"
+    >
+      <id column="id" property="id"/>
+      <result column="user_name" property="userName"/>
+      <result column="true_name" property="trueName"/>
+      <result column="phone" property="phone"/>
+      <result column="email" property="email"/>
+      <result column="update_date" property="updateDate"/>
+      <result column="create_date" property="createDate"/>
+      <result column="is_valid" property="isValid"/>
+    </collection>
+  </resultMap>
+
+  <select id="findAll" resultMap="groupMap">
+    SELECT
+    g.*
+    FROM
+    t_group g
+  </select>
+
+<!--  内嵌查找-->
+  <select id="findUserInGroup" parameterType="java.util.Map" resultType="java.util.Map">
+    select
+    u.id,
+    u.user_name,
+    u.true_name,
+    u.email,
+    u.phone,
+    u.create_date,
+    u.update_date
+    from
+    t_user u,
+    t_user_group ug
+    where
+    u.id = ug.user_id and ug.group_id = #{groupId}
+  </select>
+
+  <select id="findGroupAllInfoById" resultMap="groupMap">
+    select
+    g.*
+    from
+    t_group g
+    where
+    g.id = #{id}
+  </select>
+
+
+  <select id="findGroupByManagerId" resultMap="groupMap">
+    SELECT
+    g.*
+    FROM
+    t_group g
+    where
+    g.manager_id = #{managerId}
+  </select>
+
+  <select id="totalCount" resultType="Integer">
+    select count(id) from t_group
+  </select>
+
+  <select id="findUserJoinedGroup" parameterType="Integer" resultMap="groupMap">
+    SELECT
+    g.*
+    FROM t_group g, t_user_group gu
+    WHERE g.id=gu.group_id
+    AND gu.user_id=#{userId}
+  </select>
+
+
+  <delete id="removeMember" parameterType="Integer">
+    delete from t_user_group where user_id=#{userId} and group_id=#{groupId}
+  </delete>
+
+  <select id="queryMemberIdList" parameterType="Integer" resultType="Integer">
+    select
+    u.id
+    from
+    t_user u,
+    t_user_group ug
+    where
+    u.id = ug.user_id and ug.group_id = ${groupId}
+  </select>
+
+</mapper>

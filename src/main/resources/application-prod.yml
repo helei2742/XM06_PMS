@@ -1,0 +1,64 @@
+server:
+  tomcat:
+    uri-encoding: utf-8
+  port: 80
+  servlet:
+    context-path: /XM06
+
+## 数据源配置
+spring:
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true
+  datasource:
+    type: com.mchange.v2.c3p0.ComboPooledDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    username: Administrator
+    password: XWClassroom20202023
+    url: jdbc:mysql://127.0.0.1:3366/xm06?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: LEGACYHTML5
+    encoding: UTF-8
+
+
+  mail:
+    host: smtp.qq.com
+    username: 914577981@qq.com
+    password: jwvgwxhhnhnhbdhe
+    default-encoding: UTF-8
+  devtools:
+      restart:
+        enabled: true
+        # 设置重启目录，添加目录的文件需要restart
+        additional-paths: src/main/java
+        #解决项目自动重启编译后接口404的问题
+        poll-interval: 5000
+        quiet-period: 1000
+
+## mybatis的配置
+mybatis:
+  mapper-locations: classpath:/mappers/*.xml
+  type-aliases-package:
+  configuration:
+    ## 下划线转驼峰
+    map-underscore-to-camel-case: true
+
+## 分页助手设置
+pagehelper:
+  helper-dialect: mysql
+
+## 显示dao 执行sql语句
+logging:
+  level:
+    org:
+      xm06:
+        pms:
+          dao: debug
+

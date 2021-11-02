@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xm06.pms.dao.TaskMapper" >
+  <resultMap id="BaseResultMap" type="org.xm06.pms.vo.Task" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+    <result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="deadline" property="deadline" jdbcType="TIMESTAMP"/>
+    <result column="is_valid" property="isValid" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, task_name, creator_id, group_id, description, deadline, create_date, is_valid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.xm06.pms.vo.Task" >
+    insert into t_task (id, task_name, creator_id, 
+      group_id, description, deadline, create_date,
+      is_valid)
+    values (#{id,jdbcType=INTEGER}, #{taskName,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, 
+      #{groupId,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{deadline,jdbcType=TIMESTAMP},
+       #{createDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xm06.pms.vo.Task" >
+    insert into t_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="taskName != null" >
+        task_name,
+      </if>
+      <if test="creatorId != null" >
+        creator_id,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="deadline != null" >
+        deadline,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskName != null" >
+        #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null" >
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Task" >
+    update t_task
+    <set >
+      <if test="taskName != null" >
+        task_name = #{taskName,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null" >
+        creator_id = #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="deadline != null" >
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Task" >
+    update t_task
+    set task_name = #{taskName,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_valid = #{isValid,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByTaskName" parameterType="java.lang.String" resultType="org.xm06.pms.vo.Task">
+    select
+    *
+    from
+    t_task
+    where
+    task_name = #{taskName}
+  </select>
+
+  <!--内嵌查找用户-->
+  <select id="selectUser" parameterType="java.lang.Integer"
+          resultType="org.xm06.pms.vo.User">
+    select
+    u.id,
+    u.user_name,
+    u.true_name,
+    u.email,
+    u.phone,
+    u.create_date,
+    u.update_date,
+    u.is_valid
+    from
+    t_user u
+    where
+    u.id = #{userId}
+  </select>
+
+  <resultMap id="taskMap" type="org.xm06.pms.vo.Task">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+    <result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="deadline" property="deadline" jdbcType="TIMESTAMP"/>
+    <result column="is_valid" property="isValid" jdbcType="BIT" />
+
+    <association property="creator" javaType="org.xm06.pms.vo.User"
+                select="selectUser" column="creator_id">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="user_name" jdbcType="VARCHAR" property="userName" />
+      <result column="true_name" jdbcType="VARCHAR" property="trueName" />
+      <result column="email" jdbcType="VARCHAR" property="email" />
+      <result column="phone" jdbcType="VARCHAR" property="phone" />
+      <result column="is_valid" jdbcType="BIT" property="isValid" />
+      <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+      <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    </association>
+  </resultMap>
+
+  <select id="queryGroupTask" parameterType="java.lang.Integer" resultMap="taskMap">
+    select * from t_task
+    where group_id = #{groupId}
+    order by create_date desc
+  </select>
+
+  <select id="queryUserTask" parameterType="java.lang.Integer" resultMap="taskMap">
+    SELECT
+    t.*
+    FROM
+    t_user_group ug,
+    t_task t
+    WHERE
+    t.group_id = ug.group_id AND ug.user_id = #{userId}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryUserCreatTask" parameterType="java.lang.Integer" resultMap="taskMap">
+    select
+    t.*
+    from
+    t_task t
+    where t.creator_id = #{userId}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryDoingTask" parameterType="java.lang.Integer" resultMap="taskMap">
+    SELECT
+    t.*
+    FROM
+    t_user_group ug,
+    t_task t
+    WHERE
+    t.group_id = ug.group_id AND ug.user_id = #{userId} and t.deadline > now()
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="querySubmitTask" parameterType="java.lang.Integer" resultMap="taskMap">
+    select
+    DISTINCT
+    t.*
+    from
+    t_task t,
+    t_task_record tr
+    where
+    t.id = tr.task_id and tr.user_id = #{userId} order by tr.submit_date desc
+  </select>
+
+  <select id="queryNotSubmitTask" parameterType="java.lang.Integer" resultMap="taskMap">
+    SELECT
+    DISTINCT
+    t.*
+    FROM
+    t_task t
+    WHERE
+    t.id
+    NOT IN
+    (
+        SELECT
+        DISTINCT
+        t.id
+        FROM
+        t_task t,
+        t_task_record tr
+        WHERE
+        tr.user_id = #{userId} AND tr.task_id = t.`id`
+     )
+  </select>
+
+  <select id="queryOutDateTask" parameterType="java.lang.Integer" resultMap="taskMap">
+    SELECT
+    t.*
+    FROM
+    t_user_group ug,
+    t_task t
+    WHERE
+    t.group_id = ug.group_id AND ug.user_id = #{userId} and now() > t.deadline
+    ORDER BY create_date DESC
+  </select>
+
+</mapper>

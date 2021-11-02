@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xm06.pms.dao.TaskRecordMapper" >
+  <resultMap id="BaseResultMap" type="org.xm06.pms.vo.TaskRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="submit_date" property="submitDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, task_id, user_id, description, file_url, submit_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_task_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_task_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.xm06.pms.vo.TaskRecord" >
+    insert into t_task_record (id, task_id, user_id, 
+      description, file_url, submit_date
+      )
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{submitDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xm06.pms.vo.TaskRecord" >
+    insert into t_task_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="fileUrl != null" >
+        file_url,
+      </if>
+      <if test="submitDate != null" >
+        submit_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="submitDate != null" >
+        #{submitDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.TaskRecord" >
+    update t_task_record
+    <set >
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="submitDate != null" >
+        submit_date = #{submitDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.TaskRecord" >
+    update t_task_record
+    set task_id = #{taskId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      submit_date = #{submitDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <!--内嵌查找用户-->
+  <select id="selectUser" parameterType="java.lang.Integer"
+          resultType="org.xm06.pms.vo.User">
+    select
+    u.id,
+    u.user_name,
+    u.true_name,
+    u.email,
+    u.phone,
+    u.create_date,
+    u.update_date,
+    u.is_valid
+    from
+    t_user u
+    where
+    u.id = #{userId}
+  </select>
+  <resultMap id="taskRecordMap" type="org.xm06.pms.vo.TaskRecord">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="file_url" property="fileUrl" jdbcType="VARCHAR" />
+    <result column="submit_date" property="submitDate" jdbcType="TIMESTAMP" />
+
+    <association property="user" javaType="org.xm06.pms.vo.User"
+                 select="selectUser" column="user_id">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="user_name" jdbcType="VARCHAR" property="userName" />
+      <result column="true_name" jdbcType="VARCHAR" property="trueName" />
+      <result column="email" jdbcType="VARCHAR" property="email" />
+      <result column="phone" jdbcType="VARCHAR" property="phone" />
+      <result column="is_valid" jdbcType="BIT" property="isValid" />
+      <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+      <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    </association>
+  </resultMap>
+
+  <select id="queryUserTaskRecord" parameterType="java.lang.Integer" resultMap="taskRecordMap">
+    select * from t_task_record where user_id = #{userId} order by submit_date desc
+  </select>
+
+  <select id="selectByTaskId" parameterType="java.lang.Integer"  resultMap="taskRecordMap">
+    select * from t_task_record where task_id = #{taskId} order by submit_date desc
+  </select>
+
+  <select id="selectUserRecordOfTask" parameterType="java.lang.Integer" resultMap="taskRecordMap">
+    select * from t_task_record
+    where
+    task_id = #{taskId} and user_id = #{userId}
+    order by submit_time desc
+  </select>
+
+</mapper>
