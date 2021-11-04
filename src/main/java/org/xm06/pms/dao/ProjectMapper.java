@@ -101,7 +101,7 @@ public interface ProjectMapper extends BaseMapper<Project, Integer> {
      * 查询所有公开项目，完成度降序
      * @return
      */
-    List<Project> queryPublicProjectCompletionDegree();
+    List<Project> queryPublicProjectCompletionDegreeDESC();
 
     /**
      * 查询所有公开项目，完成度升序

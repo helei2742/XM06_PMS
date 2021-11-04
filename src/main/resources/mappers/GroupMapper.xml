@@ -174,7 +174,7 @@
     </collection>
   </resultMap>
 <!--  内嵌查找-->
-  <select id="findUserInGroup" parameterType="java.util.Map" resultType="java.util.Map">
+  <select id="findUserInGroup" parameterType="java.util.Map" resultType="org.xm06.pms.vo.User">
     select
     u.id,
     u.user_name,

@@ -175,6 +175,7 @@ public class GroupService {
         AssertUtil.isTrue(!invitationCode.equals(code), "邀请码错误");
 
         boolean isContain = false;
+        System.out.println(group.getMemberList());
         for (User member : group.getMemberList()) {
             if (member.getId() == userId) {
                 isContain = true;

@@ -59,7 +59,7 @@ public class FileUtil {
         if(file==null) return "";
         String fileName = file.getOriginalFilename();
         fileName = getSaveFileName(fileName);
-        File f = new File("D:/test/"+ userIdStr);
+        File f = new File("D:/test/" + userIdStr);
         if(!f.exists()){
             f.mkdirs();
         }

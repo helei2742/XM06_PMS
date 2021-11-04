@@ -259,7 +259,7 @@ public class ProjectService{
         }else if(orderType == ProjectQuery.CREATEDATEASC){
             return projectMapper.queryPublicProjectCreateDateASC();
         }else if(orderType == ProjectQuery.COMPLETIONDEGREEDESC){
-            return projectMapper.queryPublicProjectCompletionDegree();
+            return projectMapper.queryPublicProjectCompletionDegreeDESC();
         }else if(orderType == ProjectQuery.COMPLETIONDEGREEASC){
             return projectMapper.queryPublicProjectCompletionDegreeASC();
         }else {
