@@ -93,6 +93,17 @@ public class GroupController extends BaseController {
         List<Group> all = groupService.findUserJoinedGroupAll(userId);
         return success("查询成功", 200, all);
     }
+    /**
+     * 查询用户管理的全部小组
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/queryMyGroupAll",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public ResultInfo queryMyGroupAll(Integer userId){
+        List<Group> all = groupService.queryMyGroupAll(userId);
+        return success("查询成功", 200, all);
+    }
 
     /**
      * 根据管理员id分页查找该管理员管理的小组信息

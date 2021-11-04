@@ -10,32 +10,38 @@
     <result column="completion_degree" property="completionDegree" jdbcType="DOUBLE" />
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="is_public" property="isPublic" jdbcType="BIT" />
     <result column="is_valid" property="isValid" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_name, project_desc, creator_id, group_id, completion_degree, create_date, 
-    update_date, is_valid
+    update_date, is_valid, is_public
   </sql>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_project
     where id = #{id,jdbcType=INTEGER}
   </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_project
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  
   <insert id="insert" parameterType="org.xm06.pms.vo.Project" >
     insert into t_project (id, project_name, project_desc, 
       creator_id, group_id, completion_degree, 
-      create_date, update_date, is_valid
+      create_date, update_date, is_valid, is_public
       )
     values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{projectDesc,jdbcType=VARCHAR}, 
       #{creatorId,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{completionDegree,jdbcType=DOUBLE}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BIT}
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BIT},
+      #{isValid,jdbcType=BIT}
       )
   </insert>
+  
   <insert id="insertSelective" parameterType="org.xm06.pms.vo.Project" >
     insert into t_project
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -65,6 +71,9 @@
       </if>
       <if test="isValid != null" >
         is_valid,
+      </if>      
+      <if test="isPublic != null" >
+        is_public,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -95,8 +104,81 @@
       <if test="isValid != null" >
         #{isValid,jdbcType=BIT},
       </if>
+      <if test="isPublic != null" >
+        #{isPublic,jdbcType=BIT},
+      </if>
     </trim>
   </insert>
+
+  <insert id="insertHasKey" keyProperty="id"
+          useGeneratedKeys="true" parameterType="org.xm06.pms.vo.Project">
+    insert into t_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="projectDesc != null" >
+        project_desc,
+      </if>
+      <if test="creatorId != null" >
+        creator_id,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="completionDegree != null" >
+        completion_degree,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+      <if test="isPublic != null" >
+        is_public,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDesc != null" >
+        #{projectDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="completionDegree != null" >
+        #{completionDegree,jdbcType=DOUBLE},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=BIT},
+      </if>
+      <if test="isPublic != null" >
+        #{isPublic,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Project" >
     update t_project
     <set >
@@ -124,9 +206,13 @@
       <if test="isValid != null" >
         is_valid = #{isValid,jdbcType=BIT},
       </if>
+      <if test="isPublic != null" >
+        is_public = #{isPublic,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Project" >
     update t_project
     set project_name = #{projectName,jdbcType=VARCHAR},
@@ -136,27 +222,216 @@
       completion_degree = #{completionDegree,jdbcType=DOUBLE},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      is_valid = #{isValid,jdbcType=BIT}
+      is_valid = #{isValid,jdbcType=BIT},
+      is_public = #{isPublic,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="queryByProjectNameAndGroupId" resultType="org.xm06.pms.vo.Project">
+
+  <!--内嵌查询-->
+  <select id="queryGroupInProject" parameterType="java.util.Map" resultType="java.util.Map">
+    select
+    g.group_name,
+    g.described,
+    g.manager_id,
+    g.is_valid,
+    g.create_date,
+    g.update_date
+    from
+        t_group g,
+        t_project_group pg
+    where
+        g.id = pg.group_id and pg.project_id = #{projectId}
+  </select>
+
+  <!--映射表-->
+  <resultMap id="projectMap" type="org.xm06.pms.vo.Project">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="project_desc" property="projectDesc" jdbcType="VARCHAR" />
+    <result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="completion_degree" property="completionDegree" jdbcType="DOUBLE" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="is_public" property="isPublic" jdbcType="BIT" />
+    <result column="is_valid" property="isValid" jdbcType="BIT" />
+
+    <collection property="groupList" ofType="org.xm06.pms.vo.Group"
+                 select="queryGroupInProject" column="{projectId=id}">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="group_name" property="groupName" jdbcType="VARCHAR" />
+      <result column="described" property="described" jdbcType="VARCHAR" />
+      <result column="manager_id" property="managerId" jdbcType="INTEGER" />
+      <result column="is_valid" property="isValid" jdbcType="BIT" />
+      <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+      <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    </collection>
+  </resultMap>
+
+  
+  <select id="queryByProjectNameAndCreatorId" resultType="org.xm06.pms.vo.Project">
     select * from t_project
     where
     project_name = #{projectName, jdbcType=VARCHAR}
     and
-    group_id = #{groupId, jdbcType=INTEGER}
+    creator_id = #{creatorId, jdbcType=INTEGER}
   </select>
 
-  <select id="queryByGroupId" resultType="org.xm06.pms.vo.Project">
-    select * from t_project
+  <insert id="addProjectGroup" parameterType="java.lang.Integer">
+    insert into t_project_group(project_id, group_id, create_date, is_valid)
+    values(#{projectId}, #{groupId}, now(), true)
+  </insert>
+
+
+  <select id="queryByGroupId" resultMap="projectMap">
+    select
+        p.*
+    from
+        t_project p,
+        t_project_group pg
     where
-        group_id = #{groupId, jdbcType=INTEGER}
+        p.id = pg.project_id
+    and
+        pg.group_id = #{groupId}
   </select>
 
-  <select id="queryByCreatorId" resultType="org.xm06.pms.vo.Project">
+<!--  查询用户创建的项目   start        -->
+  <select id="queryByCreatorId" resultMap="projectMap">
     select * from t_project
     where
         creator_id = #{creatorId, jdbcType=INTEGER}
+    order by create_date DESC
   </select>
+  <select id="queryByCreatorIdCreateDateASC" resultMap="projectMap">
+    select * from t_project
+    where
+        creator_id = #{creatorId, jdbcType=INTEGER}
+    order by create_date ASC
+  </select>
+  <select id="queryByCreatorIdCompletionDESC" resultMap="projectMap">
+    select * from t_project
+    where
+        creator_id = #{creatorId, jdbcType=INTEGER}
+    order by completion_degree DESC
+  </select>
+  <select id="queryByCreatorIdCompletionASC" resultMap="projectMap">
+    select * from t_project
+    where
+        creator_id = #{creatorId, jdbcType=INTEGER}
+    order by completion_degree ASC
+  </select>
+<!--  查询用户创建的项目   end-->
+
+<!--  查询用户加入小组中的项目  start      -->
+  <select id="queryUserJoinedGroupProject"
+          resultMap="projectMap"
+          parameterType="java.lang.Integer">
+     SELECT
+     DISTINCT
+         p.* FROM
+         t_project p,
+         t_project_group pg
+     WHERE
+         p.id = pg.project_id
+     AND pg.group_id
+     IN (
+         SELECT ug.`group_id`
+         FROM
+         t_user_group ug
+         WHERE
+         ug.user_id = #{userId}
+     )
+     order by create_date DESC
+  </select>
+
+  <select id="queryUserJoinedGroupProjectCreateDateASC"
+          resultMap="projectMap"
+          parameterType="java.lang.Integer">
+     SELECT
+     DISTINCT
+         p.* FROM
+         t_project p,
+         t_project_group pg
+     WHERE
+         p.id = pg.project_id
+     AND pg.group_id
+     IN (
+         SELECT ug.`group_id`
+         FROM
+         t_user_group ug
+         WHERE
+         ug.user_id = #{userId}
+     )
+     order by create_date ASC
+  </select>
+
+  <select id="queryUserJoinedGroupProjectCompletion_DESC"
+          resultMap="projectMap"
+          parameterType="java.lang.Integer">
+     SELECT
+     DISTINCT
+         p.* FROM
+         t_project p,
+         t_project_group pg
+     WHERE
+         p.id = pg.project_id
+     AND pg.group_id
+     IN (
+         SELECT ug.`group_id`
+         FROM
+         t_user_group ug
+         WHERE
+         ug.user_id = #{userId}
+     )
+     order by completion_degree DESC
+  </select>
+  <select id="queryUserJoinedGroupProjectCompletion_ASC"
+          resultMap="projectMap"
+          parameterType="java.lang.Integer">
+     SELECT
+     DISTINCT
+         p.* FROM
+         t_project p,
+         t_project_group pg
+     WHERE
+         p.id = pg.project_id
+     AND pg.group_id
+     IN (
+         SELECT ug.`group_id`
+         FROM
+         t_user_group ug
+         WHERE
+         ug.user_id = #{userId}
+     )
+     order by completion_degree ASC
+  </select>
+<!--  查询用户加入小组中的项目  end      -->
+
+<!--   查询公开项目 start     -->
+  <select id="queryPublicProject" resultMap="projectMap">
+    select * from
+    t_project
+    where
+    is_public = 1 order by create_date DESC
+  </select>
+  <select id="queryPublicProjectCreateDateASC" resultMap="projectMap">
+    select * from
+    t_project
+    where
+    is_public = 1 order by create_date ASC
+  </select>
+  <select id="queryPublicProjectCompletionDegreeDESC" resultMap="projectMap">
+    select * from
+    t_project
+    where
+    is_public = 1 order by completion_degree DESC
+  </select>
+  <select id="queryPublicProjectCompletionDegreeASC" resultMap="projectMap">
+    select * from
+    t_project
+    where
+    is_public = 1 order by completion_degree ASC
+  </select>
+<!--     查询公开项目 end       -->
 </mapper>

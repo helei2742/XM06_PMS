@@ -1,8 +1,38 @@
 package org.xm06.pms.vo;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Project {
+    public Integer[] getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(Integer[] groupIds) {
+        this.groupIds = groupIds;
+    }
+
+    private Integer[] groupIds;
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "groupIds=" + Arrays.toString(groupIds) +
+                ", id=" + id +
+                ", projectName='" + projectName + '\'' +
+                ", projectDesc='" + projectDesc + '\'' +
+                ", creatorId=" + creatorId +
+                ", groupId=" + groupId +
+                ", completionDegree=" + completionDegree +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", isPublic=" + isPublic +
+                ", isValid=" + isValid +
+                ", groupList=" + groupList +
+                '}';
+    }
+
     private Integer id;
 
     private String projectName;
@@ -19,7 +49,26 @@ public class Project {
 
     private Date updateDate;
 
+    private Boolean isPublic;
     private Boolean isValid;
+
+    private List<Group> groupList;
+
+    public Boolean getValid() {
+        return isValid;
+    }
+
+    public void setValid(Boolean valid) {
+        isValid = valid;
+    }
+
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(List<Group> groupList) {
+        this.groupList = groupList;
+    }
 
     public Integer getId() {
         return id;
@@ -91,5 +140,13 @@ public class Project {
 
     public void setIsValid(Boolean isValid) {
         this.isValid = isValid;
+    }
+
+    public Boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }

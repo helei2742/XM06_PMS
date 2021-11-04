@@ -191,7 +191,7 @@ public class GroupService {
 
 
     /**
-     * 查找管理员管理的组，包括成员信息
+     * 分页查找管理员管理的组，包括成员信息
      * @param
      * @return
      */
@@ -205,6 +205,19 @@ public class GroupService {
         List<Group> list = groupMapper.findGroupByManagerId(managerId);
         return new PageInfo<Group>(list);
     }
+
+    /**
+     * 查询userId管理的所有组
+     * @param managerId
+     * @return
+     */
+    public List<Group> queryMyGroupAll(Integer managerId){
+        AssertUtil.isTrue(managerId==null || managerId<=0, "请输入管理员id");
+        User u = userMapper.selectByPrimaryKey(managerId);
+        AssertUtil.isTrue(u == null, "该管理员不存在");
+        return groupMapper.findGroupByManagerId(managerId);
+    }
+
 
     /**
      * 根据用户id，分页查找用户加入的组

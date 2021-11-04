@@ -53,7 +53,7 @@ public interface GroupMapper extends BaseMapper<Group, Integer> {
     public List<Group> findAll();
 
     /**
-     * 根据管理员id查找全部小组信息
+     * 根据管理员id查找全部小组信息,包含组员信息
      * @param managerId
      * @return
      */
