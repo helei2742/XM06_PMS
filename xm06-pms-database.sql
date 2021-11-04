@@ -80,7 +80,7 @@ CREATE TABLE `t_memo` (
   `create_date` datetime DEFAULT NULL,
   `is_finish` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 /*Data for the table `t_memo` */
 
@@ -94,7 +94,8 @@ insert  into `t_memo`(`id`,`user_id`,`memo`,`stale_date`,`create_date`,`is_finis
 (11,7,'test','2021-10-01 15:08:18','2021-09-30 15:08:27','\0'),
 (12,7,'test2','2021-10-22 15:09:22','2021-09-30 15:09:27',''),
 (13,7,'hahhahah','2021-10-09 00:00:00','2021-09-30 15:30:41',''),
-(15,7,'ceshi','2021-10-30 00:00:00','2021-10-01 18:53:22','\0');
+(15,7,'ceshi','2021-10-30 00:00:00','2021-10-01 18:53:22','\0'),
+(16,7,'测试创建便签','2021-11-11 00:00:00','2021-11-02 14:02:51','\0');
 
 /*Table structure for table `t_project` */
 
@@ -103,22 +104,58 @@ DROP TABLE IF EXISTS `t_project`;
 CREATE TABLE `t_project` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(50) DEFAULT NULL,
-  `project_desc` varchar(500) DEFAULT NULL,
+  `project_desc` varchar(1500) DEFAULT NULL,
   `creator_id` int(11) DEFAULT NULL,
   `group_id` int(11) DEFAULT NULL,
   `completion_degree` double DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
   `update_date` datetime DEFAULT NULL,
   `is_valid` bit(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `project_name` (`project_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `is_public` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `t_project` */
 
-insert  into `t_project`(`id`,`project_name`,`project_desc`,`creator_id`,`group_id`,`completion_degree`,`create_date`,`update_date`,`is_valid`) values 
-(1,'测试创建项目',NULL,7,16,0,'2021-10-27 21:27:14','2021-10-27 21:27:14',''),
-(2,'测试创建项目是否重名',NULL,7,16,0,'2021-10-27 21:41:19','2021-10-27 21:41:19','');
+insert  into `t_project`(`id`,`project_name`,`project_desc`,`creator_id`,`group_id`,`completion_degree`,`create_date`,`update_date`,`is_valid`,`is_public`) values 
+(1,'测试创建项目',NULL,7,16,0,'2021-10-27 21:27:14','2021-10-27 21:27:14','',NULL),
+(2,'测试创建项目是否重名',NULL,7,16,0,'2021-10-27 21:41:19','2021-10-27 21:41:19','',NULL),
+(3,'dawda','d',7,NULL,0,'2021-11-03 10:44:11','2021-11-03 10:44:11','','\0'),
+(5,'dawdadwad','d',7,NULL,0,'2021-11-03 10:49:12','2021-11-03 10:49:12','','\0'),
+(6,'dawdadw','d',7,NULL,0,'2021-11-03 10:55:34','2021-11-03 10:55:34','',''),
+(7,'dawd','d',7,NULL,0,'2021-11-03 11:00:05','2021-11-03 11:00:05','',''),
+(8,'很长描述的项目','很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目很长描述的项目',7,NULL,0,'2021-11-03 17:16:30','2021-11-03 17:16:30','','');
+
+/*Table structure for table `t_project_group` */
+
+DROP TABLE IF EXISTS `t_project_group`;
+
+CREATE TABLE `t_project_group` (
+  `project_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `is_valid` bit(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `t_project_group` */
+
+insert  into `t_project_group`(`project_id`,`group_id`,`create_date`,`is_valid`) values 
+(2,1,'2021-11-02 19:42:32',''),
+(2,16,NULL,NULL),
+(2,7,NULL,NULL),
+(1,16,NULL,NULL),
+(1,13,'2021-11-03 10:44:11',''),
+(1,23,'2021-11-03 10:44:11',''),
+(5,13,'2021-11-03 10:49:12',''),
+(5,23,'2021-11-03 10:49:12',''),
+(6,13,'2021-11-03 10:55:34',''),
+(6,23,'2021-11-03 10:55:34',''),
+(7,19,'2021-11-03 11:00:05',''),
+(7,22,'2021-11-03 11:00:05',''),
+(8,13,'2021-11-03 17:16:30',''),
+(8,16,'2021-11-03 17:16:30',''),
+(8,22,'2021-11-03 17:16:30',''),
+(8,23,'2021-11-03 17:16:30','');
 
 /*Table structure for table `t_task` */
 
