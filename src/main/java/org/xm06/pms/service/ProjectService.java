@@ -222,7 +222,7 @@ public class ProjectService{
         }else if(orderType == ProjectQuery.COMPLETIONDEGREEDESC){
             return projectMapper.queryUserJoinedGroupProjectCompletion_DESC(userId);
         }else if(orderType == ProjectQuery.COMPLETIONDEGREEASC){
-            return projectMapper.queryUserJoinedGroupProjectCreateDateASC(userId);
+            return projectMapper.queryUserJoinedGroupProjectCompletion_ASC(userId);
         }else {
             AssertUtil.isTrue(true, "没有该查询条件");
         }
