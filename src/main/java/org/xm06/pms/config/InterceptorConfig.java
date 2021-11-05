@@ -32,10 +32,16 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/templates/static/");
+/*        registry.addResourceHandler("/static/**")
+                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"classpath:/templates/static/");
         registry.addResourceHandler("/index/static/**")
-                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/templates/static/");
+                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/templates/static/");*/
+/*        registry.addResourceHandler("/static/**")
+                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"classpath:/templates/static/");
+        registry.addResourceHandler("/index/static/**")
+                .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/templates/static/");*/
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
     }
 
 }
