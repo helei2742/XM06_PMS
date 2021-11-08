@@ -42,6 +42,13 @@ public class ProjectController extends BaseController {
     }
 
 
+    @PostMapping("/queryByProjectName")
+    @ResponseBody
+    public ResultInfo queryProjectName(@RequestBody ProjectQuery projectQuery){
+        Project p = projectService.queryByProjectName(projectQuery.getProjectName());
+        return success("查询成功", 200, p);
+    }
+
     /**
      * 根据type 的不同分页查询
      * @param projectQuery

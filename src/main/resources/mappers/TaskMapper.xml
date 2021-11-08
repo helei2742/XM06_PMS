@@ -148,7 +148,7 @@
     u.update_date,
     u.is_valid
     from
-    t_user u
+    xm06_t_user u
     where
     u.id = #{userId}
   </select>
@@ -177,7 +177,7 @@
   </resultMap>
 
   <select id="queryGroupTask" parameterType="java.lang.Integer" resultMap="taskMap">
-    select * from t_task
+    select * from xm06_t_task
     where group_id = #{groupId}
     order by create_date desc
   </select>
@@ -186,8 +186,8 @@
     SELECT
     t.*
     FROM
-    t_user_group ug,
-    t_task t
+    xm06_t_user_group ug,
+    xm06_t_task t
     WHERE
     t.group_id = ug.group_id AND ug.user_id = #{userId}
     ORDER BY create_date DESC
@@ -197,7 +197,7 @@
     select
     t.*
     from
-    t_task t
+    xm06_t_task t
     where t.creator_id = #{userId}
     ORDER BY create_date DESC
   </select>
@@ -206,8 +206,8 @@
     SELECT
     t.*
     FROM
-    t_user_group ug,
-    t_task t
+    xm06_t_user_group ug,
+    xm06_t_task t
     WHERE
     t.group_id = ug.group_id AND ug.user_id = #{userId} and t.deadline > now()
     ORDER BY create_date DESC
@@ -218,8 +218,8 @@
     DISTINCT
     t.*
     from
-    t_task t,
-    t_task_record tr
+    xm06_t_task t,
+    xm06_t_task_record tr
     where
     t.id = tr.task_id and tr.user_id = #{userId} order by tr.submit_date desc
   </select>
@@ -229,7 +229,7 @@
     DISTINCT
     t.*
     FROM
-    t_task t
+    xm06_t_task t
     WHERE
     t.id
     NOT IN
@@ -238,8 +238,8 @@
         DISTINCT
         t.id
         FROM
-        t_task t,
-        t_task_record tr
+        xm06_t_task t,
+        xm06_t_task_record tr
         WHERE
         tr.user_id = #{userId} AND tr.task_id = t.`id`
      )
@@ -249,8 +249,8 @@
     SELECT
     t.*
     FROM
-    t_user_group ug,
-    t_task t
+    xm06_t_user_group ug,
+    xm06_t_task t
     WHERE
     t.group_id = ug.group_id AND ug.user_id = #{userId} and now() > t.deadline
     ORDER BY create_date DESC

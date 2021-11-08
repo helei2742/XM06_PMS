@@ -21,9 +21,21 @@ public class ProjectQuery extends BaseQuery {
     public static final Integer PAGEQUERYPROJECTBYUSERID = 1;
     public static final Integer PAGEQUERYUSERJOINEDGROUPPROJECT = 2;
     public static final Integer PAGEQUERYPUBLICPROJECT = 3;
+    public static final Integer PAGEQUERYNAMELIKEPROJECT = 4;
+
+
 
     private Integer groupId;
     private Integer userId;
+    private String projectName;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     /**
      * 查询的条件

@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.xm06.pms.dao.ProjectMapper;
 import org.xm06.pms.service.MailService;
 
 
@@ -29,5 +30,6 @@ public class MailServiceImplTest {
 
         mailService.sendHtmlMail("914577981@qq.com", "这是一个模板文件", emailContent);
     }
+
 
 }

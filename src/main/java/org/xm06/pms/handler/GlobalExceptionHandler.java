@@ -1,6 +1,8 @@
 package org.xm06.pms.handler;
 
 import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
@@ -19,9 +21,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+
 @Component
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
-
+    Logger logger = LoggerFactory.getLogger(getClass());
     @Override
     public ModelAndView resolveException(HttpServletRequest request,
                                          HttpServletResponse response,
@@ -29,7 +32,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
                                          Exception e) {
 
         e.printStackTrace();
-
+        logger.debug(e.getMessage());
         //为登录异常，直接返回登录视图
         if(e instanceof NotLoginException){
             ModelAndView mv = new ModelAndView("redirect:/index");

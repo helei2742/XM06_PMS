@@ -134,9 +134,13 @@ public class ProjectService{
         }else if (type == ProjectQuery.PAGEQUERYUSERJOINEDGROUPPROJECT){
             //2代表查找用户加入小组的项目
             pageInfo = pageQueryUserJoinedGroupProject(projectQuery);
-        }else if(type == ProjectQuery.PAGEQUERYPUBLICPROJECT){
+        }else if(type == ProjectQuery.PAGEQUERYPUBLICPROJECT) {
             //3 代表查找所有公开的项目
             pageInfo = pageQueryPublicProject(projectQuery);
+        }else if(type == ProjectQuery.PAGEQUERYNAMELIKEPROJECT) {
+            //4 项目名称模糊查询
+            pageInfo = pageQueryProjectLikeName(projectQuery);
+
         }else {
             AssertUtil.isTrue(true, "没有该type的查询");
         }
@@ -209,6 +213,41 @@ public class ProjectService{
 
 
     /**
+     * 根据projectName 字符串，模糊查询该名称的项目
+     * @param projectQuery
+     * @return
+     */
+    public PageInfo<Project> pageQueryProjectLikeName(ProjectQuery projectQuery) {
+        String projectName = projectQuery.getProjectName();
+        AssertUtil.isTrue(StringUtils.isBlank(projectName), "查询字符串不能为空");
+
+        PageHelper.startPage(projectQuery.getPage(), projectQuery.getLimit());
+        Integer orderType = projectQuery.getOrderType();
+        List<Project> all = this.nameLikeProjectOrderTypeHandle(orderType, projectName);
+        return new PageInfo<>(all);
+    }
+
+    /**
+     * 根据likeName字符串，查找项目名称含有该字符串的项目
+     * @param orderType
+     * @return
+     */
+    private List<Project> nameLikeProjectOrderTypeHandle(Integer orderType, String likeName) {
+        if(orderType == ProjectQuery.CREATEDATEDESC){
+            return projectMapper.queryNameLikeProject(likeName);
+        }else if(orderType == ProjectQuery.CREATEDATEASC){
+            return projectMapper.queryNameLikeProjectCreateDateASC(likeName);
+        }else if(orderType == ProjectQuery.COMPLETIONDEGREEDESC){
+            return projectMapper.queryNameLikeProjectCompletion_DESC(likeName);
+        }else if(orderType == ProjectQuery.COMPLETIONDEGREEASC){
+            return projectMapper.queryNameLikeProjectCompletion_ASC(likeName);
+        }else {
+            AssertUtil.isTrue(true, "没有该查询条件");
+        }
+        return null;
+    }
+
+    /**
      * 根据orderType 分类查询不同排序条件下用户加入小组中的项目
      * @param orderType
      * @param userId
@@ -266,5 +305,15 @@ public class ProjectService{
             AssertUtil.isTrue(true, "没有该查询条件");
         }
         return null;
+    }
+
+    /**
+     * 根据projectName 查询
+     * @param projectName
+     * @return
+     */
+    public Project queryByProjectName(String projectName) {
+        AssertUtil.isTrue(StringUtils.isBlank(projectName), "项目名称不能为空");
+        return projectMapper.queryByProjectName(projectName);
     }
 }

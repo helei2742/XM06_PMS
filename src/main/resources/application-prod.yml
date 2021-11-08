@@ -17,10 +17,10 @@ spring:
       write-dates-as-timestamps: true
   datasource:
     type: com.mchange.v2.c3p0.ComboPooledDataSource
-    driver-class-name: com.mysql.jdbc.Driver
-    username: Administrator
+    driverClass: com.mysql.jdbc.Driver
+    user: Administrator
     password: XWClassroom20202023
-    url: jdbc:mysql://127.0.0.1:3366/xm06?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    jdbcUrl: jdbc:mysql://127.0.0.1:3366/yjykfsj2021?useUnicode=true&characterEncoding=gbk&autoReconnect=true&failOverReadOnly=false
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -45,7 +45,7 @@ spring:
 ## mybatis的配置
 mybatis:
   mapper-locations: classpath:/mappers/*.xml
-  type-aliases-package:
+  type-aliases-package: org.xm06.pms.dao
   configuration:
     ## 下划线转驼峰
     map-underscore-to-camel-case: true
@@ -61,4 +61,5 @@ logging:
       xm06:
         pms:
           dao: debug
-
+  file:
+    name: D:xm06/log/mapping.log

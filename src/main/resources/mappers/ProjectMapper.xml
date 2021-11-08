@@ -21,17 +21,17 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from t_project
+    from xm06_t_project
     where id = #{id,jdbcType=INTEGER}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_project
+    delete from xm06_t_project
     where id = #{id,jdbcType=INTEGER}
   </delete>
   
   <insert id="insert" parameterType="org.xm06.pms.vo.Project" >
-    insert into t_project (id, project_name, project_desc, 
+    insert into xm06_t_project (id, project_name, project_desc,
       creator_id, group_id, completion_degree, 
       create_date, update_date, is_valid, is_public
       )
@@ -43,7 +43,7 @@
   </insert>
   
   <insert id="insertSelective" parameterType="org.xm06.pms.vo.Project" >
-    insert into t_project
+    insert into xm06_t_project
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -112,7 +112,7 @@
 
   <insert id="insertHasKey" keyProperty="id"
           useGeneratedKeys="true" parameterType="org.xm06.pms.vo.Project">
-    insert into t_project
+    insert into xm06_t_project
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -180,7 +180,7 @@
   </insert>
 
   <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Project" >
-    update t_project
+    update xm06_t_project
     <set >
       <if test="projectName != null" >
         project_name = #{projectName,jdbcType=VARCHAR},
@@ -214,7 +214,7 @@
   </update>
   
   <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Project" >
-    update t_project
+    update xm06_t_project
     set project_name = #{projectName,jdbcType=VARCHAR},
       project_desc = #{projectDesc,jdbcType=VARCHAR},
       creator_id = #{creatorId,jdbcType=INTEGER},
@@ -231,15 +231,16 @@
   <!--内嵌查询-->
   <select id="queryGroupInProject" parameterType="java.util.Map" resultType="java.util.Map">
     select
-    g.group_name,
-    g.described,
-    g.manager_id,
-    g.is_valid,
-    g.create_date,
-    g.update_date
+    g.id id,
+    g.group_name groupName,
+    g.described described,
+    g.manager_id managerId,
+    g.is_valid isValid,
+    g.create_date createDate,
+    g.update_date updateDate
     from
-        t_group g,
-        t_project_group pg
+        xm06_t_group g,
+        xm06_t_project_group pg
     where
         g.id = pg.group_id and pg.project_id = #{projectId}
   </select>
@@ -271,7 +272,7 @@
 
   
   <select id="queryByProjectNameAndCreatorId" resultType="org.xm06.pms.vo.Project">
-    select * from t_project
+    select * from xm06_t_project
     where
     project_name = #{projectName, jdbcType=VARCHAR}
     and
@@ -279,17 +280,20 @@
   </select>
 
   <insert id="addProjectGroup" parameterType="java.lang.Integer">
-    insert into t_project_group(project_id, group_id, create_date, is_valid)
+    insert into xm06_t_project_group(project_id, group_id, create_date, is_valid)
     values(#{projectId}, #{groupId}, now(), true)
   </insert>
 
+  <select id="queryByProjectName" parameterType="java.lang.String" resultMap="projectMap">
+    select * from xm06_t_project where project_name = #{projectName}
+  </select>
 
   <select id="queryByGroupId" resultMap="projectMap">
     select
         p.*
     from
-        t_project p,
-        t_project_group pg
+        xm06_project p,
+        xm06_t_project_group pg
     where
         p.id = pg.project_id
     and
@@ -298,25 +302,25 @@
 
 <!--  查询用户创建的项目   start        -->
   <select id="queryByCreatorId" resultMap="projectMap">
-    select * from t_project
+    select * from xm06_t_project
     where
         creator_id = #{creatorId, jdbcType=INTEGER}
     order by create_date DESC
   </select>
   <select id="queryByCreatorIdCreateDateASC" resultMap="projectMap">
-    select * from t_project
+    select * from xm06_t_project
     where
         creator_id = #{creatorId, jdbcType=INTEGER}
     order by create_date ASC
   </select>
   <select id="queryByCreatorIdCompletionDESC" resultMap="projectMap">
-    select * from t_project
+    select * from xm06_t_project
     where
         creator_id = #{creatorId, jdbcType=INTEGER}
     order by completion_degree DESC
   </select>
   <select id="queryByCreatorIdCompletionASC" resultMap="projectMap">
-    select * from t_project
+    select * from xm06_t_project
     where
         creator_id = #{creatorId, jdbcType=INTEGER}
     order by completion_degree ASC
@@ -329,16 +333,17 @@
           parameterType="java.lang.Integer">
      SELECT
      DISTINCT
-         p.* FROM
-         t_project p,
-         t_project_group pg
+         p.*
+     FROM
+         xm06_t_project p,
+         xm06_t_project_group pg
      WHERE
          p.id = pg.project_id
      AND pg.group_id
      IN (
          SELECT ug.`group_id`
          FROM
-         t_user_group ug
+         xm06_t_user_group ug
          WHERE
          ug.user_id = #{userId}
      )
@@ -350,16 +355,17 @@
           parameterType="java.lang.Integer">
      SELECT
      DISTINCT
-         p.* FROM
-         t_project p,
-         t_project_group pg
+         p.*
+     FROM
+         xm06_t_project p,
+         xm06_t_project_group pg
      WHERE
          p.id = pg.project_id
      AND pg.group_id
      IN (
          SELECT ug.`group_id`
          FROM
-         t_user_group ug
+         xm06_t_user_group ug
          WHERE
          ug.user_id = #{userId}
      )
@@ -372,15 +378,15 @@
      SELECT
      DISTINCT
          p.* FROM
-         t_project p,
-         t_project_group pg
+         xm06_t_project p,
+         xm06_t_project_group pg
      WHERE
          p.id = pg.project_id
      AND pg.group_id
      IN (
          SELECT ug.`group_id`
          FROM
-         t_user_group ug
+         xm06_t_user_group ug
          WHERE
          ug.user_id = #{userId}
      )
@@ -392,15 +398,15 @@
      SELECT
      DISTINCT
          p.* FROM
-         t_project p,
-         t_project_group pg
+         xm06_t_project p,
+         xm06_t_project_group pg
      WHERE
          p.id = pg.project_id
      AND pg.group_id
      IN (
          SELECT ug.`group_id`
          FROM
-         t_user_group ug
+         xm06_t_user_group ug
          WHERE
          ug.user_id = #{userId}
      )
@@ -411,27 +417,69 @@
 <!--   查询公开项目 start     -->
   <select id="queryPublicProject" resultMap="projectMap">
     select * from
-    t_project
+    xm06_t_project
     where
     is_public = 1 order by create_date DESC
   </select>
   <select id="queryPublicProjectCreateDateASC" resultMap="projectMap">
     select * from
-    t_project
+    xm06_t_project
     where
     is_public = 1 order by create_date ASC
   </select>
   <select id="queryPublicProjectCompletionDegreeDESC" resultMap="projectMap">
     select * from
-    t_project
+    xm06_t_project
     where
     is_public = 1 order by completion_degree DESC
   </select>
   <select id="queryPublicProjectCompletionDegreeASC" resultMap="projectMap">
     select * from
-    t_project
+    xm06_t_project
     where
     is_public = 1 order by completion_degree ASC
   </select>
 <!--     查询公开项目 end       -->
+
+<!--  项目名称模糊查找项目 start  -->
+  <select id="queryNameLikeProject" resultMap="projectMap" >
+    SELECT * FROM
+        xm06_t_project
+    WHERE
+        project_name
+    LIKE
+        concat('%',#{projectName},'%')
+    order by create_date desc
+  </select>
+
+  <select id="queryNameLikeProjectCreateDateASC" resultMap="projectMap">
+    SELECT * FROM
+        xm06_t_project
+    WHERE
+        project_name
+    LIKE
+       concat('%',#{projectName},'%')
+    order by create_date asc
+  </select>
+
+  <select id="queryNameLikeProjectCompletion_DESC" resultMap="projectMap">
+    SELECT * FROM
+        xm06_t_project
+    WHERE
+        project_name
+    LIKE
+        concat('%',#{projectName},'%')
+    order by completion_degree DESC
+  </select>
+
+  <select id="queryNameLikeProjectCompletion_ASC" resultMap="projectMap">
+    SELECT * FROM
+        xm06_t_project
+    WHERE
+        project_name
+    LIKE
+        concat('%',#{projectName},'%')
+    order by completion_degree ASC
+  </select>
+<!--  项目名称模糊查找项目 end  -->
 </mapper>

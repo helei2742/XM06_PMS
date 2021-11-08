@@ -19,6 +19,27 @@ public interface ProjectMapper extends BaseMapper<Project, Integer> {
     Project queryByProjectNameAndCreatorId(@Param("projectName") String projectName,
                                          @Param("creatorId") Integer creatorId);
 
+    /**
+     *  小组加入项目
+     * @param projectId
+     * @param groupId
+     */
+    Integer addProjectGroup(@Param("projectId") Integer projectId,
+                            @Param("groupId") Integer groupId);
+
+    /**
+     * 查找小组中的项目
+     * @param groupId
+     * @return
+     */
+    List<Project> queryByGroupId(Integer groupId);
+
+    /**
+     * 根据项目名查找项目
+     * @param projectName
+     * @return
+     */
+    Project queryByProjectName(String projectName);
 
 //===================== 查找用户加入小组中的项目 start=============
     /**
@@ -110,18 +131,35 @@ public interface ProjectMapper extends BaseMapper<Project, Integer> {
     List<Project> queryPublicProjectCompletionDegreeASC();
 //=======================查询所有公开项目 end =================
 
-    /**
-     *  小组加入项目
-     * @param projectId
-     * @param groupId
-     */
-    Integer addProjectGroup(@Param("projectId") Integer projectId,
-                            @Param("groupId") Integer groupId);
+
+
+//====================== 根据项目名，模糊查找项目 start ==========================
 
     /**
-     * 查找小组中的项目
-     * @param groupId
+     * 根据项目名模糊查找项目，默认时间降序
+     * @param likeName
      * @return
      */
-    List<Project> queryByGroupId(Integer groupId);
+    List<Project> queryNameLikeProject(String likeName);
+
+    /**
+     * 根据项目名模糊查找项目，时间升序
+     * @param likeName
+     * @return
+     */
+    List<Project> queryNameLikeProjectCreateDateASC(String likeName);
+    /**
+     * 根据项目名模糊查找项目，完成度降序
+     * @param likeName
+     * @return
+     */
+    List<Project> queryNameLikeProjectCompletion_DESC(String likeName);
+    /**
+     * 根据项目名模糊查找项目，完成度升序
+     * @param likeName
+     * @return
+     */
+    List<Project> queryNameLikeProjectCompletion_ASC(String likeName);
+//====================== 根据项目名，模糊查找项目 end =========================
+
 }

@@ -18,15 +18,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_user
+    from xm06_t_user
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_user
+    delete from xm06_t_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="org.xm06.pms.vo.User">
-    insert into t_user (id, user_name, user_pwd, 
+    insert into xm06_t_user (id, user_name, user_pwd,
       true_name, email, phone, 
       is_valid, create_date, update_date
       )
@@ -36,7 +36,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="org.xm06.pms.vo.User">
-    insert into t_user
+    insert into xm06_t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -97,7 +97,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.User">
-    update t_user
+    update xm06_t_user
     <set>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
@@ -127,7 +127,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.User">
-    update t_user
+    update xm06_t_user
     set user_name = #{userName,jdbcType=VARCHAR},
       user_pwd = #{userPwd,jdbcType=VARCHAR},
       true_name = #{trueName,jdbcType=VARCHAR},
@@ -139,11 +139,11 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="findByUsername" resultType="org.xm06.pms.vo.User">
-    select * from t_user where user_name = #{username}
+    select * from xm06_t_user where user_name = #{username}
   </select>
 
   <update id="updateUserNoPwd" parameterType="org.xm06.pms.vo.User">
-    update t_user
+    update xm06_t_user
     set user_name = #{userName,jdbcType=VARCHAR},
       true_name = #{trueName,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
@@ -155,7 +155,7 @@
 
 
   <update id="alterPassword">
-    update t_user
+    update xm06_t_user
     set
       user_pwd = #{userPwd,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP}
@@ -164,14 +164,14 @@
 
 
   <update id="confirm">
-    update t_user
+    update xm06_t_user
     set
     is_valid = true where id = #{userId};
   </update>
 
   <select id="queryIdByUsername" resultType="Integer">
     select id
-    from t_user
+    from xm06_t_user
     where user_name = #{username}
   </select>
 </mapper>

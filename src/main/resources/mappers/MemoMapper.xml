@@ -15,21 +15,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from t_memo
+    from xm06_t_memo
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_memo
+    delete from xm06_t_memo
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="org.xm06.pms.vo.Memo" >
-    insert into t_memo (id, user_id, memo, 
+    insert into xm06_t_memo (id, user_id, memo,
       stale_date, create_date, is_finish)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR}, 
       #{staleDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{isFinish,jdbcType=BOOLEAN})
   </insert>
   <insert id="insertSelective" parameterType="org.xm06.pms.vo.Memo" >
-    insert into t_memo
+    insert into xm06_t_memo
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -72,7 +72,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Memo" >
-    update t_memo
+    update xm06_t_memo
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
@@ -93,7 +93,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Memo" >
-    update t_memo
+    update xm06_t_memo
     set user_id = #{userId,jdbcType=INTEGER},
       memo = #{memo,jdbcType=VARCHAR},
       stale_date = #{staleDate,jdbcType=TIMESTAMP},
@@ -103,13 +103,13 @@
   </update>
 
   <select id="queryUserMemos" parameterType="Integer" resultType="org.xm06.pms.vo.Memo">
-    select * from t_memo
+    select * from xm06_t_memo
     where user_id = #{userId}
     ORDER BY stale_date DESC
   </select>
 
   <update id="confirmMemo">
-    update t_memo
+    update xm06_t_memo
     set is_finish = true
     where id = #{memoId}
   </update>

@@ -15,15 +15,15 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from t_task_record
+    from xm06_t_task_record
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_task_record
+    delete from xm06_t_task_record
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="org.xm06.pms.vo.TaskRecord" >
-    insert into t_task_record (id, task_id, user_id, 
+    insert into xm06_t_task_record (id, task_id, user_id,
       description, file_url, submit_date
       )
     values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
@@ -31,7 +31,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="org.xm06.pms.vo.TaskRecord" >
-    insert into t_task_record
+    insert into xm06_t_task_record
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -74,7 +74,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.TaskRecord" >
-    update t_task_record
+    update xm06_t_task_record
     <set >
       <if test="taskId != null" >
         task_id = #{taskId,jdbcType=INTEGER},
@@ -95,7 +95,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.TaskRecord" >
-    update t_task_record
+    update xm06_t_task_record
     set task_id = #{taskId,jdbcType=INTEGER},
       user_id = #{userId,jdbcType=INTEGER},
       description = #{description,jdbcType=VARCHAR},
@@ -118,7 +118,7 @@
     u.update_date,
     u.is_valid
     from
-    t_user u
+    xm06_t_user u
     where
     u.id = #{userId}
   </select>
@@ -144,15 +144,15 @@
   </resultMap>
 
   <select id="queryUserTaskRecord" parameterType="java.lang.Integer" resultMap="taskRecordMap">
-    select * from t_task_record where user_id = #{userId} order by submit_date desc
+    select * from xm06_t_task_record where user_id = #{userId} order by submit_date desc
   </select>
 
   <select id="selectByTaskId" parameterType="java.lang.Integer"  resultMap="taskRecordMap">
-    select * from t_task_record where task_id = #{taskId} order by submit_date desc
+    select * from xm06_t_task_record where task_id = #{taskId} order by submit_date desc
   </select>
 
   <select id="selectUserRecordOfTask" parameterType="java.lang.Integer" resultMap="taskRecordMap">
-    select * from t_task_record
+    select * from xm06_t_task_record
     where
     task_id = #{taskId} and user_id = #{userId}
     order by submit_time desc
