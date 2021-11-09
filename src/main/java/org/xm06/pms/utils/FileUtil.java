@@ -90,4 +90,34 @@ public class FileUtil {
         }
         return sb.toString();
     }
+
+
+
+    public static boolean generateImage(String imgData, String imgFilePath) throws IOException { // 对字节数组字符串进行Base64解码并生成图片
+         if (imgData == null) // 图像数据为空
+                 return false;
+         imgData = imgData.split("base64,")[1];
+         OutputStream out = null;
+         try {
+             out = new FileOutputStream(imgFilePath);
+             // Base64解码
+             byte[] b = Base64.getDecoder().decode(imgData);
+/*             for (int i = 0; i < b.length; ++i) {
+                 if (b[i] < 0) {// 调整异常数据
+                         b[i] += 256;
+                 }
+             }*/
+             out.write(b);
+         } catch (FileNotFoundException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+         } catch (IOException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+         } finally {
+             out.flush();
+             out.close();
+             return true;
+         }
+    }
 }
