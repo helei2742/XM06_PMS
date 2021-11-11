@@ -1,7 +1,5 @@
 package org.xm06.pms.model;
 
-import java.util.List;
-
 public class FaceUploadModel {
     private Integer userId;
     private String facesJson;

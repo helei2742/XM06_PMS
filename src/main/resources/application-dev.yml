@@ -27,14 +27,14 @@ spring:
     username: 914577981@qq.com
     password: jwvgwxhhnhnhbdhe
     default-encoding: UTF-8
-  devtools:
-      restart:
-        enabled: true
-        # 设置重启目录，添加目录的文件需要restart
-        additional-paths: src/main/java
-        #解决项目自动重启编译后接口404的问题
-        poll-interval: 5000
-        quiet-period: 1000
+#  devtools:
+#      restart:
+#        enabled: true
+#        # 设置重启目录，添加目录的文件需要restart
+#        additional-paths: src/main/java
+#        #解决项目自动重启编译后接口404的问题
+#        poll-interval: 5000
+#        quiet-period: 1000
 
 ## mybatis的配置
 mybatis:

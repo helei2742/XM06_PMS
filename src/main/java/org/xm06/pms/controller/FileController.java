@@ -1,16 +1,8 @@
 package org.xm06.pms.controller;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.lang3.StringUtils;
-import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.xm06.pms.base.BaseController;
-import org.xm06.pms.base.ResultInfo;
-import org.xm06.pms.model.FaceUploadModel;
 import org.xm06.pms.utils.AssertUtil;
 import org.xm06.pms.utils.FileUtil;
 
@@ -61,14 +53,4 @@ public class FileController extends BaseController {
         sos.close();
     }
 
-    @PostMapping("/faceImgUpload")
-    @ResponseBody
-    public ResultInfo faceImageBase64Upload(@RequestBody FaceUploadModel faceUploadModel) throws IOException {
-        JSONArray jsonArray = JSON.parseArray(faceUploadModel.getFacesJson());
-        int c = 0;
-        for (Object o : jsonArray) {
-            FileUtil.generateImage(o.toString(), "D:\\face"+c+++".jpg");
-        }
-        return success("上传成功", 200, null);
-    }
 }
