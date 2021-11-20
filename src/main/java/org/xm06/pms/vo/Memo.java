@@ -1,18 +1,25 @@
 package org.xm06.pms.vo;
 
+
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
+@ApiModel(value = "Memo",description = "便签实体类")
 public class Memo {
+    @ApiModelProperty("主键id")
     private Integer id;
-
+    @ApiModelProperty("该便签所属的用户id")
     private Integer userId;
-
+    @ApiModelProperty("便签内容")
     private String memo;
-
+    @ApiModelProperty("截至日期")
     private Date staleDate;
-
+    @ApiModelProperty("创建日期")
     private Date createDate;
-
+    @ApiModelProperty("是否完成")
     private Boolean isFinish;
 
     public Boolean getFinish() {

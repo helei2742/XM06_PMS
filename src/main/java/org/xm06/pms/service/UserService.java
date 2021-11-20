@@ -79,6 +79,7 @@ public class UserService extends BaseService<User, Integer> {
         return getUserModel(user);
     }
 
+
     /**
      * 发送确认邮件
      * @param id
@@ -87,8 +88,9 @@ public class UserService extends BaseService<User, Integer> {
     private void sendConfirmMail(Integer id, String email){
         Context context = new Context();
         context.setVariable("id", id);
-        String emailContent = templateEngine.process("emailTemplate", context);
+        String emailContent = templateEngine.process("userRegistConfirm", context);
         mailService.sendHtmlMail(email, "注册确认", emailContent);
+
     }
 
     /**
@@ -127,7 +129,6 @@ public class UserService extends BaseService<User, Integer> {
                 selectById.getId() != selectByUsername.getId()
                 , "用户名已被使用");
 
-
         user.setUpdateDate(new Date());
         AssertUtil.isTrue(userMapper.updateUserNoPwd(user)<1, "更新信息失败");
         return getUserModel(user);
@@ -162,6 +163,10 @@ public class UserService extends BaseService<User, Integer> {
         userModel.setUsername(user.getUserName());
         userModel.setTrueName(user.getTrueName());
         return userModel;
+    }
+
+    public User queryByUsername(String username){
+        return userMapper.findByUsername(username);
     }
 
 }

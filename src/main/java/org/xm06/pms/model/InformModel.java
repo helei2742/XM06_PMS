@@ -24,6 +24,7 @@ public class InformModel {
     private Boolean notRead;
 
     private List<Long> notReadList;
+
     private Boolean clear;
 
     public Boolean getClear() {

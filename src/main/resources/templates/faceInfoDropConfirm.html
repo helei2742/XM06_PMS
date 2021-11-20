@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>人脸信息注销确认</title>
+</head>
+<body>
+您好，已收到您的注销人脸信息申请，点击<br>
+<a href="#" style="color: red" th:href="@{http://localhost:9000/XM06/face/dropConfirm/{id}(id=${id})}">确认注销</a>
+或
+<a href="#" th:href="@{http://localhost:9000/XM06/face/dropCancel/{id}(id=${id})}">取消注销</a>
+</body>
+</html>

@@ -1,20 +1,25 @@
 package org.xm06.pms.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
+@ApiModel(value = "TaskRecord",description = "任务提交记录的实体类")
 public class TaskRecord {
+    @ApiModelProperty("主键id")
     private Integer id;
-
+    @ApiModelProperty("任务id")
     private Integer taskId;
-
+    @ApiModelProperty("用户id，提交的用户")
     private Integer userId;
-
+    @ApiModelProperty("提交的描述")
     private String description;
-
+    @ApiModelProperty("提交文件在服务器的保存路径")
     private String fileUrl;
-
+    @ApiModelProperty("提交的用户实体类")
     private User user;
-
+    @ApiModelProperty("提交日期")
     private Date submitDate;
 
     public User getUser() {

@@ -1,15 +1,16 @@
 package org.xm06.pms.config;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -18,6 +19,26 @@ import java.util.List;
 @ComponentScan
 public class InterceptorConfig implements WebMvcConfigurer {
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        try {
+            Field registrationsField = FieldUtils.getField(InterceptorRegistry.class, "registrations", true);
+            List<InterceptorRegistration> registrations = (List<InterceptorRegistration>) ReflectionUtils.getField(registrationsField, registry);
+            if (registrations != null) {
+                for (InterceptorRegistration interceptorRegistration : registrations) {
+                    interceptorRegistration
+                            .excludePathPatterns("/swagger**/**")
+                            .excludePathPatterns("/webjars/**")
+                            .excludePathPatterns("/v3/**")
+                            .excludePathPatterns("/v2/**")
+                            .excludePathPatterns("/doc.html");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 静态文件映射
@@ -40,8 +61,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"classpath:/templates/static/");
         registry.addResourceHandler("/index/static/**")
                 .addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX+"/templates/static/");*/
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+//        registry.addResourceHandler("/**")
+//                .addResourceLocations("classpath:/static/");
     }
 
 }

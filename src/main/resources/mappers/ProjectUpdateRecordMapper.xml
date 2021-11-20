@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xm06.pms.dao.ProjectUpdateRecordMapper" >
+  <resultMap id="BaseResultMap" type="org.xm06.pms.vo.ProjectUpdateRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="submit_desc" property="submitDesc" jdbcType="VARCHAR" />
+    <result column="submit_degree" property="submitDegree" jdbcType="REAL" />
+    <result column="upload_file_src" property="uploadFileSrc" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="is_valid" property="isValid" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, project_id, submit_desc, submit_degree, upload_file_src, create_date, 
+    update_date, is_valid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from xm06_project_update_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from xm06_project_update_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.xm06.pms.vo.ProjectUpdateRecord" >
+    insert into xm06_project_update_record (id, user_id, project_id, 
+      submit_desc, submit_degree, upload_file_src, 
+      create_date, update_date, is_valid
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, 
+      #{submitDesc,jdbcType=VARCHAR}, #{submitDegree,jdbcType=REAL}, #{uploadFileSrc,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xm06.pms.vo.ProjectUpdateRecord" >
+    insert into xm06_project_update_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="submitDesc != null" >
+        submit_desc,
+      </if>
+      <if test="submitDegree != null" >
+        submit_degree,
+      </if>
+      <if test="uploadFileSrc != null" >
+        upload_file_src,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="submitDesc != null" >
+        #{submitDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="submitDegree != null" >
+        #{submitDegree,jdbcType=REAL},
+      </if>
+      <if test="uploadFileSrc != null" >
+        #{uploadFileSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.ProjectUpdateRecord" >
+    update xm06_project_update_record
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="submitDesc != null" >
+        submit_desc = #{submitDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="submitDegree != null" >
+        submit_degree = #{submitDegree,jdbcType=REAL},
+      </if>
+      <if test="uploadFileSrc != null" >
+        upload_file_src = #{uploadFileSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.ProjectUpdateRecord" >
+    update xm06_project_update_record
+    set user_id = #{userId,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      submit_desc = #{submitDesc,jdbcType=VARCHAR},
+      submit_degree = #{submitDegree,jdbcType=REAL},
+      upload_file_src = #{uploadFileSrc,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_valid = #{isValid,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="queryUpdateRecord" resultType="org.xm06.pms.vo.ProjectUpdateRecord" parameterType="java.lang.Integer">
+    select * from xm06_project_update_record
+    where project_id = #{projectId, jdbcType=INTEGER}
+  </select>
+</mapper>

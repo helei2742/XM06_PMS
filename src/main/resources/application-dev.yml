@@ -5,6 +5,9 @@ server:
 
 ## 数据源配置
 spring:
+  mvc:
+    async:
+      request-timeout: 60000
   jackson:
     serialization:
       write-dates-as-timestamps: true
@@ -21,12 +24,15 @@ spring:
     mode: LEGACYHTML5
     encoding: UTF-8
 
-
   mail:
     host: smtp.qq.com
     username: 914577981@qq.com
     password: jwvgwxhhnhnhbdhe
     default-encoding: UTF-8
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
 #  devtools:
 #      restart:
 #        enabled: true
@@ -57,3 +63,8 @@ logging:
           dao: debug
   file:
     name: D:/log/mapping.log
+
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true

@@ -1,9 +1,13 @@
 package org.xm06.pms.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+@ApiModel(value = "Project",description = "项目的实体类")
 public class Project {
     public Integer[] getGroupIds() {
         return groupIds;
@@ -13,46 +17,30 @@ public class Project {
         this.groupIds = groupIds;
     }
 
+    @ApiModelProperty("负责该项目的小组id列表")
     private Integer[] groupIds;
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "groupIds=" + Arrays.toString(groupIds) +
-                ", id=" + id +
-                ", projectName='" + projectName + '\'' +
-                ", projectDesc='" + projectDesc + '\'' +
-                ", creatorId=" + creatorId +
-                ", groupId=" + groupId +
-                ", completionDegree=" + completionDegree +
-                ", createDate=" + createDate +
-                ", updateDate=" + updateDate +
-                ", isPublic=" + isPublic +
-                ", isValid=" + isValid +
-                ", groupList=" + groupList +
-                '}';
-    }
-
+    @ApiModelProperty("项目id")
     private Integer id;
-
+    @ApiModelProperty("项目名称")
     private String projectName;
-
+    @ApiModelProperty("项目描述")
     private String projectDesc;
-
+    @ApiModelProperty("创建者id")
     private Integer creatorId;
-
     private Integer groupId;
-
+    @ApiModelProperty("完成度")
     private Double completionDegree;
-
+    @ApiModelProperty("创建日期")
     private Date createDate;
-
+    @ApiModelProperty("更新日期")
     private Date updateDate;
-
+    @ApiModelProperty("是否为公开项目")
     private Boolean isPublic;
     private Boolean isValid;
 
+    @ApiModelProperty("项目负责小组实体的列表")
     private List<Group> groupList;
+
 
     public Boolean getValid() {
         return isValid;

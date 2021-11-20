@@ -11,13 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xm06.pms.base.BaseController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.util.Set;
 
 @Controller
 public class InitController extends BaseController {
-/*    @RequestMapping("/index")
-    public String index(){
-        return "index";
-    }*/
+    @RequestMapping("/")
+    @ResponseBody
+    public String index(HttpServletResponse response) throws IOException {
+        response.sendRedirect("index.html");
+        return null;
+    }
 }

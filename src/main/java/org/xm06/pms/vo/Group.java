@@ -1,24 +1,29 @@
 package org.xm06.pms.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.List;
 
+@ApiModel(value = "Group", description = "小组实体对象")
 public class Group {
+    @ApiModelProperty("小组id")
     private Integer id;
-
+    @ApiModelProperty("小组名")
     private String groupName;
-
+    @ApiModelProperty("小组描述")
     private String described;
-
+    @ApiModelProperty("小组管理用户id")
     private Integer managerId;
-
-    private Boolean isValid;
-
-    private Date createDate;
-
-    private Date updateDate;
-
+    @ApiModelProperty("管理用户对象")
     private User manager;
+    private Boolean isValid;
+    @ApiModelProperty("创建日期")
+    private Date createDate;
+    @ApiModelProperty("更新日期")
+    private Date updateDate;
+    @ApiModelProperty("成员列表")
     private List<User> memberList;
 
 

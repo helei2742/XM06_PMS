@@ -1,5 +1,8 @@
 package org.xm06.pms.base;
 
+import io.swagger.annotations.ApiModel;
+
+
 public class BaseQuery {
     private Integer page = 1;
     private Integer limit = 10;

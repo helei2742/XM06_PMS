@@ -17,11 +17,11 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from t_task
+    from xm06_t_task
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_task
+    delete from xm06_t_task
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="org.xm06.pms.vo.Task" >
@@ -33,7 +33,7 @@
        #{createDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="org.xm06.pms.vo.Task" >
-    insert into t_task
+    insert into xm06_t_task
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -88,7 +88,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Task" >
-    update t_task
+    update xm06_t_task
     <set >
       <if test="taskName != null" >
         task_name = #{taskName,jdbcType=VARCHAR},
@@ -115,7 +115,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Task" >
-    update t_task
+    update xm06_t_task
     set task_name = #{taskName,jdbcType=VARCHAR},
       creator_id = #{creatorId,jdbcType=INTEGER},
       group_id = #{groupId,jdbcType=INTEGER},
@@ -130,7 +130,7 @@
     select
     *
     from
-    t_task
+    xm06_t_task
     where
     task_name = #{taskName}
   </select>

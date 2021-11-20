@@ -1,7 +1,12 @@
 package org.xm06.pms.controller;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.xm06.pms.base.BaseController;
 import org.xm06.pms.utils.AssertUtil;
 import org.xm06.pms.utils.FileUtil;
@@ -15,9 +20,14 @@ import java.net.URLEncoder;
 
 @Controller
 @RequestMapping("/file")
+@Api(value = "FileController", tags = "系统文件接口，负责下载操作")
 public class FileController extends BaseController {
 
-    @RequestMapping("/download")
+    @RequestMapping(value = "/download",method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation("根据图片路径下载服务器资源文件")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "filePath", value = "文件的服务器路径",required = true,paramType = "query",dataType = "String",dataTypeClass = String.class),
+    })
     public void fileDownLoad(String filePath,
                                HttpServletResponse response,
                                HttpServletRequest request) throws IOException {
@@ -25,6 +35,7 @@ public class FileController extends BaseController {
         AssertUtil.isTrue(StringUtils.isBlank(filePath), "文件路径为空");
 
         String filename = FileUtil.getFileFromUrl(filePath);
+
         System.out.println(filename);
 
         FileInputStream fis = null;

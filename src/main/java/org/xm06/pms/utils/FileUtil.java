@@ -10,56 +10,37 @@ import java.util.Date;
 import java.util.Random;
 
 public class FileUtil {
+    /**
+     * 获取文件名
+     * @param url
+     * @return
+     */
     public static String getFileFromUrl(String url){
 
         String[] split = url.split("\\\\");
         return split[split.length-1];
     }
 
-    public static String getFileName(String agent, String filename) throws UnsupportedEncodingException {
+    /**
+     *  文件存储的基础路径
+     */
+    private static String baseSavePath = "D:/webapps/teach/yjykfsj2021/XM06_upload";
 
-        if (agent.contains("MSIE")) {
-
-            // IE浏览器
-
-            filename = URLEncoder.encode(filename, "utf-8");
-
-            filename = filename.replace("+", " ");
-
-        } else if (agent.contains("Firefox")) {
-
-            // 火狐浏览器
-
-            Base64.Encoder encoder = Base64.getEncoder();
-
-            String str = encoder.encodeToString(filename.getBytes("utf-8"));
-
-            filename = "=?utf-8?B?" + str + "?=";
-
-//            BASE64Encoder base64 = new BASE64Encoder();
-
-//            filename = "=?utf-8?B?" + base64.encode(filename.getBytes("utf-8")) + "?=";
-
-        } else {
-
-            // 其它浏览器
-
-            filename = URLEncoder.encode(filename, "utf-8");
-
-        }
-
-        return filename;
-
-    }
-
-
-    public static String saveFile(MultipartFile file, String userIdStr) throws IOException {
+    /**
+     * 保存文件
+     * @param file 文件
+     * @param path
+     * @return  返回保存路径
+     * @throws IOException
+     */
+    public static String saveFile(MultipartFile file, String path) throws IOException {
         System.out.println(file.getContentType());
 
         if(file==null) return "";
         String fileName = file.getOriginalFilename();
+
         fileName = getSaveFileName(fileName);
-        File f = new File("D:/yjykfsj2021_xw_XM06/" + userIdStr);
+        File f = new File(path);
         if(!f.exists()){
             f.mkdirs();
         }
@@ -68,6 +49,16 @@ public class FileUtil {
         return f.getAbsolutePath();
     }
 
+
+    public static void createPath(String path){
+        File file = new File(path);
+        if(!file.exists()) file.exists();
+    }
+    /**
+     * 获取保存时的文件名
+     * @param fileName
+     * @return
+     */
     public static String getSaveFileName(String fileName){
         String[] split = fileName.split("\\.");
         StringBuilder sb = new StringBuilder();
@@ -79,25 +70,103 @@ public class FileUtil {
                 + sb.toString();
     }
 
-    public static String getUserFaceImgSavePath(String username){
-        return  "D:\\userface\\"+Md5Util.encode(username) + "\\face";
+
+    /**
+     * 获取用户上传任务提交文件的文件夹
+     * @param username
+     * @return
+     */
+    public static String getUserUploadTaskFileSavePath(String username){
+        return baseSavePath + "\\uploadfile\\"+ username +"\\task";
     }
+
+    /**
+     * 获取用户上传的提交记录的文件夹
+     * @param username
+     * @return
+     */
+    public static String getUserSubmitProjectRecordPath(String username, Integer projectId){
+        return baseSavePath + "\\uploadfile\\"+ username +"\\project_"+projectId;
+    }
+
+    /**
+     * 获取用户图片保存文件夹
+     * @param username
+     * @return
+     */
+    public static String getUserUploadFaceImgSavePath(String username){
+        return  baseSavePath+"\\userface\\" + username + "\\faceimg";
+    }
+
+    /**
+     * 获取用户人脸信息保存文件夹
+     * @param username
+     * @return
+     */
     public static String getUserFaceYmlSavePath(String username){
-        return "D:\\userface\\"+Md5Util.encode(username) + "\\model";
+        return baseSavePath+"\\userface\\"+ username + "\\model";
     }
 
-    public static String getPrefix(String fileName){
-        return fileName.split("\\.")[0];
+    /**
+     * 获取从视频中获取的用户人脸图片文件夹
+     * @param username
+     * @return
+     */
+    public static String getUserVideoFaceSavePath(String username){
+        return baseSavePath+"\\userface\\"+username+"\\video\\frameimg";
     }
-    public static String getSuffix(String fileName){
-        String[] split = fileName.split("\\.");
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < split.length; i++) {
-            sb.append(".").append(split[i]);
+
+    /**
+     * 获取保存用户上传视频的文件夹
+     * @param username
+     * @return
+     */
+    public static String getUserVideoMp4SavePath(String username){
+        return baseSavePath+"\\userface\\"+username+"\\video\\mp4";
+    }
+
+
+    /**
+     * 获取保存用户人脸登录时上传的图片暂存文件夹
+     * @param username
+     * @return
+     */
+    public static String getFaceLoginImgSavePath(String username){
+        return baseSavePath+"\\userface\\"+username+"\\temp";
+    }
+
+    /**
+     * 获取用户人脸信息根文件夹路径
+     * @param username
+     * @return
+     */
+    public static String getUserFacePath(String username){
+        return baseSavePath+"\\userface\\"+username;
+    }
+    /**
+     * 清除文件夹
+     * @param file
+     */
+    public static void deleteFile(File file){
+        if (file == null || !file.exists()){
+            return;
         }
-        return sb.toString();
+        File[] files = file.listFiles();
+        for (File f: files){
+            if (f.isDirectory()){
+                deleteFile(f);
+            }else {
+                f.delete();
+            }
+        }
+        file.delete();
     }
 
+    /**
+     * base64转换为byte[]
+     * @param base64
+     * @return
+     */
     public static byte[] base64ToByte(String base64){
         if (base64 == null) // 图像数据为空
             return null;

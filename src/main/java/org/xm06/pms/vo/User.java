@@ -1,26 +1,32 @@
 package org.xm06.pms.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.List;
-
+@ApiModel(value = "User",description = "用户实体类")
 public class User {
+    @ApiModelProperty("主键id")
     private Integer id;
-
+    @ApiModelProperty("用户名")
     private String userName;
-
+    @ApiModelProperty("用户密码")
     private String userPwd;
-
+    @ApiModelProperty("用户真实姓名")
     private String trueName;
-
+    @ApiModelProperty("邮箱")
     private String email;
-
+    @ApiModelProperty("手机号")
     private String phone;
 
     private Boolean isValid;
-
+    @ApiModelProperty("创建日期")
     private Date createDate;
-
+    @ApiModelProperty("更新日期")
     private Date updateDate;
+    @ApiModelProperty("用户加入小组的列表")
+    private List<Group> groupList;
 
     public Boolean getValid() {
         return isValid;
@@ -37,8 +43,6 @@ public class User {
     public void setGroupList(List<Group> groupList) {
         this.groupList = groupList;
     }
-
-    private List<Group> groupList;
 
     public Integer getId() {
         return id;

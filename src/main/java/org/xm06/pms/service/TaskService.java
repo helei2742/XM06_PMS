@@ -125,7 +125,9 @@ public class TaskService{
         String url = null;
         if(file != null) {
             try {
-                url = FileUtil.saveFile(file, Md5Util.encode("user"+userId));
+                url = FileUtil.saveFile(file,
+                        FileUtil.getUserUploadTaskFileSavePath(user.getUserName()));
+
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new FileSaveException();

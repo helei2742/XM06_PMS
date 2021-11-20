@@ -316,4 +316,13 @@ public class ProjectService{
         AssertUtil.isTrue(StringUtils.isBlank(projectName), "项目名称不能为空");
         return projectMapper.queryByProjectName(projectName);
     }
+
+    /**
+     * 根据project的主键查询
+     * @param projectId
+     * @return
+     */
+    public Project queryByProjectId(Integer projectId) {
+        return projectMapper.selectByPrimaryKey(projectId);
+    }
 }

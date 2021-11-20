@@ -33,10 +33,11 @@ public class WebSocketServer {
 
     //concurrent包的线程安全Set，用来存放每个客户端对应的WebSocket对象。
     private final static CopyOnWriteArraySet<WebSocketServer> webSocketSet = new CopyOnWriteArraySet<>();
+
     //小组id，和小组的通知消息的map
     private static final Hashtable<Integer, Vector<InformModel>> groupMessage = new Hashtable<>();
 
-    //存储用户id，小组id，对应的未看过的消息id
+    //存储用户id，小组id，对应的未看过的消息id  <用户id, <小组id, 未看消息[]> >
     private static final Hashtable<Integer,Hashtable<Integer, Vector<Long>>> notReadMessage = new Hashtable<>();
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -63,10 +64,13 @@ public class WebSocketServer {
         this.uid = uid;
         this.groupId = groupId;
 
-        //链接时初始化对应id 、groupId 的未读消息容器
+        //一、链接时初始化对应id 、groupId 的未读消息容器
+        //1、用户未看的消息    <小组id, 未看消息[]>
         Hashtable<Integer, Vector<Long>> hashtable =
                 WebSocketServer.notReadMessage.getOrDefault(uid, new Hashtable<>());
+        //2 初始化用户的  <小组id, 未看消息[]>
         hashtable.putIfAbsent(groupId, new Vector<>());
+        //3 初始化静态存储的 <用户id, <小组id, 未看消息[]> >
         WebSocketServer.notReadMessage.put(uid, hashtable);
 
         addOnlineCount();           // 在线数加1
@@ -74,13 +78,14 @@ public class WebSocketServer {
         try {
             System.out.println("有新客户端开始监听,sid=" + this.uid + "groupId="+groupId+",当前在线人数为:" + getOnlineCount());
 
-            //群发之前的消息
+            //发送给用户该小组之前的消息
             Vector<InformModel> informModels = groupMessage.get(groupId);
             if(informModels != null){
                 for (InformModel informModel : informModels) {
                     sendMessage(informModel);
                 }
             }
+
         } catch (IOException e) {
             System.out.println("websocket IO Exception");
         }
@@ -108,11 +113,16 @@ public class WebSocketServer {
      * 收到客户端消息后调用的方法
      * @Param jsonObj 客户端发送过来的消息,为一个json对象，包含该消息包含的组id groupId 和 信息message
      *
+     *
+     *      当其中的 getNotReadList  属性不为空时，此消息为用户确认度过消息，将这些清除id对应的消息
+     *   从该uid 与 groupId 对应的 Map中清除
+     *
      */
     @OnMessage
     public void onMessage(String jsonObj, Session session) throws IOException {
         System.out.println("收到来自客户端 uid=" + uid +"groupId="+groupId+ " 的信息:" + jsonObj);
         InformModel informModel = JSONObject.parseObject(jsonObj, InformModel.class);
+
         //带有没读的列表，将这些id对应删除
         if(informModel.getNotReadList() != null){
             for (Long id : informModel.getNotReadList()) {
@@ -205,8 +215,10 @@ public class WebSocketServer {
      */
     public void sendMessage(InformModel informModel) throws IOException {
         //是未读消息
-        System.out.println(uid+"=="+groupId+"发送消息，未读内容id"+WebSocketServer.notReadMessage
+        System.out.println(uid+"=="+groupId+"发送消息，未读内容"+WebSocketServer.notReadMessage
                 .get(uid).get(groupId));
+
+        //看该用户在该组的消息是否读过
         boolean notRead = WebSocketServer.notReadMessage
                 .get(uid).get(groupId).contains(informModel.getId());
         informModel.setNotRead(notRead);
