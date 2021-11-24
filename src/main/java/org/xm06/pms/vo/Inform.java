@@ -7,9 +7,19 @@ import java.util.Date;
 
 @ApiModel(value = "Inform",description = "通知消息的实体类")
 public class Inform {
+    @Override
+    public String toString() {
+        return "Inform{" +
+                "id=" + id +
+                ", groupId=" + groupId +
+                ", sendUserId=" + sendUserId +
+                ", sendDate=" + sendDate +
+                ", message='" + message + '\'' +
+                '}';
+    }
 
     @ApiModelProperty("主键id")
-    private Integer id;
+    private Long id;
     @ApiModelProperty("该消息的小组")
     private Integer groupId;
     @ApiModelProperty("发送者id")
@@ -19,11 +29,11 @@ public class Inform {
     @ApiModelProperty("消息内容")
     private String message;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -56,6 +66,6 @@ public class Inform {
     }
 
     public void setMessage(String message) {
-        this.message = message == null ? null : message.trim();
+        this.message = message;
     }
 }

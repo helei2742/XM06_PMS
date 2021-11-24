@@ -175,15 +175,13 @@ public class GroupService {
         AssertUtil.isTrue(!invitationCode.equals(code), "邀请码错误");
 
         boolean isContain = false;
-        System.out.println(group.getMemberList());
         for (User member : group.getMemberList()) {
             if (member.getId() == userId) {
                 isContain = true;
                 break;
             }
         }
-
-        AssertUtil.isTrue(isContain, "该用户已在小组中");
+        AssertUtil.isTrue(isContain, "用户已在小组中");
 
 
         groupMapper.userAddInGroup(userId, groupId);

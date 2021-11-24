@@ -91,6 +91,7 @@ public class GroupController extends BaseController {
         return success("查询成功", 200, group);
     }
 
+
     /**
      * 分页查找全部小组信息
      * @param groupQuery

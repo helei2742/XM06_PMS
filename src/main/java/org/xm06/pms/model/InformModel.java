@@ -8,13 +8,16 @@ public class InformModel {
     @Override
     public String toString() {
         return "InformModel{" +
-                "groupId=" + groupId +
                 "id=" + id +
+                ", groupId=" + groupId +
                 ", sendUser=" + sendUser +
                 ", sendDate=" + sendDate +
                 ", message='" + message + '\'' +
+                ", notRead=" + notRead +
+                ", notReadList=" + notReadList +
                 '}';
     }
+
 
     private Long id;
     private Integer groupId;
@@ -25,31 +28,6 @@ public class InformModel {
 
     private List<Long> notReadList;
 
-    private Boolean clear;
-
-    public Boolean getClear() {
-        return clear;
-    }
-
-    public void setClear(Boolean clear) {
-        this.clear = clear;
-    }
-
-    public List<Long> getNotReadList() {
-        return notReadList;
-    }
-
-    public void setNotReadList(List<Long> notReadList) {
-        this.notReadList = notReadList;
-    }
-
-    public Boolean getNotRead() {
-        return notRead;
-    }
-
-    public void setNotRead(Boolean notRead) {
-        this.notRead = notRead;
-    }
 
     public Long getId() {
         return id;
@@ -57,14 +35,6 @@ public class InformModel {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public Integer getGroupId() {
@@ -89,5 +59,29 @@ public class InformModel {
 
     public void setSendDate(long sendDate) {
         this.sendDate = sendDate;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Boolean getNotRead() {
+        return notRead;
+    }
+
+    public void setNotRead(Boolean notRead) {
+        this.notRead = notRead;
+    }
+
+    public List<Long> getNotReadList() {
+        return notReadList;
+    }
+
+    public void setNotReadList(List<Long> notReadList) {
+        this.notReadList = notReadList;
     }
 }

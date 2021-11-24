@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 import org.xm06.pms.model.InformModel;
 import org.xm06.pms.model.UserModel;
 import org.xm06.pms.service.GroupService;
+import org.xm06.pms.service.InformService;
 import org.xm06.pms.service.UserService;
+import org.xm06.pms.utils.LoginUtil;
 import org.xm06.pms.utils.RandomIdUtil;
+import org.xm06.pms.utils.UserIDBase64;
 import org.xm06.pms.vo.User;
 
 import javax.websocket.*;
@@ -35,10 +38,35 @@ public class WebSocketServer {
     private final static CopyOnWriteArraySet<WebSocketServer> webSocketSet = new CopyOnWriteArraySet<>();
 
     //小组id，和小组的通知消息的map
-    private static final Hashtable<Integer, Vector<InformModel>> groupMessage = new Hashtable<>();
+    public static final Hashtable<Integer, Vector<InformModel>> groupMessage = new Hashtable<>();
 
-    //存储用户id，小组id，对应的未看过的消息id  <用户id, <小组id, 未看消息[]> >
-    private static final Hashtable<Integer,Hashtable<Integer, Vector<Long>>> notReadMessage = new Hashtable<>();
+    //存储用户id，小组id，对应的未看过的消息id  <用户id, <小组id, 未看消息id[]> >
+    public static final Hashtable<Integer,Hashtable<Integer, Vector<Long>>> notReadMessage = new Hashtable<>();
+
+
+    /**
+     * 清除notReadMessage,和groupMessage的内容，主要在定时保存这些数据后调用
+     */
+    public static void clearStaticMsg() {
+        System.out.println(groupMessage);
+        System.out.println(notReadMessage);
+        Set<Integer> keySet = groupMessage.keySet();
+        for (Integer integer : keySet) {
+            groupMessage.get(integer).clear();
+        }
+
+        Set<Integer> keySet1 = notReadMessage.keySet();
+        for (Integer integer : keySet1) {
+            Hashtable<Integer, Vector<Long>> hashtable = notReadMessage.get(integer);
+            Set<Integer> keySet2 = hashtable.keySet();
+            for (Integer integer1 : keySet2) {
+                hashtable.get(integer1).clear();
+            }
+        }
+        System.out.println("清除后");
+        System.out.println(groupMessage);
+        System.out.println(notReadMessage);
+    }
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
@@ -68,27 +96,56 @@ public class WebSocketServer {
         //1、用户未看的消息    <小组id, 未看消息[]>
         Hashtable<Integer, Vector<Long>> hashtable =
                 WebSocketServer.notReadMessage.getOrDefault(uid, new Hashtable<>());
+
         //2 初始化用户的  <小组id, 未看消息[]>
         hashtable.putIfAbsent(groupId, new Vector<>());
+
         //3 初始化静态存储的 <用户id, <小组id, 未看消息[]> >
         WebSocketServer.notReadMessage.put(uid, hashtable);
 
         addOnlineCount();           // 在线数加1
 
         try {
-            System.out.println("有新客户端开始监听,sid=" + this.uid + "groupId="+groupId+",当前在线人数为:" + getOnlineCount());
+            System.out.println("有新客户端开始监听,uid=" + this.uid + "groupId="+groupId+",当前在线人数为:" + getOnlineCount());
 
-            //发送给用户该小组之前的消息
-            Vector<InformModel> informModels = groupMessage.get(groupId);
-            if(informModels != null){
-                for (InformModel informModel : informModels) {
-                    sendMessage(informModel);
+            //发送给用户未读消息
+            //1、数据库中未读的消息
+            Vector<InformModel> dbNotRead = queryNotReadInDataBase(this.uid, this.groupId);
+
+            //2、内存中未读消息id
+            Vector<Long> notReadIds = WebSocketServer.notReadMessage.get(uid).get(groupId);
+            Vector<InformModel> notRead = new Vector<>();
+            //3、内存中有未读记录页添加到notRead中
+            if(WebSocketServer.groupMessage.get(groupId) != null) {
+                for (InformModel informModel : WebSocketServer.groupMessage.get(groupId)) {
+                    for (Long notReadId : notReadIds) {
+                        if (informModel.getId().equals(notReadId))
+                            notRead.add(informModel);
+                    }
                 }
+            }
+            //4、合并两部分未读消息
+            notRead.addAll(dbNotRead);
+
+            for (InformModel informModel : notRead) {
+                //发送给本socket的客户端
+                sendMessage(informModel);
             }
 
         } catch (IOException e) {
             System.out.println("websocket IO Exception");
         }
+    }
+
+
+    private static InformService informService;
+    @Autowired
+    public void setInformService(InformService informService) {
+        WebSocketServer.informService = informService;
+    }
+
+    private Vector<InformModel> queryNotReadInDataBase(Integer uid, Integer groupId){
+        return informService.queryNotReadInform(uid, groupId);
     }
 
     /**
@@ -113,46 +170,31 @@ public class WebSocketServer {
      * 收到客户端消息后调用的方法
      * @Param jsonObj 客户端发送过来的消息,为一个json对象，包含该消息包含的组id groupId 和 信息message
      *
-     *
-     *      当其中的 getNotReadList  属性不为空时，此消息为用户确认度过消息，将这些清除id对应的消息
-     *   从该uid 与 groupId 对应的 Map中清除
-     *
      */
     @OnMessage
     public void onMessage(String jsonObj, Session session) throws IOException {
         System.out.println("收到来自客户端 uid=" + uid +"groupId="+groupId+ " 的信息:" + jsonObj);
         InformModel informModel = JSONObject.parseObject(jsonObj, InformModel.class);
 
-        //带有没读的列表，将这些id对应删除
-        if(informModel.getNotReadList() != null){
-            for (Long id : informModel.getNotReadList()) {
-                System.out.println("已清除");
-                WebSocketServer.notReadMessage.get(uid).get(groupId).remove(id);
-            }
-            informModel.setClear(true);
-            sendMessage(informModel);
-            return;
-        }
-
-        //转换为对象,设置对应属性
+        //设置对应属性
+        //随机消息id
+        informModel.setId(RandomIdUtil.getRandomId(this.uid));
         informModel.setSendDate(new Date().getTime());
         informModel.setSendUser(getUserModel(this.uid));
-        informModel.setId(RandomIdUtil.getRandomId(this.uid));
 
         Integer groupId = informModel.getGroupId();
 
-        //获取需群发的对象
+        //获取需群发的小组成员id
         List<Integer> idList = getGroupMemberIdList(groupId);
 
-        //将消息保存
+        //将消息保存到内存（不需存到数据库，设置定时存储到数据库）
         Vector<InformModel> informModels = WebSocketServer.groupMessage.getOrDefault(groupId, new Vector<>());
         informModels.add(informModel);
         WebSocketServer.groupMessage.put(groupId, informModels);
 
         //添加该消息未读到对应的 uid，groupId中
         for (Integer toId : idList) {
-            if(toId == this.uid) continue;
-            WebSocketServer.addNotReadId(informModel.getId(),toId,groupId);
+            this.addNotReadId(informModel.getId(),toId,groupId);
         }
 
         try {
@@ -167,13 +209,15 @@ public class WebSocketServer {
      * 将未读消息id添加到 WebSocketServer.notReadMessage 中
      * @param id
      */
-    private static void addNotReadId(Long id, Integer uid, Integer groupId){
+    private void addNotReadId(Long id, Integer uid, Integer groupId){
         System.out.println("添加未读"+uid+"="+groupId+"="+id);
-
         Hashtable<Integer, Vector<Long>> hashtable =
                 WebSocketServer.notReadMessage.getOrDefault(uid, new Hashtable<>());
         Vector<Long> vector = hashtable.getOrDefault(groupId, new Vector<>());
-        vector.add(id);
+        //排除发送者自己
+        if(!uid.equals(this.uid)){
+            vector.add(id);
+        }
         hashtable.put(groupId, vector);
         WebSocketServer.notReadMessage.put(uid, hashtable);
     }
@@ -191,16 +235,17 @@ public class WebSocketServer {
      * 群发自定义消息
      */
     public static void sendMessage(InformModel informModel, List<Integer> toIds) throws IOException {
-        System.out.println("推送消息到客户端 " + toIds + "，推送内容:" + informModel);
+        System.out.println("推送消息到客户端 uid:" + toIds + "groupId:"+informModel.getGroupId()+
+                "，推送内容:" + informModel);
 
         if(toIds== null || toIds.size() <= 0) {
             return;
         }
-        //向对应的socket发消息
+        //向相应的socket发消息
         for (WebSocketServer item : webSocketSet) {
             try {
                 //给小组的成员发送消息
-                if(toIds.contains(item.uid) && item.groupId == informModel.getGroupId()){
+                if(toIds.contains(item.uid) && item.groupId.equals(informModel.getGroupId())){
                     item.sendMessage(informModel);
                 }
             } catch (IOException e) {
@@ -214,15 +259,18 @@ public class WebSocketServer {
      * 实现服务器主动推送消息到 指定客户端
      */
     public void sendMessage(InformModel informModel) throws IOException {
-        //是未读消息
-        System.out.println(uid+"=="+groupId+"发送消息，未读内容"+WebSocketServer.notReadMessage
-                .get(uid).get(groupId));
+        Boolean saveF = informModel.getNotRead();
 
         //看该用户在该组的消息是否读过
-        boolean notRead = WebSocketServer.notReadMessage
-                .get(uid).get(groupId).contains(informModel.getId());
-        informModel.setNotRead(notRead);
+        // 数据库中获取的未读消息在获取的稍后就标记notRead为true了
+        if(informModel.getNotRead() == null) {
+            boolean notRead =
+                    WebSocketServer.notReadMessage.get(uid).get(groupId).contains(informModel.getId());
+            informModel.setNotRead(notRead);
+        }
         this.session.getBasicRemote().sendText(JSON.toJSONString(informModel));
+        //会更改此对象的notRead值，发送完成后重置
+        informModel.setNotRead(saveF);
     }
 
 
@@ -258,7 +306,7 @@ public class WebSocketServer {
         UserModel userModel = new UserModel();
         userModel.setUsername(user.getUserName());
         userModel.setTrueName(user.getTrueName());
-        userModel.setUserIdStr(String.valueOf(userId));
+        userModel.setUserIdStr(UserIDBase64.encoderUserID(userId));
         return userModel;
     }
 

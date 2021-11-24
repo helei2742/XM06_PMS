@@ -32,6 +32,14 @@ public class TaskController extends BaseController {
     @Autowired
     private TaskService taskService;
 
+    @RequestMapping(value = "/queryByTaskId",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    @ApiOperation("根据taskId，查询任务的信息")
+    @ApiImplicitParam(name="taskId",value="任务的主键id",required = true,dataTypeClass = Integer.class)
+    public ResultInfo queryByTaskId(Integer taskId) {
+        Task t = taskService.queryByTaskId(taskId);
+        return success("", 200, t);
+    }
 
     @PostMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -48,6 +56,7 @@ public class TaskController extends BaseController {
         PageInfo<Task> tasks = taskService.queryGroupTask(taskQuery);
         return success("查询小组任务成功", 200, tasks);
     }
+
 
     @PostMapping(value = "/pageQueryUserTask", produces = "application/json;charset=utf-8")
     @ResponseBody

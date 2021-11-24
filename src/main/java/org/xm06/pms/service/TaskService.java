@@ -178,4 +178,13 @@ public class TaskService{
                 .selectUserRecordOfTask(taskRecordQuery.getUserId(), taskRecordQuery.getTaskId());
         return new PageInfo<>(all);
     }
+
+    /**
+     * 根据taskId 查找任务
+     * @param taskId
+     * @return
+     */
+    public Task queryByTaskId(Integer taskId) {
+        return taskMapper.selectByPrimaryKey(taskId);
+    }
 }

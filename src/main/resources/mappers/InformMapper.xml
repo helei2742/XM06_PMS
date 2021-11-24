@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.xm06.pms.dao.InformMapper" >
   <resultMap id="BaseResultMap" type="org.xm06.pms.vo.Inform" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="group_id" property="groupId" jdbcType="INTEGER" />
     <result column="send_user_id" property="sendUserId" jdbcType="INTEGER" />
     <result column="send_date" property="sendDate" jdbcType="TIMESTAMP" />
@@ -11,20 +11,20 @@
   <sql id="Base_Column_List" >
     id, group_id, send_user_id, send_date, message
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from xm06_t_inform
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from xm06_t_inform
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="org.xm06.pms.vo.Inform" >
     insert into xm06_t_inform (id, group_id, send_user_id,
       send_date, message)
-    values (#{id,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{sendUserId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{groupId,jdbcType=INTEGER}, #{sendUserId,jdbcType=INTEGER},
       #{sendDate,jdbcType=TIMESTAMP}, #{message,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="org.xm06.pms.vo.Inform" >
@@ -48,7 +48,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="groupId != null" >
         #{groupId,jdbcType=INTEGER},
@@ -80,17 +80,36 @@
         message = #{message,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Inform" >
     update xm06_t_inform
     set group_id = #{groupId,jdbcType=INTEGER},
       send_user_id = #{sendUserId,jdbcType=INTEGER},
       send_date = #{sendDate,jdbcType=TIMESTAMP},
       message = #{message,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 
 
+  <select id="queryNotReadInform" resultType="org.xm06.pms.vo.Inform">
+	SELECT
+        i.*
+    FROM
+        xm06_t_inform i ,
+        xm06_t_not_read_inform nri
+    WHERE nri.user_id = #{userId}
+    and nri.group_id = #{groupId}
+    AND nri.inform_id = i.id
+  </select>
+
+  <delete id="removeNotRead">
+    delete from xm06_t_not_read_inform where user_id=#{userId} and group_id=#{groupId}
+  </delete>
+
+  <select id="queryInformByGroupId" resultType="org.xm06.pms.vo.Inform">
+    select * from xm06_t_inform where group_id = #{groupId} order by send_date desc
+  </select>
 
 </mapper>
