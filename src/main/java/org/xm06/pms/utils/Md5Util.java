@@ -30,42 +30,5 @@ public class Md5Util {
      * @param conferenceName
      * @param creatorId
      * @return
-     *//*
-    Conference queryByConferenceNameAndCreatorId(@Param("conferenceName") String conferenceName,
-                                                 @Param("creatorId") Integer creatorId);
-
-    *//**
-     * 根据小组id查找任会议
-     * @param groupId
-     * @return
-     *//*
-    List<Conference> queryGroupConference(Integer groupId);
-
-    *//**
-     * 查找用户发布的会议
-     * @param userId
-     * @return
-     *//*
-    List<Conference> queryUserCreateConference(Integer userId);
-
-    *//**
-     * 查找正在进行的会议
-     * @param userId
-     * @return
-     *//*
-    List<Conference> queryComingConference(Integer userId);
-
-    *//**
-     * 查找结束的会议
-     * @param userId
-     * @return
-     *//*
-    List<Conference> queryFinishConference(Integer userId);
-
-    *//**
-     * 查询全部的会议
-     * @param userId
-     * @return
-     *//*
-    List<Conference> queryAllConference(Integer userId);*/
+     */
 }
