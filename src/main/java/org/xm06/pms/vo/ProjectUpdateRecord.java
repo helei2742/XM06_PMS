@@ -19,6 +19,8 @@ public class ProjectUpdateRecord {
     private String submitDesc;
     @ApiModelProperty("提交进度")
     private Float submitDegree;
+    @ApiModelProperty("提交后项目进度")
+    private Float totalDegree;
     @ApiModelProperty("上传文件在服务器的保存路径")
     private String uploadFileSrc;
     @ApiModelProperty("进度提交时间")
@@ -27,6 +29,14 @@ public class ProjectUpdateRecord {
     private Date updateDate;
 
     private Boolean isValid;
+
+    public Float getTotalDegree() {
+        return totalDegree;
+    }
+
+    public void setTotalDegree(Float totalDegree) {
+        this.totalDegree = totalDegree;
+    }
 
     public Integer getId() {
         return id;

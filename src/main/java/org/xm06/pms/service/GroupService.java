@@ -5,10 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.xm06.pms.dao.GroupMapper;
+import org.xm06.pms.dao.ProjectMapper;
+import org.xm06.pms.dao.TaskMapper;
 import org.xm06.pms.dao.UserMapper;
 import org.xm06.pms.query.GroupQuery;
 import org.xm06.pms.model.UserGroupModel;
@@ -244,6 +247,11 @@ public class GroupService {
         return groupMapper.findUserJoinedGroup(userId);
     }
 
+    @Resource
+    TaskMapper taskMapper;
+    @Resource
+    ProjectMapper projectMapper;
+
     /**
      * 移除小组
      * @param managerId
@@ -257,7 +265,20 @@ public class GroupService {
         Group group = groupMapper.selectByPrimaryKey(groupId);
         AssertUtil.isTrue(group == null, "没有该小组的信息");
         AssertUtil.isTrue(managerId!=group.getManagerId(), "只有小组管理员才能解散小组");
+
+        //删除成员
+        List<Integer> idList = groupMapper.queryMemberIdList(groupId);
+        for (Integer userId : idList) {
+            groupMapper.removeMember(userId, groupId);
+        }
+        //删除发布的任务
+        taskMapper.deleteGroupTask(groupId);
+        //删除所属项目的记录
+        projectMapper.deleteGroupInProject(groupId);
+
+
         AssertUtil.isTrue(groupMapper.deleteByPrimaryKey(groupId)<1, "解散小组失败");
+
         return group.getGroupName();
     }
 }

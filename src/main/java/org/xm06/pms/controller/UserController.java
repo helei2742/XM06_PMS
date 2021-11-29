@@ -50,6 +50,8 @@ public class UserController extends BaseController {
     public ResultInfo findByIdStr(String userIdStr) {
         Integer userID = UserIDBase64.decoderUserID(userIdStr);
         User u = userService.findByIdStr(userID);
+
+        systemRecordService.addLoginUserId(userID);
         return success("查询成功", 200, u);
     }
 
@@ -63,6 +65,8 @@ public class UserController extends BaseController {
     })
     public ResultInfo addUser(User user) {
         UserModel userModel = userService.addUser(user);
+
+        systemRecordService.addRegisterCount();
         return success("注册成功,请前往邮箱确认", 200, userModel);
     }
 

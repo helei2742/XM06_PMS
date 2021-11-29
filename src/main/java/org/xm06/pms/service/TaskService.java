@@ -24,8 +24,7 @@ import org.xm06.pms.vo.User;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TaskService{
@@ -144,16 +143,6 @@ public class TaskService{
         AssertUtil.isTrue(taskRecordMapper.insertSelective(taskRecord)<1, "保存提交记录失败");
     }
 
-    /**
-     * 查询用户的提交记录
-     * @param userId
-     * @return
-     */
-    public List<TaskRecord> userTaskRecord(Integer userId){
-        User user = userMapper.selectByPrimaryKey(userId);
-        AssertUtil.isTrue(user == null, "没有该用户");
-        return taskRecordMapper.queryUserTaskRecord(userId);
-    }
 
     /**
      * 查询任务的所有提交记录
@@ -180,11 +169,77 @@ public class TaskService{
     }
 
     /**
+     * 分页查询用户的所有提交记录
+     * @param taskRecordQuery
+     * @return
+     */
+    public PageInfo<TaskRecord> queryUserTaskRecord(TaskRecordQuery taskRecordQuery){
+        User user = userMapper.selectByPrimaryKey(taskRecordQuery.getUserId());
+        AssertUtil.isTrue(user == null, "没有该用户");
+        PageHelper.startPage(taskRecordQuery.getPage(), taskRecordQuery.getLimit());
+        List<TaskRecord> all = taskRecordMapper.queryUserTaskRecord(taskRecordQuery.getUserId());
+        return new PageInfo<>(all);
+    }
+
+    /**
      * 根据taskId 查找任务
      * @param taskId
      * @return
      */
     public Task queryByTaskId(Integer taskId) {
-        return taskMapper.selectByPrimaryKey(taskId);
+        Task task = taskMapper.selectByPrimaryKey(taskId);
+        AssertUtil.isTrue(task == null, "不存在该任务");
+        User user = userMapper.selectByPrimaryKey(task.getCreatorId());
+        AssertUtil.isTrue(user == null, "创建者已注销");
+        user.setUserPwd("");
+        task.setCreator(user);
+        return task;
+    }
+
+    /**
+     * 修改任务
+     * @param task
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void alterTask(Task task) {
+        taskMapper.updateByPrimaryKeySelective(task);
+    }
+
+    /**
+     * 查询任务提交记录的echarts图表数据，
+     * @param taskId
+     * @return
+     */
+    public Map<String, Object> queryTaskSubmitCharts(Integer taskId) {
+        Task task = taskMapper.selectByPrimaryKey(taskId);
+        AssertUtil.isTrue(task == null, "该任务不存在");
+        //获取任务 的成员
+        Group group = groupMapper.findGroupAllInfoById(task.getGroupId());
+        AssertUtil.isTrue(group==null, "任务所属小组已解散");
+
+        List<User> memberList = group.getMemberList();
+
+        List<User> submitUsers = new ArrayList<>();
+        List<User> notSubmitUsers = new ArrayList<>();
+
+        for (User user : memberList) {
+            List<TaskRecord> records = taskRecordMapper.selectUserRecordOfTask(user.getId(), taskId);
+            if(records!=null&&records.size()>0){
+                //用户的updateDate 用作提交时间
+                user.setUpdateDate(records.get(0).getSubmitDate());
+                submitUsers.add(user);
+            }else {
+                notSubmitUsers.add(user);
+            }
+        }
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("max", memberList.size());
+        res.put("submitCount",submitUsers.size());
+        res.put("notSubmitCount",notSubmitUsers.size());
+        res.put("submitUsers", submitUsers);
+        res.put("notSubmitUsers",notSubmitUsers);
+        res.put("code", 200);
+        return res;
     }
 }

@@ -7,7 +7,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.opencv.face.Face;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -51,6 +50,8 @@ public class ProjectController extends BaseController {
     @ApiOperation(value = "创建项目接口",notes = "需传入projectName，creatorId,projectDesc,groups,isPublic")
     public ResultInfo createProject(@RequestBody @Valid Project project){
         projectService.addProject(project);
+
+        systemRecordService.addProjectCreateCount();
         return success("创建项目成功", 200, null);
     }
 
@@ -133,6 +134,9 @@ public class ProjectController extends BaseController {
         record.setSubmitDesc(map.get("submitDesc"));
         record.setSubmitDegree(Float.valueOf(map.get("submitDegree")));
         projectUploadRecordService.addProjectUpdateRecord(record, file);
+
+
+        systemRecordService.addProjectUpdateCount();
         return success("添加成功", 200, null);
     }
 
@@ -146,6 +150,23 @@ public class ProjectController extends BaseController {
         PageInfo<ProjectUpdateRecord> pageInfo =
                 projectUploadRecordService.pageQueryProjectUpdateRecord(recordQuery);
         return success("添加成功", 200, pageInfo);
+    }
+
+
+    @PostMapping("/querySubmitChartInfo")
+    @ResponseBody
+    @ApiOperation(value = "查询项目记录生成项目总提交情况的echarts图表的数据",notes = "需传入projectId")
+    public Map<String, Object> querySubmitChartInfo(@RequestBody Map<String,String> m){
+        Integer projectId = Integer.parseInt(m.get("projectId"));
+        return projectUploadRecordService.queryProjectUserDegree(projectId);
+    }
+
+    @PostMapping("/queryUserSubmit14day")
+    @ResponseBody
+    @ApiOperation(value = "查询项目记录生成项目14天内的提交情况的echarts图表的数据",notes = "需传入projectId")
+    public Map<String, Object> queryUserSubmit14day(@RequestBody Map<String,String> m){
+        Integer projectId = Integer.parseInt(m.get("projectId"));
+        return projectUploadRecordService.queryProjectSubmit14day(projectId);
     }
 
 }

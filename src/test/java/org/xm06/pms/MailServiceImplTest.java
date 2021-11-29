@@ -43,20 +43,4 @@ public class MailServiceImplTest {
         mailService.sendHtmlMail("914577981@qq.com", "这是一个模板文件", emailContent);
     }
 
-    @Autowired
-    FaceService faceService;
-    @Test
-    public void test() {
-        faceService.setValid(7);
-
-//        faceService.dropUserFaceInfoCancel(7);
-//        faceService.dropUserFaceInfo(7);
-    }
-    @Test
-    public void test2() {
-//        faceService.setValid(7);
-
-        faceService.dropUserFaceInfoCancel(7);
-//        faceService.dropUserFaceInfo(7);
-    }
 }

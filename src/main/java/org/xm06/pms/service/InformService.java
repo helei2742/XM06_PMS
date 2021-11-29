@@ -157,13 +157,17 @@ public class InformService {
      * @return
      */
     public PageInfo<InformModel> pageQueryInformRecord(InformQuery informQuery) {
-        List<Integer> list = groupMapper.queryMemberIdList(informQuery.getGroupId());
-        if(list!=null && !list.contains(informQuery.getUserId())){
+        Integer groupId = informQuery.getGroupId();
+        Integer userId = informQuery.getUserId();
+        List<Integer> list = groupMapper.queryMemberIdList(groupId);
+        if(list!=null && !list.contains(userId)){
             AssertUtil.isTrue(true, "非小组成员无法查询消息记录");
         }
 
+
+        //数据库中的消息记录
         PageHelper.startPage(informQuery.getPage(), informQuery.getLimit());
-        List<Inform> all = informMapper.queryInformByGroupId(informQuery.getGroupId());
+        List<Inform> all = informMapper.queryInformByGroupId(groupId);
         PageInfo<Inform> informPageInfo = new PageInfo<>(all);
 
         HashMap<Integer, UserModel> map = new HashMap<>();

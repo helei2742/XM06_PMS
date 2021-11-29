@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -46,6 +48,22 @@ public class TaskController extends BaseController {
     @ApiOperation(value = "发布任务接口",notes = "应传入：taskName，deadline，groupId，creatorId，description")
     public ResultInfo addTask(@RequestBody @Valid Task task) {
         taskService.addTask(task);
+        //统计
+        systemRecordService.addTaskCreateCount();
+        return success("发布任务成功", 200, null);
+    }
+
+    @PostMapping(value = "/alterTask", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "修改任务接口",notes = "应传入：taskName，deadline，description")
+    public ResultInfo alterTask(@RequestBody @Valid Task task) {
+        task.setCreateDate(null);
+        task.setCreator(null);
+        task.setGroupId(null);
+        task.setCreatorId(null);
+        task.setIsValid(null);
+        taskService.alterTask(task);
+
         return success("发布任务成功", 200, null);
     }
 
@@ -82,6 +100,8 @@ public class TaskController extends BaseController {
             , HttpServletRequest request) throws UnsupportedEncodingException {
 
         taskService.submitTask(file, userId, taskId, description);
+
+        systemRecordService.addTaskSubmitCount();
         return success("提交成功", 200, null);
     }
 
@@ -89,9 +109,9 @@ public class TaskController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "分页查询用户所有提交记录接口",notes = "需包含userId, 还可选择传入page,limit")
     public ResultInfo userSubmitRecord(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
-        PageHelper.startPage(taskRecordQuery.getPage(), taskRecordQuery.getLimit());
-        List<TaskRecord> all = taskService.userTaskRecord(taskRecordQuery.getUserId());
-        return success("查询用户所有提交记录成功", 200, new PageInfo<>(all));
+
+        PageInfo<TaskRecord> info = taskService.queryUserTaskRecord(taskRecordQuery);
+        return success("查询用户所有提交记录成功", 200, info);
     }
 
 
@@ -110,5 +130,12 @@ public class TaskController extends BaseController {
     public ResultInfo userRecordOfTask(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
         PageInfo<TaskRecord> all = taskService.userRecordOfTask(taskRecordQuery);
         return success("查阅用户提交记录成功", 200, all);
+    }
+
+    @PostMapping(value = "/queryTaskSubmitCharts")
+    @ResponseBody
+    @ApiOperation(value = "查询任务提交情况的echart表数据",notes = "需包含taskId")
+    public Map<String,Object> queryTaskSubmitCharts(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
+        return taskService.queryTaskSubmitCharts(taskRecordQuery.getTaskId());
     }
 }

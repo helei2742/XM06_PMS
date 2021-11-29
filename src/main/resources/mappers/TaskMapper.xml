@@ -256,4 +256,7 @@
     ORDER BY create_date DESC
   </select>
 
+  <delete id="deleteGroupTask" parameterType="java.lang.Integer">
+    delete from xm06_t_task where group_id=#{groupId}
+  </delete>
 </mapper>

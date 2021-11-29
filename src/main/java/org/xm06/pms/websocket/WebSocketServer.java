@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -48,8 +49,8 @@ public class WebSocketServer {
      * 清除notReadMessage,和groupMessage的内容，主要在定时保存这些数据后调用
      */
     public static void clearStaticMsg() {
-        System.out.println(groupMessage);
-        System.out.println(notReadMessage);
+//        System.out.println(groupMessage);
+//        System.out.println(notReadMessage);
         Set<Integer> keySet = groupMessage.keySet();
         for (Integer integer : keySet) {
             groupMessage.get(integer).clear();
@@ -63,9 +64,9 @@ public class WebSocketServer {
                 hashtable.get(integer1).clear();
             }
         }
-        System.out.println("清除后");
-        System.out.println(groupMessage);
-        System.out.println(notReadMessage);
+//        System.out.println("清除后");
+//        System.out.println(groupMessage);
+//        System.out.println(notReadMessage);
     }
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -301,7 +302,6 @@ public class WebSocketServer {
      * @return
      */
     private UserModel getUserModel(Integer userId){
-
         User user = userService.selectByPrimaryKey(userId);
         UserModel userModel = new UserModel();
         userModel.setUsername(user.getUserName());

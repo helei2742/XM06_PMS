@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xm06.pms.dao.SystemRecordMapper" >
+  <resultMap id="BaseResultMap" type="org.xm06.pms.vo.SystemRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="login_count" property="loginCount" jdbcType="INTEGER" />
+    <result column="register_count" property="registerCount" jdbcType="INTEGER" />
+    <result column="task_submit_count" property="taskSubmitCount" jdbcType="INTEGER" />
+    <result column="task_create_count" property="taskCreateCount" jdbcType="INTEGER" />
+    <result column="group_create_count" property="groupCreateCount" jdbcType="INTEGER" />
+    <result column="project_create_count" property="projectCreateCount" jdbcType="INTEGER" />
+    <result column="project_update_count" property="projectUpdateCount" jdbcType="INTEGER" />
+    <result column="record_date" property="recordDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, login_count, register_count, task_submit_count, task_create_count, group_create_count, 
+    project_create_count, project_update_count, record_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from xm06_t_system_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from xm06_t_system_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.xm06.pms.vo.SystemRecord" >
+    insert into xm06_t_system_record (id, login_count, register_count, 
+      task_submit_count, task_create_count, group_create_count, 
+      project_create_count, project_update_count, 
+      record_date)
+    values (#{id,jdbcType=INTEGER}, #{loginCount,jdbcType=INTEGER}, #{registerCount,jdbcType=INTEGER}, 
+      #{taskSubmitCount,jdbcType=INTEGER}, #{taskCreateCount,jdbcType=INTEGER}, #{groupCreateCount,jdbcType=INTEGER}, 
+      #{projectCreateCount,jdbcType=INTEGER}, #{projectUpdateCount,jdbcType=INTEGER}, 
+      #{recordDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xm06.pms.vo.SystemRecord" >
+    insert into xm06_t_system_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loginCount != null" >
+        login_count,
+      </if>
+      <if test="registerCount != null" >
+        register_count,
+      </if>
+      <if test="taskSubmitCount != null" >
+        task_submit_count,
+      </if>
+      <if test="taskCreateCount != null" >
+        task_create_count,
+      </if>
+      <if test="groupCreateCount != null" >
+        group_create_count,
+      </if>
+      <if test="projectCreateCount != null" >
+        project_create_count,
+      </if>
+      <if test="projectUpdateCount != null" >
+        project_update_count,
+      </if>
+      <if test="recordDate != null" >
+        record_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="loginCount != null" >
+        #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="registerCount != null" >
+        #{registerCount,jdbcType=INTEGER},
+      </if>
+      <if test="taskSubmitCount != null" >
+        #{taskSubmitCount,jdbcType=INTEGER},
+      </if>
+      <if test="taskCreateCount != null" >
+        #{taskCreateCount,jdbcType=INTEGER},
+      </if>
+      <if test="groupCreateCount != null" >
+        #{groupCreateCount,jdbcType=INTEGER},
+      </if>
+      <if test="projectCreateCount != null" >
+        #{projectCreateCount,jdbcType=INTEGER},
+      </if>
+      <if test="projectUpdateCount != null" >
+        #{projectUpdateCount,jdbcType=INTEGER},
+      </if>
+      <if test="recordDate != null" >
+        #{recordDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.SystemRecord" >
+    update xm06_t_system_record
+    <set >
+      <if test="loginCount != null" >
+        login_count = #{loginCount,jdbcType=INTEGER},
+      </if>
+      <if test="registerCount != null" >
+        register_count = #{registerCount,jdbcType=INTEGER},
+      </if>
+      <if test="taskSubmitCount != null" >
+        task_submit_count = #{taskSubmitCount,jdbcType=INTEGER},
+      </if>
+      <if test="taskCreateCount != null" >
+        task_create_count = #{taskCreateCount,jdbcType=INTEGER},
+      </if>
+      <if test="groupCreateCount != null" >
+        group_create_count = #{groupCreateCount,jdbcType=INTEGER},
+      </if>
+      <if test="projectCreateCount != null" >
+        project_create_count = #{projectCreateCount,jdbcType=INTEGER},
+      </if>
+      <if test="projectUpdateCount != null" >
+        project_update_count = #{projectUpdateCount,jdbcType=INTEGER},
+      </if>
+      <if test="recordDate != null" >
+        record_date = #{recordDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.SystemRecord" >
+    update xm06_t_system_record
+    set login_count = #{loginCount,jdbcType=INTEGER},
+      register_count = #{registerCount,jdbcType=INTEGER},
+      task_submit_count = #{taskSubmitCount,jdbcType=INTEGER},
+      task_create_count = #{taskCreateCount,jdbcType=INTEGER},
+      group_create_count = #{groupCreateCount,jdbcType=INTEGER},
+      project_create_count = #{projectCreateCount,jdbcType=INTEGER},
+      project_update_count = #{projectUpdateCount,jdbcType=INTEGER},
+      record_date = #{recordDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="query8Day" resultType="org.xm06.pms.vo.SystemRecord">
+    SELECT * FROM xm06_t_system_record WHERE date(record_date) >= date_sub(curdate(), interval 8 day) order by record_date asc
+  </select>
+
+  <select id="queryLastRecord" resultType="org.xm06.pms.vo.SystemRecord">
+    select
+    *
+    from
+    xm06_t_system_record order by id desc limit 1
+  </select>
+
+  <select id="queryTotalLogin" resultType="java.lang.Integer">
+    select sum(login_count) from xm06_t_system_record
+  </select>
+  <select id="queryTotalRecord" resultType="org.xm06.pms.vo.SystemRecord">
+   SELECT
+   SUM(login_count) login_count,
+   SUM(register_count) register_count,
+   SUM(task_submit_count) task_submit_count,
+   SUM(task_create_count) task_create_count,
+   SUM(group_create_count) group_create_count,
+   SUM(project_create_count) project_create_count,
+   SUM(project_update_count) project_update_count
+   FROM
+   xm06_t_system_record
+  </select>
+</mapper>

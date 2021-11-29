@@ -18,11 +18,11 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Map;
 
-@Controller
-@RequestMapping("/face")
-@Api(value="FaceController", tags = "人脸模块接口")
+//@Controller
+//@RequestMapping("/face")
+//@Api(value="FaceController", tags = "人脸模块接口")
 public class FaceController extends BaseController {
-
+/*
     @Autowired
     FaceService faceService;
 
@@ -87,5 +87,5 @@ public class FaceController extends BaseController {
     public String dropCancel(@PathVariable(value = "id") Integer userId){
         faceService.dropUserFaceInfoCancel(userId);
         return "dropCancelSuccess";
-    }
+    }*/
 }

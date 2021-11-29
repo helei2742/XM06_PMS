@@ -1,14 +1,22 @@
 package org.xm06.pms.base;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.xm06.pms.service.SystemRecordService;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class BaseController {
+    @Autowired
+    public SystemRecordService systemRecordService;
+
+
     @ModelAttribute
     public void preHandler(HttpServletRequest request){
         request.setAttribute("ctx", request.getContextPath());
     }
+
 
     public ResultInfo success() {
         return new ResultInfo();

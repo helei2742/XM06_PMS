@@ -44,6 +44,8 @@ public class GroupController extends BaseController {
     })
     public ResultInfo createGroup(Group group){
         Group addGroup = groupService.createGroup(group);
+
+        systemRecordService.addGroupCreateCount();
         return success("创建小组成功", 200, addGroup);
     }
 

@@ -284,6 +284,21 @@
     values(#{projectId}, #{groupId}, now(), true)
   </insert>
 
+  <select id="queryProjectUser" parameterType="java.lang.Integer" resultType="org.xm06.pms.vo.User">
+   SELECT
+   DISTINCT
+   u.*
+   FROM
+   xm06_t_project_group pg,
+   xm06_t_user u,
+   xm06_t_user_group ug
+   WHERE
+   pg.project_id = #{projectId, jdbcType=INTEGER}
+   AND
+   pg.group_id = ug.group_id
+   AND
+   ug.user_id = u.id
+  </select>
   <select id="queryByProjectName" parameterType="java.lang.String" resultMap="projectMap">
     select * from xm06_t_project where project_name = #{projectName}
   </select>
@@ -482,4 +497,8 @@
     order by completion_degree ASC
   </select>
 <!--  项目名称模糊查找项目 end  -->
+
+    <delete id="deleteGroupInProject" parameterType="java.lang.Integer">
+        delete from xm06_t_project_group where group_id =#{groupId}
+    </delete>
 </mapper>

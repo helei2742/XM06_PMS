@@ -1,13 +1,6 @@
 package org.xm06.pms.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.opencv.core.*;
-import org.opencv.face.FaceRecognizer;
-import org.opencv.face.LBPHFaceRecognizer;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.videoio.VideoCapture;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,29 +10,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.opencv.imgcodecs.Imgcodecs.*;
 
 public class FaceUtil {
 
+/*
 
     public final static Integer MINNEEDFACECOUNT = 50;
 
 
-    /**
+    */
+/**
      * 图片字节转换为mat
      * @param b
      * @return
-     */
+     *//*
+
     public static Mat byteToMat(byte[] b){
        Mat mat = Imgcodecs.imdecode(new MatOfByte(b), IMREAD_UNCHANGED);
        return mat;
     }
 
-    /**
+    */
+/**
      * 读取路径图片，灰度化识别人脸后返回人脸的mat，图片需要为原图
      * @param imgSrc 图片路径
      * @return  未灰度化人脸 大小 w345 h345
-     */
+     *//*
+
     public static Mat conv_Mat(String imgSrc, CascadeClassifier faceDetector){
         if(StringUtils.isBlank(imgSrc)){
             return null;
@@ -48,11 +45,13 @@ public class FaceUtil {
         return conv_Mat(image0,faceDetector);
     }
 
-    /**
+    */
+/**
      * 将图片Mat识别后返回人脸的mat，图片需要为原图，
      * @param  image0 需转换的图片Mat
      * @return  未灰度化人脸 大小 w345 h345
-     */
+     *//*
+
     public static Mat conv_Mat(Mat image0, CascadeClassifier faceDetector){
 
         Mat image1 = new Mat();
@@ -72,12 +71,14 @@ public class FaceUtil {
         return face;
     }
 
-    /**
+    */
+/**
      * 识别图片人脸转换为灰度图
      * @param image0
      * @param faceDetector
      * @return 灰度化人脸 大小 w345 h345
-     */
+     *//*
+
     public static Mat conv_Mat_gray(Mat image0, CascadeClassifier faceDetector){
         Mat image1 = new Mat();
         // 灰度化
@@ -98,13 +99,15 @@ public class FaceUtil {
         return face;
     }
 
-    /**
+    */
+/**
      * 训练模型的方法，传入人脸图片所在的文件夹路径，和模型输出的路径
      * 图片需要为未灰度化的人脸大小统一
      * 训练结束后模型文件会在模型输出路径里边
      *
      * 存放文件格式：   "/face_model_"+userIdStr+".yml"
-     */
+     *//*
+
     public static String train(String imageFolder, String saveFolder, String userIdStr)
             throws IOException {
 // opencv的模型
@@ -154,13 +157,15 @@ public class FaceUtil {
     }
 
 
-    /**
+    */
+/**
      * 面部识别方法， 图片必须为灰度化的人脸图片
      * @param face 需识别的图片mat,灰度化的人脸
      * @param faceCascade  脸部识别模块
      * @param faceRecognizer 指定的face的识别器
      * @return boolean 代表是否验证通过
-     */
+     *//*
+
     public static boolean faceRecognize_getBoolean(Mat face, CascadeClassifier faceCascade,
                                         FaceRecognizer faceRecognizer){
         MatOfRect faces = new MatOfRect();
@@ -187,11 +192,13 @@ public class FaceUtil {
     }
 
 
-    /**
+    */
+/**
      * 根据图片路径获取图片
      * @param imgSrc
      * @return
-     */
+     *//*
+
     public static Mat readImg(String imgSrc) {
         return imread(imgSrc);
     }
@@ -203,14 +210,16 @@ public class FaceUtil {
 
 
     private static long startTime;
-    /**
+    */
+/**
      * 读取视频文件，获取有人像的帧，保存这些帧
      * @param videoPath      视频路径
      * @param frameSavePath 视频中读取的图像帧保存路径
      * @param username      用户名。用户生成图像名
      * @param faceCascade
      * @return  保存的帧的路径
-     */
+     *//*
+
     public static String readImgFromVideo(String videoPath, String frameSavePath ,String username, CascadeClassifier faceCascade){
         VideoCapture capture = new VideoCapture(videoPath);
         int connection = 0;
@@ -247,5 +256,6 @@ public class FaceUtil {
         AssertUtil.isTrue(connection<50, "视频人脸图像不足");
         return frameSavePath;
     }
+*/
 
 }

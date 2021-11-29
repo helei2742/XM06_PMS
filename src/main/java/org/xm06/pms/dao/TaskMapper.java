@@ -58,4 +58,10 @@ public interface TaskMapper extends BaseMapper<Task, Integer> {
      * @return
      */
     List<Task> queryNotSubmitTask(Integer userId);
+
+    /**
+     * 删除小组发布的任务
+     * @param groupId
+     */
+    Integer deleteGroupTask(Integer groupId);
 }

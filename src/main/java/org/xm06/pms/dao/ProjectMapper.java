@@ -3,6 +3,7 @@ package org.xm06.pms.dao;
 import org.apache.ibatis.annotations.Param;
 import org.xm06.pms.base.BaseMapper;
 import org.xm06.pms.vo.Project;
+import org.xm06.pms.vo.User;
 
 import java.util.List;
 
@@ -33,6 +34,13 @@ public interface ProjectMapper extends BaseMapper<Project, Integer> {
      * @return
      */
     List<Project> queryByGroupId(Integer groupId);
+
+    /**
+     * 查找项目中的用户
+     * @param projectId
+     * @return
+     */
+    List<User> queryProjectUser(Integer projectId);
 
     /**
      * 根据项目名查找项目
@@ -160,6 +168,13 @@ public interface ProjectMapper extends BaseMapper<Project, Integer> {
      * @return
      */
     List<Project> queryNameLikeProjectCompletion_ASC(String likeName);
+
+    /**
+     * 删除参与项目的记录
+     * @param groupId
+     * @return
+     */
+    Integer deleteGroupInProject(Integer groupId);
 //====================== 根据项目名，模糊查找项目 end =========================
 
 }

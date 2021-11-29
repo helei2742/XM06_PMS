@@ -11,8 +11,10 @@ import org.xm06.pms.base.ResultInfo;
 import org.xm06.pms.model.InformModel;
 import org.xm06.pms.query.InformQuery;
 import org.xm06.pms.service.InformService;
+import org.xm06.pms.websocket.WebSocketServer;
 
 import java.util.List;
+import java.util.Vector;
 
 
 @Controller
@@ -27,6 +29,13 @@ public class InformController extends BaseController {
     public ResultInfo pageQueryInformRecord(@RequestBody InformQuery informQuery){
         PageInfo<InformModel> pi = informService.pageQueryInformRecord(informQuery);
         return success("查询消息记录成功", 200, pi);
+    }
+
+    @PostMapping("/queryInformIn3day")
+    @ResponseBody
+    public ResultInfo queryInformIn3day(@RequestBody InformQuery informQuery){
+        Vector<InformModel> informModels = WebSocketServer.groupMessage.get(informQuery.getGroupId());
+        return success("查询消息记录成功", 200, informModels);
     }
 
     @PostMapping(value = "/clearNotRead")

@@ -7,13 +7,14 @@
     <result column="project_id" property="projectId" jdbcType="INTEGER" />
     <result column="submit_desc" property="submitDesc" jdbcType="VARCHAR" />
     <result column="submit_degree" property="submitDegree" jdbcType="REAL" />
+    <result column="total_degree" property="totalDegree" jdbcType="REAL" />
     <result column="upload_file_src" property="uploadFileSrc" jdbcType="VARCHAR" />
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
     <result column="is_valid" property="isValid" jdbcType="BIT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, project_id, submit_desc, submit_degree, upload_file_src, create_date, 
+    id, user_id, project_id, submit_desc, submit_degree, total_degree,upload_file_src, create_date,
     update_date, is_valid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -28,11 +29,11 @@
   </delete>
   <insert id="insert" parameterType="org.xm06.pms.vo.ProjectUpdateRecord" >
     insert into xm06_t_project_update_record (id, user_id, project_id,
-      submit_desc, submit_degree, upload_file_src, 
+      submit_desc, submit_degree, total_degree,upload_file_src,
       create_date, update_date, is_valid
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, 
-      #{submitDesc,jdbcType=VARCHAR}, #{submitDegree,jdbcType=REAL}, #{uploadFileSrc,jdbcType=VARCHAR}, 
+      #{submitDesc,jdbcType=VARCHAR}, #{submitDegree,jdbcType=REAL}, #{totalDegree,jdbcType=REAL},#{uploadFileSrc,jdbcType=VARCHAR},
       #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=BIT}
       )
   </insert>
@@ -53,6 +54,9 @@
       </if>
       <if test="submitDegree != null" >
         submit_degree,
+      </if>
+      <if test="totalDegree != null" >
+        total_degree,
       </if>
       <if test="uploadFileSrc != null" >
         upload_file_src,
@@ -83,6 +87,9 @@
       <if test="submitDegree != null" >
         #{submitDegree,jdbcType=REAL},
       </if>
+      <if test="totalDegree != null" >
+        #{totalDegree,jdbcType=REAL},
+      </if>
       <if test="uploadFileSrc != null" >
         #{uploadFileSrc,jdbcType=VARCHAR},
       </if>
@@ -112,6 +119,9 @@
       <if test="submitDegree != null" >
         submit_degree = #{submitDegree,jdbcType=REAL},
       </if>
+      <if test="totalDegree != null" >
+        total_degree = #{totalDegree,jdbcType=REAL},
+      </if>
       <if test="uploadFileSrc != null" >
         upload_file_src = #{uploadFileSrc,jdbcType=VARCHAR},
       </if>
@@ -133,6 +143,7 @@
       project_id = #{projectId,jdbcType=INTEGER},
       submit_desc = #{submitDesc,jdbcType=VARCHAR},
       submit_degree = #{submitDegree,jdbcType=REAL},
+      total_degree = #{totalDegree,jdbcType=REAL},
       upload_file_src = #{uploadFileSrc,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
@@ -144,5 +155,27 @@
   <select id="queryUpdateRecord" resultType="org.xm06.pms.vo.ProjectUpdateRecord" parameterType="java.lang.Integer">
     select * from xm06_t_project_update_record
     where project_id = #{projectId, jdbcType=INTEGER}
+  </select>
+
+  <select id="queryUserTotalDegree" resultType="java.lang.Double">
+    select sum(submit_degree) from xm06_t_project_update_record
+    where project_id = #{projectId,jdbcType=INTEGER}
+    and user_id = #{userId,jdbcType=INTEGER }
+  </select>
+
+  <select id="queryUserSubmit14day" resultType="org.xm06.pms.vo.ProjectUpdateRecord">
+   SELECT
+   SUM(submit_degree) 'submit_degree',
+   DATE_FORMAT(create_date,"%Y-%m-%d") 'create_date'
+   FROM
+   xm06_t_project_update_record
+   WHERE
+   user_id = #{userId,jdbcType=INTEGER}
+   AND
+   project_id = #{projectId,jdbcType=INTEGER}
+   AND
+   DATE(create_date) >= DATE_SUB(CURDATE(), INTERVAL 14 DAY)
+   GROUP BY
+   DATE_FORMAT(create_date,"%Y-%m-%d")
   </select>
 </mapper>

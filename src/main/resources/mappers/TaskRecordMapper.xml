@@ -155,7 +155,7 @@
     select * from xm06_t_task_record
     where
     task_id = #{taskId} and user_id = #{userId}
-    order by submit_time desc
+    order by submit_date desc
   </select>
 
 </mapper>

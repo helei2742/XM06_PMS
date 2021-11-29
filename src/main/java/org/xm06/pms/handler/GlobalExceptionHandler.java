@@ -33,11 +33,11 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
         e.printStackTrace();
         logger.debug(e.getMessage());
-        //为登录异常，直接返回登录视图
-        if(e instanceof NotLoginException){
-            ModelAndView mv = new ModelAndView("redirect:/index");
-            return mv;
-        }
+//        //为登录异常，直接返回登录视图
+//        if(e instanceof NotLoginException){
+//            ModelAndView mv = new ModelAndView("redirect:/index");
+//            return mv;
+//        }
 
         //设置默认错误视图
         ModelAndView mv = new ModelAndView();
@@ -92,7 +92,6 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
                         ow.append(JSON.toJSONString(resultInfo));
                         ow.flush();
                     } catch (IOException ioException) {
-
                         ioException.printStackTrace();
                     }finally {
                         try {
