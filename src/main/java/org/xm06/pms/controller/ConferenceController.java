@@ -1,6 +1,7 @@
 package org.xm06.pms.controller;
 
 
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xm06.pms.base.ResultInfo;
 import org.xm06.pms.base.BaseController;
+import org.xm06.pms.query.ConferenceQuery;
 import org.xm06.pms.service.ConferenceService;
 import org.xm06.pms.vo.Conference;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 
 @Controller
@@ -27,6 +26,13 @@ public class ConferenceController extends BaseController{
 
     @Autowired
     private ConferenceService conferenceService;
+
+    @PostMapping(value = "/pageQueryAllConference", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public ResultInfo conference_index(@RequestBody @Valid ConferenceQuery conferenceQuery) {
+        PageInfo<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
+        return success("查询会议成功", 200, conferences);
+    }
 
     @PostMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody

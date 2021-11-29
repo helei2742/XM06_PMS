@@ -86,13 +86,12 @@ public class ConferenceService {
      *
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED)
-    public PageInfo<Conference> publicConferenceType(ConferenceQuery conferenceQuery){
+    public PageInfo<Conference> pageQueryAllConference(ConferenceQuery conferenceQuery){
         Integer type = conferenceQuery.getType();
 
         AssertUtil.isTrue(type == null, "必须传入参数type");
-        User user = userMapper.selectByPrimaryKey(conferenceQuery.getCreatorId());
-        AssertUtil.isTrue(user == null, "该用户不存在");
+//        User user = userMapper.selectByPrimaryKey(conferenceQuery.getCreatorId());
+//        AssertUtil.isTrue(user == null, "该用户不存在");
 
         PageHelper.startPage(conferenceQuery.getPage(), conferenceQuery.getLimit());
         List<Conference> all = null;

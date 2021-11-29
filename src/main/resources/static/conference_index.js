@@ -45,8 +45,9 @@ var Page = function() {
         data.conference_date = $("#record_query_setup #conference_date").val();
         data.hour_long = $("#record_query_setup #hour_long").val();
         data.address = $("#record_query_setup #address").val();
+        data.type = 5;
         $.ajax({
-            url: "/XM06/get_conference_list",
+            url: "/XM06/conference/pageQueryAllConference",
             type: "POST",
             data: JSON.stringify(data),
             dataType: "JSON",
@@ -81,6 +82,9 @@ var Page = function() {
                             html = html + record.conference_name;
                             html = html + "</td>“"
                             html = html + "<td>"
+                            html = html + record.group_id;
+                            html = html + "</td>";
+                            html = html + "<td>"
                             html = html + record.conference_info;
                             html = html + "</td>";
                             html = html + "<td>"
@@ -91,6 +95,12 @@ var Page = function() {
                             html = html + "</td>";
                             html = html + "<td>"
                             html = html + record.address;
+                            html = html + "</td>";
+                            html = html + "<td>"
+                            html = html + record.creator_id;
+                            html = html + "</td>";
+                            html = html + "<td>"
+                            html = html + record.create_date.toDateString();
                             html = html + "</td>";
                             html = html + "<td>";
                             html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
@@ -113,14 +123,14 @@ var Page = function() {
         data.task_name=$("#record_add_div #task_name").val();
         console.log(data)
         $.ajax({
-            url: "/add_task_record",
+            url: "/conference/add",
             type: "POST",
             data: JSON.stringify(data),
             dataType: "JSON",
             contentType: "application/json;charset=UTF-8",
             success: function (json){
                 if(json.result_code === 0){
-                    alert("已经完成任务添加。");
+                    alert("已经完成会议添加。");
                     window.location.reload();
                 }
             },

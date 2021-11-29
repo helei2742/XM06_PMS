@@ -7,7 +7,7 @@
 <!--    <properties resource="init.properties"/>-->
 
     <!-- 指定数据连接驱动jar地址 -->
-    <classPathEntry location="D:\JavaWeb\maven_repository\mysql\mysql-connector-java\8.0.18\mysql-connector-java-8.0.18.jar" />
+    <classPathEntry location="D:\BookMaintain\web\WEB-INF\lib\mysql-connector-java-8.0.16.jar" />
 
     <!-- 一个数据库一个context -->
     <context id="infoGuardian">
@@ -21,7 +21,7 @@
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/pms?serverTimezone=GMT%2B8"
                         userId="root"
-                        password="962464" />
+                        password="18789513633gtxy" />
 
         <!-- 类型转换 -->
         <javaTypeResolver>
@@ -53,8 +53,8 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="pms.xm06_project_update_record"
-               domainObjectName="ProjectUpdateRecord" enableCountByExample="false"
+        <table tableName="xm06_t_conference"
+               domainObjectName="Conference" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
             <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
