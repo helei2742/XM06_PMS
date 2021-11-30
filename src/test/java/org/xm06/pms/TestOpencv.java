@@ -36,7 +36,7 @@ package org.xm06.pms;
 //
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@SpringBootTest
-public class TestOpencv {
+//public class TestOpencv {
 //    private static CascadeClassifier faceCascade;
 //    static {
 //        // 解决awt报错问题
@@ -94,4 +94,4 @@ public class TestOpencv {
 //        System.out.println("共测试"+size+"条数据,成功"+successCount);
 //        System.out.println("成功率:"+(successCount*1.0)/size);
 //    }
-}
+//}

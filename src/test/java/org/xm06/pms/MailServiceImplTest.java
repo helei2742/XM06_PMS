@@ -18,7 +18,7 @@ package org.xm06.pms;
 //
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@SpringBootTest
-public class MailServiceImplTest {
+//public class MailServiceImplTest {
 //
 //    @Autowired
 //    private MailService mailService;
@@ -59,4 +59,4 @@ public class MailServiceImplTest {
 //        faceService.dropUserFaceInfoCancel(7);
 ////        faceService.dropUserFaceInfo(7);
 //    }
-}
+//}
