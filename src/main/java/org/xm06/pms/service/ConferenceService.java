@@ -51,9 +51,9 @@ public class ConferenceService {
 
         AssertUtil.isTrue(conferenceMapper.queryByConferenceNameAndCreatorId(
                 conference.getConferenceName(), conference.getCreatorId())!=null,
-                "您已创建了相同名称的项目");
+                "您已创建了相同名称的会议");
 
-        AssertUtil.isTrue(conferenceMapper.insertSelective(conference)<1,"创建任务失败");
+        AssertUtil.isTrue(conferenceMapper.insertSelective(conference)<1,"创建会议失败");
     }
 
     /**
@@ -79,7 +79,7 @@ public class ConferenceService {
      * 根据type 分类查询不同条件下的会议
      * @param conferenceQuery
      * conferenceQuery 中
-     *      type 为 1、会议名称模糊查询）同时需传入其他必须参数(对应2.userId, 1.conferenceName)
+     *      type 为 1、查询用户创建会议
      *             2.查询小组的会议
      *             3.查询还没开始的会议
      *             4，查询已经结束的会议
@@ -106,16 +106,16 @@ public class ConferenceService {
             all = conferenceMapper.queryUserCreateConference(conferenceQuery.getCreatorId());
         } else if (type == ConferenceQuery.PAGEQUERYCOMINGCONFERENCE) {
             // 2表示查询还未开始的会议
-            all = conferenceMapper.queryComingConference(conferenceQuery.getCreatorId());
+            all = conferenceMapper.queryComingConference();
         } else if (type == ConferenceQuery.PAGEQUERYFINISHCONFERENCE) {
             // 3表示查询已经结束的会议
-            all = conferenceMapper.queryFinishConference(conferenceQuery.getCreatorId());
+            all = conferenceMapper.queryFinishConference();
         } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID) {
             // 4表示查询小组会议
             all = conferenceMapper.queryGroupConference(conferenceQuery.getGroupId());
         } else {
             // 查询全部任务
-            all = conferenceMapper.queryAllConference(conferenceQuery.getCreatorId());
+            all = conferenceMapper.queryAllConference();
         }
         return new PageInfo<>(all);
     }

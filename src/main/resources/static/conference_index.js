@@ -45,7 +45,18 @@ var Page = function() {
         data.conference_date = $("#record_query_setup #conference_date").val();
         data.hour_long = $("#record_query_setup #hour_long").val();
         data.address = $("#record_query_setup #address").val();
-        data.type = 5;
+        data.creator_id = $("#record_query_setup #creator_id").val();
+        data.group_id = $("#record_query_setup #group_id").val();
+        if (data.conference_name === "" && data.creator_id === "" && data.group_id === ""){
+            data.type = 5;
+        }
+        if (data.creator_id !== ""){
+            data.type = 1;
+        }
+        if (data.group_id !== ""){
+            data.type = 4;
+        }
+        console.log(data)
         $.ajax({
             url: "/XM06/conference/pageQueryAllConference",
             type: "POST",
@@ -53,9 +64,8 @@ var Page = function() {
             dataType: "JSON",
             contentType: "application/json;charset=UTF-8",
             success: function (json){
-                // console.log(JSON.stringify(json));
-                if(json.result_code === 0) {
-                    var list = json.aaData;
+                if(json.code === 200) {
+                    var list = json.result.list;
                     var html = "";
                     var item = 1;
                     if (list !== undefined && list.length > 0) {
@@ -79,28 +89,28 @@ var Page = function() {
                             html = html + i;
                             html = html + "</td>";
                             html = html + "<td>";
-                            html = html + record.conference_name;
+                            html = html + record.conferenceName;
                             html = html + "</td>“"
                             html = html + "<td>"
-                            html = html + record.group_id;
+                            html = html + record.groupId;
                             html = html + "</td>";
                             html = html + "<td>"
-                            html = html + record.conference_info;
+                            html = html + record.conferenceInfo;
                             html = html + "</td>";
                             html = html + "<td>"
-                            html = html + record.conference_date.toDateString();
+                            html = html + new Date(record.conferenceDate);
                             html = html + "</td>";
                             html = html + "<td>"
-                            html = html + record.hour_long;
+                            html = html + record.hourLong;
                             html = html + "</td>";
                             html = html + "<td>"
                             html = html + record.address;
                             html = html + "</td>";
                             html = html + "<td>"
-                            html = html + record.creator_id;
+                            html = html + record.creatorId;
                             html = html + "</td>";
                             html = html + "<td>"
-                            html = html + record.create_date.toDateString();
+                            html = html + new Date(record.createDate);
                             html = html + "</td>";
                             html = html + "<td>";
                             html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
@@ -235,30 +245,3 @@ var Page = function() {
         },
     }
 }()
-
-
-
-
-
-
-
-function demo() {
-    const data = {};
-    $("#demo").html("")
-    data.id = $("#id").val();
-    console.log(data)
-    $.ajax({
-        type:"POST",
-        url:"/test",
-        dataType:"json",
-        data:JSON.stringify(data),
-        contentType:"application/json",
-        success:function (data){
-            console.log(data)
-            $("#demo").html(data.temp)
-        },
-        error:function (e){
-            console.log(e)
-        }
-    })
-}

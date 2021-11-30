@@ -139,7 +139,7 @@
       group_id = #{groupId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <resultMap id="BaseResultMap" type="org.xm06.pms.vo.Conference">
+    <resultMap id="conferenceMap" type="org.xm06.pms.vo.Conference">
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="conference_name" jdbcType="VARCHAR" property="conferenceName" />
         <result column="conference_info" jdbcType="VARCHAR" property="conferenceInfo" />
@@ -150,5 +150,62 @@
         <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
         <result column="group_id" jdbcType="INTEGER" property="groupId" />
     </resultMap>
+
+  <!--内嵌查找用户-->
+  <select id="selectUser" parameterType="java.lang.Integer"
+          resultType="org.xm06.pms.vo.User">
+    select
+      u.id,
+      u.user_name,
+      u.true_name,
+      u.email,
+      u.phone,
+      u.create_date,
+      u.update_date,
+      u.is_valid
+    from
+      xm06_t_user u
+    where
+      u.id = #{userId}
+  </select>
+
+  <select id="queryAllConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.*
+    FROM
+    xm06_t_conference c
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryGroupConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT * FROM xm06_t_conference
+    WHERE group_id = #{groupId}
+    order by create_date desc
+  </select>
+
+  <select id="queryUserCreateConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.* FROM xm06_t_conference c
+    WHERE c.creator_id = #{creatorId}
+    order by create_date desc
+  </select>
+
+  <select id="queryComingConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.* FROM xm06_t_conference c
+    WHERE c.conference_date > NOW()
+    ORDER BY create_date DESC
+  </select>
+  
+  <select id="queryFinishConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.* FROM xm06_t_conference c
+    WHERE  c.conference_date &lt; NOW()
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryByConferenceNameAndCreatorId" resultType="org.xm06.pms.vo.Conference">
+    select * from xm06_t_conference
+    where
+      conference_name = #{conferenceName, jdbcType=VARCHAR}
+      and
+      creator_id = #{creatorId, jdbcType=INTEGER}
+  </select>
 
 </mapper>

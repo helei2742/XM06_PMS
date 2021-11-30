@@ -19,31 +19,28 @@ public interface ConferenceMapper {
 
     /**
      * 查找用户发布的会议
-     * @param userId
+     * @param creatorId
      * @return
      */
-    List<Conference> queryUserCreateConference(Integer userId);
+    List<Conference> queryUserCreateConference(Integer creatorId);
 
     /**
      * 查找正在进行的会议
-     * @param userId
      * @return
      */
-    List<Conference> queryComingConference(Integer userId);
+    List<Conference> queryComingConference();
 
     /**
      * 查找结束的会议
-     * @param userId
      * @return
      */
-    List<Conference> queryFinishConference(Integer userId);
+    List<Conference> queryFinishConference();
 
     /**
      * 查询全部的会议
-     * @param userId
      * @return
      */
-    List<Conference> queryAllConference(Integer userId);
+    List<Conference> queryAllConference();
 
 
     int deleteByPrimaryKey(Integer id);

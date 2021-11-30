@@ -31,6 +31,7 @@ public class ConferenceController extends BaseController{
     @ResponseBody
     public ResultInfo conference_index(@RequestBody @Valid ConferenceQuery conferenceQuery) {
         PageInfo<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
+        // System.out.println(conferences.getList().get(0));
         return success("查询会议成功", 200, conferences);
     }
 
