@@ -3,13 +3,11 @@ package org.xm06.pms.controller;
 
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.xm06.pms.base.ResultInfo;
 import org.xm06.pms.base.BaseController;
 import org.xm06.pms.query.ConferenceQuery;
@@ -40,11 +38,16 @@ public class ConferenceController extends BaseController{
     @ApiOperation(value = "发布会议接口",notes = "应传入：conferenceName，conferenceInfo, conferenceDate，hourLong, groupId，" +
             "address, creatorId, createDate, groupId")
     public ResultInfo addConference(@RequestBody @Valid Conference conference) {
+        System.out.println(conference);
         conferenceService.addConference(conference);
         return success("发布会议成功", 200, null);
     }
 
-//    public String ConferenceIndex(){
-//        return "conference_index.html";
-//    }
+    @PostMapping(value = "/delete", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiModelProperty(value = "删除会议记录")
+    public ResultInfo deleteConference(@RequestBody @Valid Conference conference) {
+        conferenceService.deleteConference(conference.getId(), conference.getGroupId(), conference.getCreatorId());
+        return success("删除会议成功", 200, null);
+    }
 }

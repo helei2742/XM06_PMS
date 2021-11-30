@@ -19,6 +19,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <head>
 <meta charset="utf-8"/>
 <title>Metronic | Data Tables - Basic Datatables</title>
+	<meta content="text/html">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -26,20 +27,20 @@ License: You must have a valid license purchased only from themeforest(the above
 <meta content="" name="author"/>
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
-<link href="assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
-<link href="assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
-<link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-<link href="assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<link href="plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
 <!-- END GLOBAL MANDATORY STYLES -->
 <!-- BEGIN THEME STYLES -->
-<link href="assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
-<link href="assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
-<link href="assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
-<link id="style_color" href="assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
-<link href="assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<link href="css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+<link href="css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="css/layout.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
-<link rel="shortcut icon" href="favicon.ico"/>
+<link rel="shortcut icon" href="img/favicon.ico"/>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -81,7 +82,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="form-group">
 								<label class="col-md-3 control-label">会议时间</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" placeholder="请输入会议时间" id="conference_date" name="conference_date">
+									<input type="datetime-local" class="form-control" placeholder="请输入会议时间" id="conference_date" name="conference_date">
 								</div>
 							</div>
 							<div class="form-group">
@@ -94,6 +95,18 @@ License: You must have a valid license purchased only from themeforest(the above
 								<label class="col-md-3 control-label">会议地点</label>
 								<div class="col-md-9">
 									<input type="text" class="form-control" placeholder="请输入会议地点" id="address" name="address">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">小组编号</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" placeholder="请输入小组编号" id="group_id" name="group_id">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">创建人号</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" placeholder="创建人号" id="creator_id" name="creator_id">
 								</div>
 							</div>
 						</div>
@@ -136,7 +149,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<div class="form-group">
 								<label class="col-md-3 control-label">会议时间</label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" placeholder="请输入会议时间" id="conference_date" name="conference_date">
+									<input type="datetime-local" class="form-control" placeholder="请输入会议时间" id="conference_date" name="conference_date">
 								</div>
 							</div>
 							<div class="form-group">
@@ -151,13 +164,25 @@ License: You must have a valid license purchased only from themeforest(the above
 									<input type="text" class="form-control" placeholder="请输入会议地址" id="address" name="address">
 								</div>
 							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">小组编号</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" placeholder="请输入小组编号" id="group_id" name="group_id">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-3 control-label">创建人号</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" placeholder="创建人号" id="creator_id" name="creator_id">
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn default" data-dismiss="modal">关闭</button>
-				<button type="button" class="btn blue" id="record_add_div_submit_button" name="record_add_div_submit_button">确认添加</button>
+				<button type="button" class="btn blue" id="record_modify_div_submit_button" name="record_add_div_submit_button">确认添加</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -171,7 +196,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
 			<a href="index.html">
-			<img src="assets/admin/layout/img/logo.png" alt="logo" class="logo-default"/>
+			<img src="img/logo.png" alt="logo" class="logo-default"/>
 			</a>
 			<div class="menu-toggler sidebar-toggler hide">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -313,7 +338,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								<li>
 									<a href="inbox.html?a=view">
 									<span class="photo">
-									<img src="assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
+									<img src="img/avatar2.jpg" class="img-circle" alt="">
 									</span>
 									<span class="subject">
 									<span class="from">
@@ -327,7 +352,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								<li>
 									<a href="inbox.html?a=view">
 									<span class="photo">
-									<img src="assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
+									<img src="img/avatar3.jpg" class="img-circle" alt="">
 									</span>
 									<span class="subject">
 									<span class="from">
@@ -341,7 +366,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								<li>
 									<a href="inbox.html?a=view">
 									<span class="photo">
-									<img src="assets/admin/layout3/img/avatar1.jpg" class="img-circle" alt="">
+									<img src="img/avatar1.jpg" class="img-circle" alt="">
 									</span>
 									<span class="subject">
 									<span class="from">
@@ -355,7 +380,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								<li>
 									<a href="inbox.html?a=view">
 									<span class="photo">
-									<img src="assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
+									<img src="img/avatar2.jpg" class="img-circle" alt="">
 									</span>
 									<span class="subject">
 									<span class="from">
@@ -369,7 +394,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								<li>
 									<a href="inbox.html?a=view">
 									<span class="photo">
-									<img src="assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
+									<img src="img/avatar3.jpg" class="img-circle" alt="">
 									</span>
 									<span class="subject">
 									<span class="from">
@@ -486,7 +511,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 				<li class="dropdown dropdown-user">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-					<img alt="" class="img-circle" src="assets/admin/layout/img/avatar3_small.jpg"/>
+					<img alt="" class="img-circle" src="img/avatar3_small.jpg"/>
 					<span class="username username-hide-on-mobile">
 					Nick </span>
 					<i class="fa fa-angle-down"></i>
@@ -1474,27 +1499,15 @@ License: You must have a valid license purchased only from themeforest(the above
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-md-3 control-label">会议信息</label>
+									<label class="col-md-3 control-label">小组编号</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="请输入会议信息" id="conference_info" name="conference_info">
+										<input type="text" class="form-control" placeholder="请输入小组编号" id="group_id" name="group_id">
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-md-3 control-label">会议时间</label>
+									<label class="col-md-3 control-label">创建人号</label>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="请输入会议信息" id="conference_date" name="conference_date">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-md-3 control-label">会议时长</label>
-									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="请输入会议信息" id="hour_long" name="hour_long">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-md-3 control-label">会议地点</label>
-									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="请输入会议信息" id="address" name="address">
+										<input type="text" class="form-control" placeholder="创建人号" id="creator_id" name="creator_id">
 									</div>
 								</div>
 							</div>
@@ -1510,7 +1523,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			</div>
 			<hr>
 			<div class="row"  id="datatable_tab">
-				<div class="col-md-6">
+				<div class="col-md-6" style="width:100%">
 					<!-- BEGIN SAMPLE TABLE PORTLET-->
 					<div class="portlet box blue">
 						<div class="portlet-title">
@@ -1629,7 +1642,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="media-status">
 										<span class="badge badge-success">8</span>
 									</div>
-									<img class="media-object" src="assets/admin/layout/img/avatar3.jpg" alt="...">
+									<img class="media-object" src="img/avatar3.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Bob Nilson</h4>
 										<div class="media-heading-sub">
@@ -1638,7 +1651,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									</div>
 								</li>
 								<li class="media">
-									<img class="media-object" src="assets/admin/layout/img/avatar1.jpg" alt="...">
+									<img class="media-object" src="img/avatar1.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Nick Larson</h4>
 										<div class="media-heading-sub">
@@ -1650,7 +1663,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="media-status">
 										<span class="badge badge-danger">3</span>
 									</div>
-									<img class="media-object" src="assets/admin/layout/img/avatar4.jpg" alt="...">
+									<img class="media-object" src="img/avatar4.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Deon Hubert</h4>
 										<div class="media-heading-sub">
@@ -1659,7 +1672,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									</div>
 								</li>
 								<li class="media">
-									<img class="media-object" src="assets/admin/layout/img/avatar2.jpg" alt="...">
+									<img class="media-object" src="img/avatar2.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Ella Wong</h4>
 										<div class="media-heading-sub">
@@ -1674,7 +1687,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="media-status">
 										<span class="badge badge-warning">2</span>
 									</div>
-									<img class="media-object" src="assets/admin/layout/img/avatar6.jpg" alt="...">
+									<img class="media-object" src="img/avatar6.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Lara Kunis</h4>
 										<div class="media-heading-sub">
@@ -1689,7 +1702,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="media-status">
 										<span class="label label-sm label-success">new</span>
 									</div>
-									<img class="media-object" src="assets/admin/layout/img/avatar7.jpg" alt="...">
+									<img class="media-object" src="img/avatar7.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Ernie Kyllonen</h4>
 										<div class="media-heading-sub">
@@ -1699,7 +1712,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									</div>
 								</li>
 								<li class="media">
-									<img class="media-object" src="assets/admin/layout/img/avatar8.jpg" alt="...">
+									<img class="media-object" src="img/avatar8.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Lisa Stone</h4>
 										<div class="media-heading-sub">
@@ -1714,7 +1727,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="media-status">
 										<span class="badge badge-success">7</span>
 									</div>
-									<img class="media-object" src="assets/admin/layout/img/avatar9.jpg" alt="...">
+									<img class="media-object" src="img/avatar9.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Deon Portalatin</h4>
 										<div class="media-heading-sub">
@@ -1723,7 +1736,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									</div>
 								</li>
 								<li class="media">
-									<img class="media-object" src="assets/admin/layout/img/avatar10.jpg" alt="...">
+									<img class="media-object" src="img/avatar10.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Irina Savikova</h4>
 										<div class="media-heading-sub">
@@ -1735,7 +1748,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="media-status">
 										<span class="badge badge-danger">4</span>
 									</div>
-									<img class="media-object" src="assets/admin/layout/img/avatar11.jpg" alt="...">
+									<img class="media-object" src="img/avatar11.jpg" alt="...">
 									<div class="media-body">
 										<h4 class="media-heading">Maria Gomez</h4>
 										<div class="media-heading-sub">
@@ -1755,7 +1768,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								</div>
 								<div class="page-quick-sidebar-chat-user-messages">
 									<div class="post out">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar3.jpg"/>
+										<img class="avatar" alt="" src="img/avatar3.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Bob Nilson</a>
@@ -1765,7 +1778,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post in">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar2.jpg"/>
+										<img class="avatar" alt="" src="img/avatar2.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Ella Wong</a>
@@ -1775,7 +1788,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post out">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar3.jpg"/>
+										<img class="avatar" alt="" src="img/avatar3.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Bob Nilson</a>
@@ -1785,7 +1798,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post in">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar2.jpg"/>
+										<img class="avatar" alt="" src="img/avatar2.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Ella Wong</a>
@@ -1795,7 +1808,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post out">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar3.jpg"/>
+										<img class="avatar" alt="" src="img/avatar3.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Bob Nilson</a>
@@ -1805,7 +1818,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post in">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar2.jpg"/>
+										<img class="avatar" alt="" src="img/avatar2.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Ella Wong</a>
@@ -1815,7 +1828,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post out">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar3.jpg"/>
+										<img class="avatar" alt="" src="img/avatar3.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Bob Nilson</a>
@@ -1825,7 +1838,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post in">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar2.jpg"/>
+										<img class="avatar" alt="" src="img/avatar2.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Ella Wong</a>
@@ -1835,7 +1848,7 @@ License: You must have a valid license purchased only from themeforest(the above
 										</div>
 									</div>
 									<div class="post out">
-										<img class="avatar" alt="" src="assets/admin/layout/img/avatar3.jpg"/>
+										<img class="avatar" alt="" src="img/avatar3.jpg"/>
 										<div class="message">
 											<span class="arrow"></span>
 											<a href="javascript:;" class="name">Bob Nilson</a>
@@ -2245,26 +2258,26 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
-<script src="assets/global/plugins/respond.min.js"></script>
-<script src="assets/global/plugins/excanvas.min.js"></script>
+<script src="plugins/respond.min.js"></script>
+<script src="plugins/excanvas.min.js"></script>
 <![endif]-->
-<script src="assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="plugins/jquery.min.js" type="text/javascript"></script>
+<script src="plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-<script src="assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
-<script src="assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
-<script src="assets/global/scripts/metronic.js" type="text/javascript"></script>
-<script src="assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
-<script src="assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
-<script src="assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
-<script src="conference_index.js"></script>
+<script src="js/metronic.js" type="text/javascript"></script>
+<script src="js/layout.js" type="text/javascript"></script>
+<script src="js/quick-sidebar.js" type="text/javascript"></script>
+<script src="js/demo.js" type="text/javascript"></script>
+<script src="js/conference_index.js"></script>
 </body>
 <!-- END BODY -->
 </html>
