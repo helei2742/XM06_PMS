@@ -33,6 +33,22 @@ public class ConferenceController extends BaseController{
         return success("查询会议成功", 200, conferences);
     }
 
+    @PostMapping(value = "/pageQueryBeforeConference", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public ResultInfo before_conference(@RequestBody @Valid ConferenceQuery conferenceQuery) {
+        PageInfo<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
+        // System.out.println(conferences.getList().get(0));
+        return success("查询会议成功", 200, conferences);
+    }
+
+    @PostMapping(value = "/pageQueryAfterConference", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public ResultInfo after_conference(@RequestBody @Valid ConferenceQuery conferenceQuery) {
+        PageInfo<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
+        // System.out.println(conferences.getList().get(0));
+        return success("查询会议成功", 200, conferences);
+    }
+
     @PostMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "发布会议接口",notes = "应传入：conferenceName，conferenceInfo, conferenceDate，hourLong, groupId，" +
@@ -47,7 +63,15 @@ public class ConferenceController extends BaseController{
     @ResponseBody
     @ApiModelProperty(value = "删除会议记录")
     public ResultInfo deleteConference(@RequestBody @Valid Conference conference) {
-        conferenceService.deleteConference(conference.getId(), conference.getGroupId(), conference.getCreatorId());
+        conferenceService.deleteConference(conference.getId(), conference.getUserId());
+        return success("删除会议成功", 200, null);
+    }
+
+    @PostMapping(value = "/modify", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiModelProperty(value = "删除会议记录")
+    public ResultInfo modifyConference(@RequestBody @Valid Conference conference) {
+        conferenceService.modifyConference(conference, conference.getUserId());
         return success("删除会议成功", 200, null);
     }
 }

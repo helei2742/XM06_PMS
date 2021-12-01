@@ -27,6 +27,11 @@ public class ConferenceQuery extends BaseQuery {
     public static final Integer PAGEQUERYCOMINGCONFERENCE = 2;
     public static final Integer PAGEQUERYFINISHCONFERENCE = 3;
     public static final Integer PAGEQUERYCONFERENCEBYGROUPID = 4;
+    public static final Integer PAGEQUERYCONFERENCEBYNAME = 5;
+    public static final Integer PAGEQUERYCONFERENCEBYNAMEANDCREATORID = 6;
+    public static final Integer PAGEQUERYCONFERENCEBYNAMEANDGROUPID = 7;
+    public static final Integer PAGEQUERYCONFERENCEBYALL = 8;
+    public static final Integer PAGEQUERYCONFERENCEBYCREATORIDANDGROUPID = 9;
 
 
     @ApiModelProperty("会议名字")

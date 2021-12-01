@@ -18,6 +18,34 @@ public interface ConferenceMapper {
     List<Conference> queryGroupConference(Integer groupId);
 
     /**
+     * 根据会议名字关键字和小组id查找任会议
+     * @param conferenceName,groupId
+     * @return
+     */
+    List<Conference> queryGroupConferenceByName(String conferenceName, Integer groupId);
+
+    /**
+     * 按照小组ID和创建人ID查询会议
+     * @param groupId,creatorId
+     * @return
+     */
+    List<Conference> queryConferenceByGroupIdAndCreatorId(Integer groupId, Integer creatorId);
+
+    /**
+     * 全条件查询会议
+     * @param conferenceName,groupId,creatorId
+     * @return
+     */
+    List<Conference> queryConferenceByAll(String conferenceName, Integer groupId, Integer creatorId);
+
+    /**
+     * 根据名字查找任会议
+     * @param conferenceName
+     * @return
+     */
+    List<Conference> queryConferenceByName(String conferenceName);
+
+    /**
      * 查找用户发布的会议
      * @param creatorId
      * @return

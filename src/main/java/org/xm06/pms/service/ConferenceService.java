@@ -16,6 +16,7 @@ import org.xm06.pms.vo.Group;
 import org.xm06.pms.vo.User;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,22 +58,43 @@ public class ConferenceService {
     }
 
     /**
-     * 删除项目方法
+     * 删除会议方法
      * @param conferenceId
-     * @param groupId
      * @param userId
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteConference(Integer conferenceId, Integer groupId, Integer userId) {
+    public void deleteConference(Integer conferenceId, Integer userId) {
         AssertUtil.isTrue(conferenceId == null, "找不到该会议，conferenceId为空");
-        AssertUtil.isTrue(groupId == null, "groupId为空");
         AssertUtil.isTrue(userId == null, "userId为空");
 
-        Group group = groupMapper.selectByPrimaryKey(groupId);
-        AssertUtil.isTrue(group == null, "该会议不存在");
-        AssertUtil.isTrue(group.getManagerId() != userId, "该操作者不能删除小组会议");
+        AssertUtil.isTrue( (conferenceMapper.selectByPrimaryKey(conferenceId)).getCreatorId() != userId, "该操作者不能删除该会议");
 
         AssertUtil.isTrue(conferenceMapper.deleteByPrimaryKey(conferenceId)<=0, "删除会议失败");
+    }
+
+    /**
+     * 修改会议方法
+     * @param conference
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void modifyConference(Conference conference, Integer userId){
+        AssertUtil.isTrue(StringUtils.isBlank(conference.getConferenceName()), "会议名不能为空");
+
+        AssertUtil.isTrue(conference.getConferenceDate() == null, "会议日期不能为空");
+
+        Group group = groupMapper.selectByPrimaryKey(conference.getGroupId());
+        AssertUtil.isTrue(group == null, "不存在该小组");
+
+        AssertUtil.isTrue(userId == null, "修改人id不能为空");
+
+        User user = userMapper.selectByPrimaryKey(conference.getCreatorId());
+        AssertUtil.isTrue(user == null, "修改人不存在");
+
+        AssertUtil.isTrue( user.getId() != userId, "该操作者不能修改该会议");
+
+        conference.setCreateDate(new Date());
+
+        AssertUtil.isTrue(conferenceMapper.updateByPrimaryKeySelective(conference)<=0,"修改会议失败");
     }
 
     /**
@@ -97,7 +119,8 @@ public class ConferenceService {
         List<Conference> all = null;
 
         PageInfo<Conference> pageInfo = null;
-        if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID) {
+        if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID && type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID
+        && type == ConferenceQuery.PAGEQUERYCONFERENCEBYALL) {
             Group group = groupMapper.selectByPrimaryKey(conferenceQuery.getGroupId());
             AssertUtil.isTrue(group == null, "小组不存在");
         }
@@ -113,6 +136,26 @@ public class ConferenceService {
         } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID) {
             // 4表示查询小组会议
             all = conferenceMapper.queryGroupConference(conferenceQuery.getGroupId());
+        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAME) {
+            // 5表示查询会议名字关键字
+            all = conferenceMapper.queryConferenceByName(conferenceQuery.getConferenceName());
+        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDCREATORID) {
+            // 6表示查询会议名字关键字和创建人ID
+            System.out.println(conferenceMapper.queryByConferenceNameAndCreatorId(conferenceQuery.getConferenceName(),
+                    conferenceQuery.getCreatorId()));
+            all = new ArrayList<Conference>();
+            all.add(conferenceMapper.queryByConferenceNameAndCreatorId(conferenceQuery.getConferenceName(),
+                    conferenceQuery.getCreatorId()));
+        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID) {
+            // 7表示查询会议名字关键字和小组ID
+            all = conferenceMapper.queryGroupConferenceByName(conferenceQuery.getConferenceName(), conferenceQuery.getGroupId());
+        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYALL) {
+            // 8表示全条件查询会议
+            all = conferenceMapper.queryConferenceByAll(conferenceQuery.getConferenceName(), conferenceQuery.getGroupId(),
+                    conferenceQuery.getCreatorId());
+        }  else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYCREATORIDANDGROUPID) {
+            // 9表示按照小组ID和创建人ID查询会议
+            all = conferenceMapper.queryConferenceByGroupIdAndCreatorId(conferenceQuery.getGroupId(), conferenceQuery.getCreatorId());
         } else {
             // 查询全部任务
             all = conferenceMapper.queryAllConference();

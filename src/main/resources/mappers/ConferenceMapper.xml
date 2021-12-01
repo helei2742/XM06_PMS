@@ -196,16 +196,53 @@
   
   <select id="queryFinishConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
     SELECT c.* FROM xm06_t_conference c
-    WHERE  c.conference_date &lt; NOW()
+    WHERE  c.conference_date &lt; NOW()<!--小于符号-->
     ORDER BY create_date DESC
   </select>
 
   <select id="queryByConferenceNameAndCreatorId" resultType="org.xm06.pms.vo.Conference">
     select * from xm06_t_conference
     where
-      conference_name = #{conferenceName, jdbcType=VARCHAR}
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
       and
       creator_id = #{creatorId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryConferenceByName" parameterType="java.lang.String" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryGroupConferenceByName" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+    AND
+        group_id = #{groupId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryConferenceByAll" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+      AND
+      group_id = #{groupId, jdbcType=INTEGER}
+      AND
+        creator_id = #{creatorId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryConferenceByGroupIdAndCreatorId" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      group_id = #{groupId, jdbcType=INTEGER}
+      AND
+      creator_id = #{creatorId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
   </select>
 
 </mapper>

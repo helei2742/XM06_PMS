@@ -21,6 +21,8 @@ public class Conference {
 
     private Integer groupId;
 
+    private Integer userId;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class Conference {
 
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }
