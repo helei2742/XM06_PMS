@@ -72,4 +72,5 @@ public class DateUtil {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         return fmt.format(date1).equals(fmt.format(date2));
     }
+
 }

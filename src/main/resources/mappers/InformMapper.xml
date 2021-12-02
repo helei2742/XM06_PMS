@@ -112,4 +112,8 @@
     select * from xm06_t_inform where group_id = #{groupId} order by send_date desc
   </select>
 
+  <delete id="removeInformOfGroup" parameterType="java.lang.Integer">
+    delete from xm06_t_inform where group_id = #{groupId}
+  </delete>
+
 </mapper>

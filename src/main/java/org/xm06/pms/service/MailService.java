@@ -8,6 +8,7 @@ public interface MailService {
      * @param content 内容
      */
     void sendSimpleMail(String to, String subject, String content);
+
     /**
      * 发送HTML邮件
      * @param to 收件人

@@ -158,4 +158,14 @@
     order by submit_date desc
   </select>
 
+  <delete id="deleteByIds" parameterType="java.util.List">
+    delete from xm06_t_task_record
+    <where>
+      <foreach collection="list" open="id in(" close=")" item="id" separator=",">
+        #{id}
+      </foreach>
+    </where>
+    and
+    user_id = #{userId}
+  </delete>
 </mapper>

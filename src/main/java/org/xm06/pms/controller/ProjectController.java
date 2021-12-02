@@ -56,6 +56,16 @@ public class ProjectController extends BaseController {
     }
 
 
+    @PostMapping("/updateProject")
+    @ResponseBody
+    @ApiOperation(value = "更新项目接口",notes = "如有更改，需传入projectName, projectDesc,isPublic等基本项目信息，" +
+            "还有传入更改后的小组 groupIds[], 无论小组是否需要更改都需传入，否则视作删除项目下的小组。")
+    public ResultInfo updateProject(@RequestBody Project project){
+        System.out.println(project);
+        projectService.updateProject(project);
+        return success("修改项目信息成功", 200, null);
+    }
+
     @PostMapping("/queryByProjectName")
     @ResponseBody
     @ApiOperation(value = "根据项目名称查询项目接口",notes = "需传入projectName")
@@ -167,6 +177,26 @@ public class ProjectController extends BaseController {
     public Map<String, Object> queryUserSubmit14day(@RequestBody Map<String,String> m){
         Integer projectId = Integer.parseInt(m.get("projectId"));
         return projectUploadRecordService.queryProjectSubmit14day(projectId);
+    }
+
+    @PostMapping("/deleteProject")
+    @ResponseBody
+    @ApiOperation(value = "删除项目方法，并不会直接删除，会产生一个验证码发往userId对应的邮箱",
+            notes = "需传入projectId,userId")
+    public ResultInfo deleteProject(@RequestBody Map<String,String> map){
+        Integer userId = Integer.parseInt(map.get("userId"));
+        Integer projectId = Integer.parseInt(map.get("projectId"));
+        projectService.deleteProject(projectId,userId);
+        return success("",200,null);
+    }
+
+    @PostMapping("/deleteConfirm")
+    @ResponseBody
+    public ResultInfo deleteConfirm(@RequestBody Map<String, String> map){
+        String checkCode = map.get("checkCode");
+        Integer projectId = Integer.valueOf(map.get("projectId"));
+        projectService.deleteConfirm(projectId, checkCode);
+        return success("确认成功", 200, null);
     }
 
 }

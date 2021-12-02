@@ -6,6 +6,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
+import javafx.beans.binding.IntegerBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.xm06.pms.service.TaskService;
 import org.xm06.pms.vo.Task;
 import org.xm06.pms.vo.TaskRecord;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -109,7 +112,6 @@ public class TaskController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "分页查询用户所有提交记录接口",notes = "需包含userId, 还可选择传入page,limit")
     public ResultInfo userSubmitRecord(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
-
         PageInfo<TaskRecord> info = taskService.queryUserTaskRecord(taskRecordQuery);
         return success("查询用户所有提交记录成功", 200, info);
     }
@@ -130,6 +132,25 @@ public class TaskController extends BaseController {
     public ResultInfo userRecordOfTask(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
         PageInfo<TaskRecord> all = taskService.userRecordOfTask(taskRecordQuery);
         return success("查阅用户提交记录成功", 200, all);
+    }
+
+    @PostMapping("/deleteTaskSubmitRecord")
+    @ResponseBody
+    @ApiOperation(value = "删除某一提交记录接口",notes = "需包含userId(用于校验身份）,recordId")
+    public ResultInfo deleteTaskSubmitRecord(@RequestBody Map<String,String> map){
+        Integer userId = Integer.parseInt(map.get("userId"));
+        Integer recordId = Integer.parseInt(map.get("recordId"));
+        taskService.deleteTaskSubmitRecord(userId, recordId);
+        return success("删除成功", 200, null);
+    }
+
+    @PostMapping("/deleteSelectedRecord")
+    @ResponseBody
+    public ResultInfo deleteSelectedRecord(@RequestBody Map<String,Object> s){
+        List<Integer> recordIds = (List<Integer>) s.get("recordIds");
+        Integer userId = (Integer) s.get("userId");
+        taskService.deleteSelectedRecord(recordIds, userId);
+        return success("删除选中成功", 200, null);
     }
 
     @PostMapping(value = "/queryTaskSubmitCharts")

@@ -2,9 +2,7 @@ package org.xm06.pms.websocket;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -13,8 +11,7 @@ import org.xm06.pms.model.UserModel;
 import org.xm06.pms.service.GroupService;
 import org.xm06.pms.service.InformService;
 import org.xm06.pms.service.UserService;
-import org.xm06.pms.utils.LoginUtil;
-import org.xm06.pms.utils.RandomIdUtil;
+import org.xm06.pms.utils.RandomUtil;
 import org.xm06.pms.utils.UserIDBase64;
 import org.xm06.pms.vo.User;
 
@@ -179,7 +176,7 @@ public class WebSocketServer {
 
         //设置对应属性
         //随机消息id
-        informModel.setId(RandomIdUtil.getRandomId(this.uid));
+        informModel.setId(RandomUtil.getRandomId(this.uid));
         informModel.setSendDate(new Date().getTime());
         informModel.setSendUser(getUserModel(this.uid));
 

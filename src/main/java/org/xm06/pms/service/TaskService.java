@@ -1,5 +1,6 @@
 package org.xm06.pms.service;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +24,7 @@ import org.xm06.pms.vo.TaskRecord;
 import org.xm06.pms.vo.User;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -241,5 +243,33 @@ public class TaskService{
         res.put("notSubmitUsers",notSubmitUsers);
         res.put("code", 200);
         return res;
+    }
+
+    /**
+     * 根据recordId，删除任务提交记录
+     * @param userId
+     * @param recordId
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTaskSubmitRecord(Integer userId, Integer recordId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        AssertUtil.isTrue(user==null, "不存在该用户");
+        TaskRecord taskRecord = taskRecordMapper.selectByPrimaryKey(recordId);
+        AssertUtil.isTrue(taskRecord==null, "查询不到该提交记录");
+
+        if(taskRecord.getFileUrl()!=null){
+            //删除磁盘文件
+            FileUtil.deleteFile(new File(taskRecord.getFileUrl()));
+        }
+
+        AssertUtil.isTrue(taskRecordMapper.deleteByPrimaryKey(recordId)<1,"删除记录失败");
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteSelectedRecord(List<Integer> recordIds, Integer userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        AssertUtil.isTrue(user==null, "不存在该用户");
+
+        taskRecordMapper.deleteByIds(recordIds,userId);
     }
 }

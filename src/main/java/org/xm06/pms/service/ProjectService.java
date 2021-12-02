@@ -4,21 +4,24 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
+import org.quartz.simpl.PropertySettingJobFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.xm06.pms.dao.GroupMapper;
 import org.xm06.pms.dao.ProjectMapper;
 import org.xm06.pms.dao.UserMapper;
+import org.xm06.pms.model.CheckCodeModel;
 import org.xm06.pms.query.ProjectQuery;
 import org.xm06.pms.utils.AssertUtil;
+import org.xm06.pms.utils.RandomUtil;
 import org.xm06.pms.vo.Group;
 import org.xm06.pms.vo.Project;
 import org.xm06.pms.vo.User;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProjectService{
@@ -94,23 +97,71 @@ public class ProjectService{
     }
 
 
+    @Autowired
+    MailService mailService;
+
+    static private final Hashtable<Integer, CheckCodeModel> PROJECTIDMAPCODE = new Hashtable<>();
+
     /**
      * 删除项目方法
      * @param projectId
-     * @param groupId
      * @param userId
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteProject(Integer projectId, Integer groupId, Integer userId){
+    public void deleteProject(Integer projectId, Integer userId){
         AssertUtil.isTrue(projectId == null, "找不到该项目，projectId为空");
-        AssertUtil.isTrue(groupId == null, "groupId为空");
         AssertUtil.isTrue(userId == null, "userId为空");
 
-        Group group = groupMapper.selectByPrimaryKey(groupId);
-        AssertUtil.isTrue(group == null, "该小组不存在");
-        AssertUtil.isTrue(group.getManagerId() != userId, "该操作者不能删除小组项目");
+        CheckCodeModel beforeCCM = ProjectService.PROJECTIDMAPCODE.getOrDefault(projectId, null);
 
-        AssertUtil.isTrue(projectMapper.deleteByPrimaryKey(projectId)<=0, "删除项目失败");
+        AssertUtil.isTrue(beforeCCM!=null
+                &&(new Date().getTime() - beforeCCM.getCreateTime())*1.0/60/1000<5,
+                "之前的验证码尚未过期，请勿重复发送");
+
+        User user = userMapper.selectByPrimaryKey(userId);
+        AssertUtil.isTrue(user==null, "不存在该用户");
+
+        AssertUtil.isTrue(!user.getValid(), "该用户尚未完成注册邮箱确认");
+
+        Project project = projectMapper.selectByPrimaryKey(projectId);
+        AssertUtil.isTrue(project==null, "不存在该项目");
+
+        AssertUtil.isTrue(!project.getCreatorId().equals(userId), "非项目创建人不能删除项目");
+
+        String code = RandomUtil.generateVerCode();
+        mailService.sendSimpleMail(user.getEmail(),"删除项目确认","尊敬的用户,您好:\n"
+                + "\n本次请求的邮件验证码为:" + code + ",本验证码5分钟内有效，请及时输入。（请勿泄露此验证码）\n"
+                + "\n如非本人操作，请忽略该邮件。\n(这是一封自动发送的邮件，请不要直接回复）");
+
+        CheckCodeModel ccm = new CheckCodeModel();
+        ccm.setProjectId(projectId);
+        ccm.setCreateTime(new Date().getTime());
+        ccm.setCode(code);
+        ProjectService.PROJECTIDMAPCODE.put(projectId,ccm);
+
+        System.out.println(PROJECTIDMAPCODE);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteConfirm(Integer projectId, String checkCode) {
+        CheckCodeModel ccm = ProjectService.PROJECTIDMAPCODE.getOrDefault(projectId, null);
+
+        AssertUtil.isTrue(StringUtils.isBlank(checkCode), "验证码不能为空");
+        AssertUtil.isTrue(ccm == null, "验证码已过期，请重新发送");
+        long t = new Date().getTime() - ccm.getCreateTime();
+        AssertUtil.isTrue(t*1.0/1000/60 > 5, "验证码已过期，请重新发送");
+
+        AssertUtil.isTrue(!checkCode.equals(ccm.getCode()), "验证码错误");
+
+        //删除验证码记录
+        ProjectService.PROJECTIDMAPCODE.remove(projectId);
+
+        //删除项目中的所有组
+        projectMapper.removeAllGroup(projectId);
+        //删除项目
+        projectMapper.deleteByPrimaryKey(projectId);
+        //删除提交记录
+
     }
 
 
@@ -318,11 +369,41 @@ public class ProjectService{
     }
 
     /**
-     * 根据project的主键查询
+     * 根据project的主键查询,结果包含项目的小组
      * @param projectId
      * @return
      */
     public Project queryByProjectId(Integer projectId) {
-        return projectMapper.selectByPrimaryKey(projectId);
+        Project project = projectMapper.selectByPrimaryKey(projectId);
+        AssertUtil.isTrue(project==null, "不存在该项目");
+        List<Group> list = projectMapper.queryProjectGroup(projectId);
+        project.setGroupList(list);
+        return project;
     }
+
+    /**
+     * 更新项目信息
+     * @param project
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateProject(Project project) {
+        Integer[] ids = project.getGroupIds();
+        Integer projectId = project.getId();
+        AssertUtil.isTrue(ids==null||ids.length<=0, "修改后小组不能为空");
+
+        Project dbProject = projectMapper.selectByPrimaryKey(projectId);
+        AssertUtil.isTrue(dbProject == null, "不存在该项目");
+        AssertUtil.isTrue(!dbProject.getCreatorId().equals(project.getCreatorId()),
+                "非项目创建人不能更改项目");
+
+        project.setUpdateDate(new Date());
+        AssertUtil.isTrue(projectMapper.updateByPrimaryKeySelective(project)<0,"更新项目失败");
+
+        projectMapper.removeAllGroup(projectId);
+        for (Integer id : ids) {
+            this.addProjectGroupNoCheck(projectId, id);
+        }
+    }
+
+
 }

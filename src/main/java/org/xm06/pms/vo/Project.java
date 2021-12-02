@@ -137,4 +137,22 @@ public class Project {
     public void setIsPublic(Boolean isPublic) {
         this.isPublic = isPublic;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "groupIds=" + Arrays.toString(groupIds) +
+                ", id=" + id +
+                ", projectName='" + projectName + '\'' +
+                ", projectDesc='" + projectDesc + '\'' +
+                ", creatorId=" + creatorId +
+                ", groupId=" + groupId +
+                ", completionDegree=" + completionDegree +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", isPublic=" + isPublic +
+                ", isValid=" + isValid +
+                ", groupList=" + groupList +
+                '}';
+    }
 }

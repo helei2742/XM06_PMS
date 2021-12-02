@@ -209,7 +209,7 @@ public class GroupService {
     }
 
     /**
-     * 查询userId管理的所有组
+     * 查询userId管理的所有组,包含成员信息
      * @param managerId
      * @return
      */
@@ -219,7 +219,17 @@ public class GroupService {
         AssertUtil.isTrue(u == null, "该管理员不存在");
         return groupMapper.findGroupByManagerId(managerId);
     }
-
+    /**
+     * 查询userId管理的所有组,不包含成员信息
+     * @param managerId
+     * @return
+     */
+    public List<Group> queryMyGroup(Integer managerId) {
+        AssertUtil.isTrue(managerId==null || managerId<=0, "请输入管理员id");
+        User u = userMapper.selectByPrimaryKey(managerId);
+        AssertUtil.isTrue(u == null, "该管理员不存在");
+        return groupMapper.findGroupByManagerIdNoMember(managerId);
+    }
 
     /**
      * 根据用户id，分页查找用户加入的组
@@ -251,6 +261,8 @@ public class GroupService {
     TaskMapper taskMapper;
     @Resource
     ProjectMapper projectMapper;
+    @Resource
+    InformService informService;
 
     /**
      * 移除小组
@@ -266,19 +278,47 @@ public class GroupService {
         AssertUtil.isTrue(group == null, "没有该小组的信息");
         AssertUtil.isTrue(managerId!=group.getManagerId(), "只有小组管理员才能解散小组");
 
+        //删除发的消息，未读记录等
+        informService.removeInformOfGroup(groupId);
+
+        //删除发布的任务，提交记录不删
+        taskMapper.deleteGroupTask(groupId);
+
+        //删除所属项目的记录
+        projectMapper.deleteGroupInProject(groupId);
+
         //删除成员
         List<Integer> idList = groupMapper.queryMemberIdList(groupId);
         for (Integer userId : idList) {
             groupMapper.removeMember(userId, groupId);
         }
-        //删除发布的任务
-        taskMapper.deleteGroupTask(groupId);
-        //删除所属项目的记录
-        projectMapper.deleteGroupInProject(groupId);
-
 
         AssertUtil.isTrue(groupMapper.deleteByPrimaryKey(groupId)<1, "解散小组失败");
 
         return group.getGroupName();
     }
+
+
+    /**
+     * 修改小组信息
+     * @param groupId
+     * @param userId
+     * @param groupName
+     * @param groupDesc
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void alterGroupInfo(Integer groupId, Integer userId, String groupName, String groupDesc) {
+        Group group = groupMapper.selectByPrimaryKey(groupId);
+        AssertUtil.isTrue(group == null, "小组不存在");
+        AssertUtil.isTrue(!userId.equals(group.getManagerId()), "非小组管理员不能修改");
+
+        group.setUpdateDate(new Date());
+        group.setGroupName(groupName);
+        group.setDescribed(groupDesc);
+        group.setCreateDate(null);
+        group.setIsValid(null);
+        group.setManagerId(null);
+        AssertUtil.isTrue(groupMapper.updateByPrimaryKeySelective(group)<1, "修改小组信息失败");
+    }
+
 }

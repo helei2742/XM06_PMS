@@ -14,4 +14,11 @@ public interface InformMapper extends BaseMapper<Inform, Integer> {
     Integer removeNotRead(@Param("userId") Integer uid,@Param("groupId") Integer groupId);
 
     List<Inform> queryInformByGroupId(Integer groupId);
+
+    /**
+     * 移除数据库中小组的消息
+     * @param groupId
+     * @return
+     */
+    Integer removeInformOfGroup(Integer groupId);
 }

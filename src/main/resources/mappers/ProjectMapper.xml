@@ -501,4 +501,20 @@
     <delete id="deleteGroupInProject" parameterType="java.lang.Integer">
         delete from xm06_t_project_group where group_id =#{groupId}
     </delete>
+
+    <select id="queryProjectGroup" resultType="org.xm06.pms.vo.Group">
+        SELECT
+        g.*
+        FROM
+        xm06_t_group g,
+        xm06_t_project_group pg
+        WHERE
+        pg.project_id = #{projectId,jdbcType=INTEGER}
+        AND
+        g.id = pg.group_id
+    </select>
+
+    <delete id="removeAllGroup" parameterType="java.lang.Integer">
+        delete from xm06_t_project_group where project_id = #{projectId,jdbcType=INTEGER}
+    </delete>
 </mapper>

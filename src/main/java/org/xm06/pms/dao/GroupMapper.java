@@ -59,6 +59,12 @@ public interface GroupMapper extends BaseMapper<Group, Integer> {
      */
     public List<Group> findGroupByManagerId(Integer managerId);
 
+    /**
+     * 查找用户管理的全部小组，不包含组员信息
+     * @param managerId
+     * @return
+     */
+    public List<Group> findGroupByManagerIdNoMember(Integer managerId);
 
     /**
      * 根据用户id查找加入的所有组,包含组员信息

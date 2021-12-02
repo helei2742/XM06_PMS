@@ -29,4 +29,13 @@ public interface TaskRecordMapper extends BaseMapper<TaskRecord, Integer> {
      * @return
      */
     List<TaskRecord> selectUserRecordOfTask(@Param("userId") Integer userId,@Param("taskId") Integer taskId);
+
+
+    /**
+     * 删除id的记录
+     * @param recordIds
+     * @return
+     */
+    Integer deleteByIds(@Param("list") List<Integer> recordIds,@Param("userId") Integer userId);
+
 }

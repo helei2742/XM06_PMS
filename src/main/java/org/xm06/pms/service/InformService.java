@@ -229,4 +229,36 @@ public class InformService {
         //清除数据库的
         informMapper.removeNotRead(userId,groupId);
     }
+
+    /**
+     * 清除小组中的所有消息
+     * @param groupId
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void removeInformOfGroup(Integer groupId){
+        //删除数据库中小组的消息
+        informMapper.removeInformOfGroup(groupId);
+        //删除内存中的小组消息
+        Vector<InformModel> vector =
+                WebSocketServer.groupMessage.getOrDefault(groupId, null);
+        if(vector != null){
+            vector.clear();
+            vector = null;
+        }
+        WebSocketServer.groupMessage.remove(groupId);
+
+        //移除数据库中的未读消息
+        notReadInformMapper.removeNotReadOfGroup(groupId);
+        //移除数据库中未读消息
+        List<Integer> ids = groupMapper.queryMemberIdList(groupId);
+        for (Integer id : ids) {
+            Hashtable<Integer, Vector<Long>> hashtable =
+                    WebSocketServer.notReadMessage.getOrDefault(id, null);
+            if(hashtable != null){
+                hashtable.clear();
+                hashtable = null;
+            }
+            WebSocketServer.notReadMessage.remove(id);
+        }
+    }
 }

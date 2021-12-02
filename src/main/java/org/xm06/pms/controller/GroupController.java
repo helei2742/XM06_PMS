@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,15 @@ public class GroupController extends BaseController {
 
         systemRecordService.addGroupCreateCount();
         return success("创建小组成功", 200, addGroup);
+    }
+
+    @RequestMapping(value = "/alterGroupInfo",method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public ResultInfo alterGroupInfo(Integer groupId, Integer userId,
+                                     String groupName, String described){
+
+        groupService.alterGroupInfo(groupId,userId,groupName,described);
+        return success("修改成功", 200, null);
     }
 
     /**
@@ -129,18 +139,34 @@ public class GroupController extends BaseController {
     }
 
     /**
-     * 查询用户管理的全部小组
+     * 查询用户管理的全部小组，包含成员信息
      * @param userId
      * @return
      */
     @RequestMapping(value = "/queryMyGroupAll",produces = "application/json;charset=utf-8",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    @ApiOperation("查询用户管理的全部小组接口")
+    @ApiOperation("查询用户管理的全部小组，包含成员信息接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name="userId",value = "用户id", required = true, dataType = "Integer",dataTypeClass = Integer.class)
     })
     public ResultInfo queryMyGroupAll(Integer userId){
         List<Group> all = groupService.queryMyGroupAll(userId);
+        return success("查询成功", 200, all);
+    }
+
+    /**
+     * 查询用户管理的全部小组，包含成员信息
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/queryMyGroup",produces = "application/json;charset=utf-8",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    @ApiOperation("查询用户管理的全部小组，不包含成员信息接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="userId",value = "用户id", required = true, dataType = "Integer",dataTypeClass = Integer.class)
+    })
+    public ResultInfo queryMyGroup(Integer userId){
+        List<Group> all = groupService.queryMyGroup(userId);
         return success("查询成功", 200, all);
     }
 

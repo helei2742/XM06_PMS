@@ -152,11 +152,13 @@ public class FileUtil {
             return;
         }
         File[] files = file.listFiles();
-        for (File f: files){
-            if (f.isDirectory()){
-                deleteFile(f);
-            }else {
-                f.delete();
+        if(files != null){
+            for (File f: files){
+                if (f.isDirectory()){
+                    deleteFile(f);
+                }else {
+                    f.delete();
+                }
             }
         }
         file.delete();

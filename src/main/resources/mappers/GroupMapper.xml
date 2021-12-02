@@ -209,6 +209,10 @@
     g.manager_id = #{managerId}
   </select>
 
+  <select id="findGroupByManagerIdNoMember" resultType="org.xm06.pms.vo.Group">
+    select * from xm06_t_group where manager_id = #{managerId}
+  </select>
+
   <select id="totalCount" resultType="Integer">
     select count(id) from xm06_t_group
   </select>

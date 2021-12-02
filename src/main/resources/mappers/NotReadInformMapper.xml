@@ -52,4 +52,8 @@
              AND inform_id = #{informId}) = 0)
 	LIMIT 1
    </insert>
+
+  <delete id="removeNotReadOfGroup" parameterType="java.lang.Integer">
+    delete from xm06_t_not_read_inform where group_id = #{groupId}
+  </delete>
 </mapper>

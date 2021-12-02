@@ -11,4 +11,6 @@ public interface NotReadInformMapper {
     Integer insert(@Param("userId") Integer userId,
                    @Param("groupId") Integer groupId,
                    @Param("informId") Long informId);
+
+    Integer removeNotReadOfGroup(Integer groupId);
 }
