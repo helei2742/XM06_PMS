@@ -1,14 +1,9 @@
 jQuery(document).ready(function() {
-    // initiate layout and plugins
-    //Metronic.init(); // init metronic core components
-    Layout.init(); // init current layout
-    QuickSidebar.init(); // init quick sidebar
-    Demo.init(); // init demo features
     Page.init();
 });
 
 var date_flage = "";
-var resultlist = [];
+var resultList = [];
 var user = {};
 
 // var baseURL = 'http://www.ylxteach.net/XM06';
@@ -206,7 +201,7 @@ var Page = function() {
                                 if (list !== undefined && list.length > 0) {
                                     for (var i = 0; i < list.length; i++) {
                                         var record = list[i];
-                                        resultlist.push(record);
+                                        resultList.push(record);
                                         if (item === 1){
                                             html = html + "<tr class=\"active\">";
                                             item++;
@@ -336,20 +331,20 @@ var Page = function() {
 
     var onModifyRecord = function(id){
         // console.log(resultlist)
-        for (var i = 0; i < resultlist.length; i++){
-            if(id === parseInt(resultlist[i].id)){
+        for (var i = 0; i < resultList.length; i++){
+            if(id === parseInt(resultList[i].id)){
                 // 读取到的result[i].id为string类型，要转化为number类型才能比较
-                $("#record_modify_div #id").val(resultlist[i].id);
-                $("#record_modify_div #conference_name").val(resultlist[i].conferenceName);
-                $("#record_modify_div #conference_info").val(resultlist[i].conferenceInfo);
-                var d = new Date(resultlist[i].conferenceDate);
+                $("#record_modify_div #id").val(resultList[i].id);
+                $("#record_modify_div #conference_name").val(resultList[i].conferenceName);
+                $("#record_modify_div #conference_info").val(resultList[i].conferenceInfo);
+                var d = new Date(resultList[i].conferenceDate);
                 var dateString  = d.getFullYear() + "-" +  ("0"+(d.getMonth()+1)).slice(-2)  + "-"  + ("0" + d.getDate()).slice(-2)
                     + "T" + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
                 $("#record_modify_div #conference_date").val(dateString);
-                $("#record_modify_div #hour_long").val(resultlist[i].hourLong);
-                $("#record_modify_div #address").val(resultlist[i].address);
-                $("#record_modify_div #creator_id").val(resultlist[i].creatorId);
-                $("#record_modify_div #group_id").val(resultlist[i].groupId);
+                $("#record_modify_div #hour_long").val(resultList[i].hourLong);
+                $("#record_modify_div #address").val(resultList[i].address);
+                $("#record_modify_div #creator_id").val(resultList[i].creatorId);
+                $("#record_modify_div #group_id").val(resultList[i].groupId);
                 $("#record_modify_div").modal("show");
                 break;
             }
@@ -431,40 +426,10 @@ var Page = function() {
 
     var onModifyDivSubmit=function (){
         // 提交结束
-        // console.log(111111111111111)
         $("#record_modify_div").modal("hide");
         submitModifyRecordDiv()
     };
 
-    // cookie相关
-    function getUserIdStr(){
-        var userIdStr;
-        let localUserIdStr = getCookie('userIdStr')
-        if(localUserIdStr != null){
-            userIdStr = localUserIdStr
-        }
-        // console.log(userIdStr)
-        return userIdStr
-    }
-
-    function getCookie(objName) {//获取指定名称的cookie的值
-        var arrStr = document.cookie.split("; ");
-        for (var i = 0; i < arrStr.length; i++) {
-            var temp = arrStr[i].split("=");
-            if (temp[0] === objName) return unescape(temp[1]);
-        }
-
-    }
-
-    function delCookie (name) {
-        var exp=new Date();
-        console.log('cookie')
-        exp.setTime(exp.getTime()-10000);
-        var cval = getCookie(name)
-        if (cval != null) {
-            document.cookie = name + '=' + cval + ';expires=' + exp.toUTCString()+";path=/";
-        }
-    }
 
     //Page return 开始
     return {
@@ -479,3 +444,35 @@ var Page = function() {
         },
     }
 }()
+
+
+
+
+function getCookie(objName) {//获取指定名称的cookie的值
+    var arrStr = document.cookie.split("; ");
+    for (var i = 0; i < arrStr.length; i++) {
+        var temp = arrStr[i].split("=");
+        if (temp[0] === objName) return unescape(temp[1]);
+    }
+
+}
+
+function delCookie (name) {
+    var exp=new Date();
+    console.log('cookie')
+    exp.setTime(exp.getTime()-10000);
+    var cval = getCookie(name)
+    if (cval != null) {
+        document.cookie = name + '=' + cval + ';expires=' + exp.toUTCString()+";path=/";
+    }
+}
+
+function getUserIdStr(){
+    var userIdStr;
+    let localUserIdStr = getCookie('userIdStr')
+    if(localUserIdStr != null){
+        userIdStr = localUserIdStr
+    }
+    // console.log(userIdStr)
+    return userIdStr
+}

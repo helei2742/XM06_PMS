@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 30/11/2021 21:48:05
+ Date: 01/12/2021 23:19:17
 */
 
 SET NAMES utf8mb4;
@@ -52,14 +52,14 @@ CREATE TABLE `xm06_t_conference`  (
   `group_id` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_conference
 -- ----------------------------
-INSERT INTO `xm06_t_conference` VALUES (1, '小组团会', '商量团支部组建事项', '2021-11-23 23:45:52', '1h', '二基楼', NULL, NULL, 16);
-INSERT INTO `xm06_t_conference` VALUES (4, 'test会议', '我们要test以下会议添加', '2021-11-30 22:53:00', '2h', '二基楼', 27, '2021-11-30 14:53:26', 16);
-INSERT INTO `xm06_t_conference` VALUES (9, '1111', '我们要test以下会议添加', '2021-11-30 20:33:00', '2h', '二基楼', 27, '2021-11-30 20:33:50', 16);
+INSERT INTO `xm06_t_conference` VALUES (4, 'test会议', '我们要test一下会议修改', '2021-11-30 22:53:00', '2h', '二基楼', 27, '2021-12-01 19:11:30', 16);
+INSERT INTO `xm06_t_conference` VALUES (18, '测试会议', '我们要test一下会议添加', '2021-12-01 20:42:00', '2h', '二基楼', 27, '2021-12-01 19:09:43', 16);
+INSERT INTO `xm06_t_conference` VALUES (19, '初始化会议', '我们要test一下会议添加', '2021-12-01 22:52:00', '2h', '二基楼', 27, '2021-12-01 18:52:37', 16);
 
 -- ----------------------------
 -- Table structure for xm06_t_group
@@ -74,7 +74,7 @@ CREATE TABLE `xm06_t_group`  (
   `create_date` datetime NULL DEFAULT NULL,
   `update_date` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_group
@@ -232,7 +232,7 @@ CREATE TABLE `xm06_t_memo`  (
   `create_date` datetime NULL DEFAULT NULL,
   `is_finish` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_memo
@@ -528,7 +528,7 @@ CREATE TABLE `xm06_t_project`  (
   `is_valid` bit(1) NULL DEFAULT NULL,
   `is_public` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_project
@@ -593,7 +593,7 @@ CREATE TABLE `xm06_t_project_update_record`  (
   `update_date` datetime NULL DEFAULT NULL,
   `is_valid` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_project_update_record
@@ -620,7 +620,7 @@ CREATE TABLE `xm06_t_role`  (
   `update_date` datetime NULL DEFAULT NULL,
   `is_valid` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_role
@@ -640,7 +640,7 @@ CREATE TABLE `xm06_t_task`  (
   `create_date` datetime NULL DEFAULT NULL,
   `is_valid` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_task
@@ -672,7 +672,7 @@ CREATE TABLE `xm06_t_task_record`  (
   `file_url` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `submit_date` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 56 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_task_record
@@ -748,7 +748,7 @@ CREATE TABLE `xm06_t_user`  (
   `create_date` datetime NULL DEFAULT NULL,
   `update_date` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_user
@@ -772,7 +772,7 @@ INSERT INTO `xm06_t_user` VALUES (18, 'wojiaohelei', '4QrcOUm6Wau+VuBX8g+IPg==',
 INSERT INTO `xm06_t_user` VALUES (19, 'deplo', '4QrcOUm6Wau+VuBX8g+IPg==', '何磊', '914577981@qq.com', '', b'1', '2021-10-15 17:26:28', '2021-10-15 17:26:28');
 INSERT INTO `xm06_t_user` VALUES (24, 'erctvbyuhnij', 'EKIjsIq9qLMGgQzOYYqh3g==', '遵义市', '914577981@qq.com', '', b'0', '2021-11-14 17:20:17', '2021-11-14 17:20:17');
 INSERT INTO `xm06_t_user` VALUES (26, 'helei2742', 'xgkUKIhdWWIXaBdgiCk9lQ==', '何磊', '914577981@qq.com', '', b'1', '2021-11-20 14:50:15', '2021-11-20 14:50:15');
-INSERT INTO `xm06_t_user` VALUES (27, '月华似练只待迢迢江水', 'rQsIC5O9koeIVX57B2T6oA==', '吴茂俊', '1226398122@qq.com', '18789513633', b'1', '2021-11-24 19:20:58', '2021-11-24 19:20:58');
+INSERT INTO `xm06_t_user` VALUES (27, '123456', '4QrcOUm6Wau+VuBX8g+IPg==', '111', '1226398122@qq.com', '', b'1', '2021-12-01 08:34:06', '2021-12-01 08:34:06');
 
 -- ----------------------------
 -- Table structure for xm06_t_user_faceinfo
@@ -787,7 +787,7 @@ CREATE TABLE `xm06_t_user_faceinfo`  (
   `update_date` datetime NULL DEFAULT NULL,
   `is_valid` bit(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_user_faceinfo
@@ -856,6 +856,7 @@ INSERT INTO `xm06_t_user_group` VALUES ('7', '28');
 INSERT INTO `xm06_t_user_group` VALUES ('7', '27');
 INSERT INTO `xm06_t_user_group` VALUES ('7', '3');
 INSERT INTO `xm06_t_user_group` VALUES ('27', '16');
+INSERT INTO `xm06_t_user_group` VALUES ('27', '29');
 
 -- ----------------------------
 -- Table structure for xm06_t_user_role
@@ -868,7 +869,7 @@ CREATE TABLE `xm06_t_user_role`  (
   `create_date` datetime NULL DEFAULT NULL,
   `update_date` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of xm06_t_user_role
