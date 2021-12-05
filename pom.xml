@@ -55,6 +55,11 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+      <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi</artifactId>
+          <version>3.17</version>
+      </dependency>
 
     <dependency>
       <groupId>org.mybatis.spring.boot</groupId>

@@ -54,8 +54,8 @@
         </javaClientGenerator>
 
         <!-- 配置表信息 -->
-        <table tableName="pms.xm06_t_system_record"
-               domainObjectName="SystemRecord" enableCountByExample="false"
+        <table tableName="pms.xm06_t_announce"
+               domainObjectName="Announce" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
             <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample

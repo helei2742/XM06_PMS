@@ -10,21 +10,27 @@ import io.swagger.models.auth.In;
 import javafx.beans.binding.IntegerBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.xm06.pms.base.BaseController;
 import org.xm06.pms.base.ResultInfo;
+import org.xm06.pms.model.ExcelConfig;
+import org.xm06.pms.model.TaskRecordExport;
 import org.xm06.pms.query.TaskQuery;
 import org.xm06.pms.query.TaskRecordQuery;
 import org.xm06.pms.service.TaskService;
+import org.xm06.pms.utils.PoiUtils;
 import org.xm06.pms.vo.Task;
 import org.xm06.pms.vo.TaskRecord;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +72,16 @@ public class TaskController extends BaseController {
         task.setCreatorId(null);
         task.setIsValid(null);
         taskService.alterTask(task);
+
+        return success("发布任务成功", 200, null);
+    }
+
+    @PostMapping(value = "/dropTask", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    @ApiOperation(value = "删除任务接口",notes = "应传入：taskId, creatorId,不会删除任务的提交记录")
+    public ResultInfo dropTask(@RequestBody @Valid Task task) {
+
+        taskService.dropTask(task);
 
         return success("发布任务成功", 200, null);
     }
@@ -158,5 +174,56 @@ public class TaskController extends BaseController {
     @ApiOperation(value = "查询任务提交情况的echart表数据",notes = "需包含taskId")
     public Map<String,Object> queryTaskSubmitCharts(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
         return taskService.queryTaskSubmitCharts(taskRecordQuery.getTaskId());
+    }
+
+
+    @PostMapping("/exportMyRecordExcel")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportMyRecordExcel(@RequestBody Map<String,String> map, HttpServletResponse response) throws UnsupportedEncodingException {
+        Integer userId = Integer.parseInt(map.get("userId"));
+
+        List<TaskRecordExport> all = taskService.exportUserRecordExcel(userId);
+        ExcelConfig excelConfig = new ExcelConfig();
+
+
+
+        if(all.size() > 0){
+            excelConfig.setManager(all.get(0).getSubmitUserName());
+            excelConfig.setAuthor(all.get(0).getSubmitUserName());
+            excelConfig.setSheetName("任务("+all.get(0).getTaskName()+")的提交记录");
+        }
+        excelConfig.setCategory("我的提交记录");
+        excelConfig.setCompany("SCU");
+        excelConfig.setSubject("提交记录表");
+        excelConfig.setTitle("提交记录");
+        excelConfig.setComments("备注信息暂无");
+
+        response.setHeader("Access-Control-Expose-Headers", "filename");
+        response.setHeader("filename", URLEncoder.encode("我的提交记录表.xls","utf-8"));
+        return PoiUtils.exportExcel(all, excelConfig, TaskRecordExport.class);
+    }
+
+    @PostMapping("/exportTaskRecordExcel")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportTaskRecordExcel(@RequestBody Map<String,String> map, HttpServletResponse response) throws UnsupportedEncodingException {
+        Integer taskId = Integer.parseInt(map.get("taskId"));
+
+        List<TaskRecordExport> all = taskService.exportTaskRecordExcel(taskId);
+        ExcelConfig excelConfig = new ExcelConfig();
+
+        if(all.size() > 0){
+            excelConfig.setManager(all.get(0).getSubmitUserName());
+            excelConfig.setAuthor(all.get(0).getSubmitUserName());
+            excelConfig.setSheetName("任务("+all.get(0).getTaskName()+")的提交记录");
+        }
+        excelConfig.setCategory("任务的提交记录");
+        excelConfig.setCompany("SCU");
+        excelConfig.setSubject("提交记录表");
+        excelConfig.setTitle("提交记录");
+        excelConfig.setComments("备注信息暂无");
+
+        response.setHeader("Access-Control-Expose-Headers", "filename");
+        response.setHeader("filename", URLEncoder.encode("任务提交记录表.xls","utf-8"));
+        return PoiUtils.exportExcel(all, excelConfig, TaskRecordExport.class);
     }
 }

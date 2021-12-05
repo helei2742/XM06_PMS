@@ -76,6 +76,7 @@ public class UserController extends BaseController {
     @ApiImplicitParam(name="userId",required = true,value = "用户id",dataTypeClass = Integer.class)
     public ResultInfo queryUserById(Integer userId){
         User user = userService.selectByPrimaryKey(userId);
+        user.setUserPwd("******");
         return success("查找成功", 200, user);
     }
 

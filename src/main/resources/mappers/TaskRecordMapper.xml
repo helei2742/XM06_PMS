@@ -168,4 +168,46 @@
     and
     user_id = #{userId}
   </delete>
+
+  <select id="getUserTaskRecordExport" resultType="org.xm06.pms.model.TaskRecordExport">
+    SELECT
+   u.user_name submitUserName,
+   u.true_name trueName,
+   t.task_name taskName,
+   tr.description submitDesc,
+   tr.submit_date submitDate,
+   tr.file_url submitFileName
+   FROM
+	xm06_t_user u,
+   xm06_t_task_record tr,
+   xm06_t_task t
+   WHERE
+   u.id = tr.user_id
+   AND
+   t.id = tr.task_id
+   AND
+   u.id = #{userId}
+   ORDER BY tr.submit_date
+  </select>
+
+  <select id="getTaskRecordExport" resultType="org.xm06.pms.model.TaskRecordExport">
+    SELECT
+   u.user_name submitUserName,
+   u.true_name trueName,
+   t.task_name taskName,
+   tr.description submitDesc,
+   tr.submit_date submitDate,
+   tr.file_url submitFileName
+   FROM
+	xm06_t_user u,
+   xm06_t_task_record tr,
+   xm06_t_task t
+   WHERE
+   u.id = tr.user_id
+   AND
+   t.id = tr.task_id
+   AND
+   t.id = #{taskId}
+   ORDER BY tr.submit_date
+  </select>
 </mapper>

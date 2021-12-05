@@ -313,7 +313,7 @@ public class FaceService {
     private MailService mailService;
     @Autowired
     private TemplateEngine templateEngine;
-
+0
     private void sendConfirmMail(Integer id, String email){
         Context context = new Context();
         context.setVariable("id", id);

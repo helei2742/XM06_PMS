@@ -1,6 +1,7 @@
 package org.xm06.pms.service;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import org.xm06.pms.dao.TaskMapper;
 import org.xm06.pms.dao.TaskRecordMapper;
 import org.xm06.pms.dao.UserMapper;
 import org.xm06.pms.exception.FileSaveException;
+import org.xm06.pms.model.TaskRecordExport;
 import org.xm06.pms.query.TaskQuery;
 import org.xm06.pms.query.TaskRecordQuery;
 import org.xm06.pms.utils.AssertUtil;
@@ -24,8 +26,10 @@ import org.xm06.pms.vo.TaskRecord;
 import org.xm06.pms.vo.User;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.*;
 
 @Service
@@ -207,6 +211,15 @@ public class TaskService{
         taskMapper.updateByPrimaryKeySelective(task);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void dropTask(Task task) {
+        Task select = taskMapper.selectByPrimaryKey(task.getId());
+        AssertUtil.isTrue(select == null, "不存在该任务");
+        AssertUtil.isTrue(!select.getCreatorId().equals(task.getCreatorId()), "该用户不能删除此任务");
+
+        taskMapper.deleteByPrimaryKey(task.getId());
+    }
+
     /**
      * 查询任务提交记录的echarts图表数据，
      * @param taskId
@@ -272,4 +285,45 @@ public class TaskService{
 
         taskRecordMapper.deleteByIds(recordIds,userId);
     }
+
+    /**
+     * 获取导出userId 提交记录
+     * @param userId
+     * @return
+     */
+    public List<TaskRecordExport> exportUserRecordExcel(Integer userId) {
+        AssertUtil.isTrue(userId == null, "用户不能为空");
+
+
+        List<TaskRecordExport> exports =
+                taskRecordMapper.getUserTaskRecordExport(userId);
+        exports.forEach(e -> {
+            String s = e.getSubmitFileName();
+            if(s == null){
+                e.setSubmitFileName("无提交文件");
+            }else{
+                e.setSubmitFileName(FileUtil.getFileFromUrl(s));
+            }
+
+        });
+        return exports;
+    }
+
+    public List<TaskRecordExport> exportTaskRecordExcel(Integer taskId) {
+        AssertUtil.isTrue(taskId==null, "任务不能为空");
+
+        List<TaskRecordExport> exports = taskRecordMapper.getTaskRecordExport(taskId);
+        exports.forEach(e -> {
+            String s = e.getSubmitFileName();
+            if(s == null){
+                e.setSubmitFileName("无提交文件");
+            }else{
+                e.setSubmitFileName(FileUtil.getFileFromUrl(s));
+            }
+
+        });
+        return exports;
+    }
+
+
 }

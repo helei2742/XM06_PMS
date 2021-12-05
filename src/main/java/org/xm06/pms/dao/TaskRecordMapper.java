@@ -2,6 +2,7 @@ package org.xm06.pms.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.xm06.pms.base.BaseMapper;
+import org.xm06.pms.model.TaskRecordExport;
 import org.xm06.pms.vo.TaskRecord;
 
 import java.util.List;
@@ -38,4 +39,7 @@ public interface TaskRecordMapper extends BaseMapper<TaskRecord, Integer> {
      */
     Integer deleteByIds(@Param("list") List<Integer> recordIds,@Param("userId") Integer userId);
 
+    List<TaskRecordExport> getUserTaskRecordExport(Integer userId);
+
+    List<TaskRecordExport> getTaskRecordExport(Integer taskId);
 }
