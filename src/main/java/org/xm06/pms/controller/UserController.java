@@ -1,5 +1,6 @@
 package org.xm06.pms.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,6 +23,7 @@ import org.xm06.pms.vo.User;
 @Controller
 @RequestMapping("/user")
 @Api(value = "UserController",tags = "用户模块接口")
+@ApiSupport(author = "914577981@qq.com")
 public class UserController extends BaseController {
 
     @Autowired

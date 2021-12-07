@@ -1,28 +1,29 @@
 package org.xm06.pms.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.ibatis.annotations.Param;
-import org.assertj.core.internal.ObjectArrays;
+
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xm06.pms.base.BaseController;
 import org.xm06.pms.service.SystemRecordService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
+
 
 @Controller
+@Api(value = "InitController",tags = "系统相关接口")
+@ApiSupport(author = "914577981@qq.com")
 public class InitController extends BaseController {
-    @RequestMapping("/")
+    @RequestMapping(value = "/",method={RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @ApiOperation("跳转到默认主页")
     public String index(HttpServletResponse response) throws IOException {
         response.sendRedirect("index.html");
         return null;
@@ -31,13 +32,15 @@ public class InitController extends BaseController {
     @Autowired
     SystemRecordService systemRecordService;
 
-    @RequestMapping("/systemRecord/7day")
+    @RequestMapping(value = "/systemRecord/7day",method={RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @ApiOperation("系统7天的各种记录数据接口")
     public Map<String, Object> systemRecord7day() {
         return systemRecordService.last7DaySystemRecord();
     }
-    @RequestMapping("/systemRecord/total")
+    @RequestMapping(value = "/systemRecord/total",method={RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
+    @ApiOperation("系统的总记录数据接口")
     public Map<String, Object> systemRecordTotal() {
         return systemRecordService.systemTotalRecord();
     }

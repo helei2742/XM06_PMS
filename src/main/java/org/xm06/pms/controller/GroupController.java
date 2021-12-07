@@ -2,6 +2,7 @@ package org.xm06.pms.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,6 +26,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/group")
 @Api(value = "GroupController", tags = "小组模块接口")
+@ApiSupport(author = "914577981@qq.com")
 public class GroupController extends BaseController {
 
     @Autowired

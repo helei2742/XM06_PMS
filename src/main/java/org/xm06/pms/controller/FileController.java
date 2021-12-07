@@ -1,4 +1,5 @@
 package org.xm06.pms.controller;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,6 +22,7 @@ import java.net.URLEncoder;
 @Controller
 @RequestMapping("/file")
 @Api(value = "FileController", tags = "系统文件接口，负责下载操作")
+@ApiSupport(author = "914577981@qq.com")
 public class FileController extends BaseController {
 
     @RequestMapping(value = "/download",method = {RequestMethod.GET, RequestMethod.POST})

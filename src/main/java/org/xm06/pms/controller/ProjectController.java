@@ -3,6 +3,8 @@ package org.xm06.pms.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,6 +34,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/project")
 @Api(value = "ProjectController", tags = "项目模块接口")
+@ApiSupport(author = "914577981@qq.com")
 public class ProjectController extends BaseController {
 
     @Autowired
@@ -48,7 +51,8 @@ public class ProjectController extends BaseController {
     @PostMapping(value = "/create")
     @ResponseBody
     @ApiOperation(value = "创建项目接口",notes = "需传入projectName，creatorId,projectDesc,groups,isPublic")
-    public ResultInfo createProject(@RequestBody @Valid Project project){
+    @ApiOperationSupport(includeParameters = {"project.projectName","project.creatorId","project.projectDesc","project.groups","project.isPublic"})
+    public ResultInfo createProject(@RequestBody Project project){
         projectService.addProject(project);
 
         systemRecordService.addProjectCreateCount();
@@ -59,9 +63,9 @@ public class ProjectController extends BaseController {
     @PostMapping("/updateProject")
     @ResponseBody
     @ApiOperation(value = "更新项目接口",notes = "如有更改，需传入projectName, projectDesc,isPublic等基本项目信息，" +
-            "还有传入更改后的小组 groupIds[], 无论小组是否需要更改都需传入，否则视作删除项目下的小组。")
+            "还有传入更改后的小组 groupIds[], 无论小组是否需要更改都需传入，否则视作删除项目下的小组。还需传入creatorId用于校验身份")
+    @ApiOperationSupport(includeParameters = {"project.projectName","project.creatorId","project.projectDesc","project.groups","project.isPublic"})
     public ResultInfo updateProject(@RequestBody Project project){
-        System.out.println(project);
         projectService.updateProject(project);
         return success("修改项目信息成功", 200, null);
     }
@@ -69,7 +73,8 @@ public class ProjectController extends BaseController {
     @PostMapping("/queryByProjectName")
     @ResponseBody
     @ApiOperation(value = "根据项目名称查询项目接口",notes = "需传入projectName")
-    public ResultInfo queryByProjectName(@RequestBody @Valid ProjectQuery projectQuery){
+    @ApiOperationSupport(includeParameters = {"projectQuery.projectName"})
+    public ResultInfo queryByProjectName(@RequestBody ProjectQuery projectQuery){
         Project p = projectService.queryByProjectName(projectQuery.getProjectName());
         return success("查询成功", 200, p);
     }
@@ -96,8 +101,8 @@ public class ProjectController extends BaseController {
             "同时，分页查询的page(当前页,默认1) 和 limit(每页的数目，默认10) 也可传入。" +
             "排序方式orderType(1、代表按照project创建时间降序，2、代表按照project创建时间升序，3、代表按照project完成的降序" +
             "4、代表按照project完成度升序）")
-    public ResultInfo queryProjectList(@RequestBody @Valid ProjectQuery projectQuery) {
-        System.out.println(projectQuery);
+    @ApiOperationSupport(includeParameters = {"projectQuery.type","projectQuery.orderType","projectQuery.userId","projectQuery.projectName","projectQuery.page","projectQuery.limit"})
+    public ResultInfo queryProjectList(@RequestBody ProjectQuery projectQuery) {
         PageInfo<Project> pageInfo = projectService.queryProjectList(projectQuery);
         return success("查询成功", 200, pageInfo);
     }
@@ -109,8 +114,9 @@ public class ProjectController extends BaseController {
      */
     @PostMapping(value = "/pageQueryGroupProject", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "根据小组名称分页查询项目接口",notes = "需传入groupId,可选传入page,limit")
-    public ResultInfo queryByGroupId(@RequestBody @Valid ProjectQuery query){
+    @ApiOperation(value = "根据小组id分页查询项目接口",notes = "需传入groupId,可选传入page,limit")
+    @ApiOperationSupport(includeParameters = {"projectQuery.groupId","projectQuery.page","projectQuery.limit"})
+    public ResultInfo queryByGroupId(@RequestBody ProjectQuery query){
         PageInfo<Project> pageInfo = projectService.pageQueryGroupProject(query);
         return success("查询小组项目成功", 200, pageInfo);
     }
@@ -123,7 +129,8 @@ public class ProjectController extends BaseController {
     @PostMapping(value = "/pageQueryProjectByCreatorId", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "根据创建者的id分页查找项目接口",notes ="需传入userId，可选传入page,limit")
-    public ResultInfo pageQueryProjectByCreatorId(@RequestBody @Valid ProjectQuery query){
+    @ApiOperationSupport(includeParameters = {"projectQuery.userId","projectQuery.page","projectQuery.limit"})
+    public ResultInfo pageQueryProjectByCreatorId(@RequestBody ProjectQuery query){
         PageInfo<Project> pageInfo = projectService.pageQueryProjectByUserId(query);
         return success("查询创建项目成功", 200, pageInfo);
     }
@@ -154,18 +161,19 @@ public class ProjectController extends BaseController {
     @PostMapping(value = "/pageQueryRecordList", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "分页查询项目记录接口",notes = "需传入projectId,可选传入page,limit")
-    public ResultInfo pageQueryUpdateRecord(@RequestBody @Valid ProjectRecordQuery recordQuery)
+    @ApiOperationSupport(includeParameters = {"projectRecordQuery.projectId","projectRecordQuery.page","projectRecordQuery.limit"})
+    public ResultInfo pageQueryUpdateRecord(@RequestBody ProjectRecordQuery projectRecordQuery)
             throws IOException {
 
         PageInfo<ProjectUpdateRecord> pageInfo =
-                projectUploadRecordService.pageQueryProjectUpdateRecord(recordQuery);
+                projectUploadRecordService.pageQueryProjectUpdateRecord(projectRecordQuery);
         return success("添加成功", 200, pageInfo);
     }
 
 
     @PostMapping("/querySubmitChartInfo")
     @ResponseBody
-    @ApiOperation(value = "查询项目记录生成项目总提交情况的echarts图表的数据",notes = "需传入projectId")
+    @ApiOperation(value = "查询项目记录生成项目总提交情况的echarts图表的数据接口",notes = "需传入projectId")
     public Map<String, Object> querySubmitChartInfo(@RequestBody Map<String,String> m){
         Integer projectId = Integer.parseInt(m.get("projectId"));
         return projectUploadRecordService.queryProjectUserDegree(projectId);
@@ -173,7 +181,7 @@ public class ProjectController extends BaseController {
 
     @PostMapping("/queryUserSubmit14day")
     @ResponseBody
-    @ApiOperation(value = "查询项目记录生成项目14天内的提交情况的echarts图表的数据",notes = "需传入projectId")
+    @ApiOperation(value = "查询项目记录生成项目14天内的提交情况的echarts图表的数据接口",notes = "需传入projectId")
     public Map<String, Object> queryUserSubmit14day(@RequestBody Map<String,String> m){
         Integer projectId = Integer.parseInt(m.get("projectId"));
         return projectUploadRecordService.queryProjectSubmit14day(projectId);
@@ -181,7 +189,7 @@ public class ProjectController extends BaseController {
 
     @PostMapping("/deleteProject")
     @ResponseBody
-    @ApiOperation(value = "删除项目方法，并不会直接删除，会产生一个验证码发往userId对应的邮箱",
+    @ApiOperation(value = "删除项目接口，并不会直接删除，会产生一个验证码发往userId对应的邮箱",
             notes = "需传入projectId,userId")
     public ResultInfo deleteProject(@RequestBody Map<String,String> map){
         Integer userId = Integer.parseInt(map.get("userId"));
@@ -192,6 +200,8 @@ public class ProjectController extends BaseController {
 
     @PostMapping("/deleteConfirm")
     @ResponseBody
+    @ApiOperation(value = "确认删除项目接口",
+            notes = "需传入checkCode,projectId")
     public ResultInfo deleteConfirm(@RequestBody Map<String, String> map){
         String checkCode = map.get("checkCode");
         Integer projectId = Integer.valueOf(map.get("projectId"));

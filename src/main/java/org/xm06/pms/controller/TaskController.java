@@ -2,6 +2,8 @@ package org.xm06.pms.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,6 +40,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/task")
 @Api(value = "TaskController", tags = "任务模块接口")
+@ApiSupport(author = "914577981@qq.com")
 public class TaskController extends BaseController {
 
     @Autowired
@@ -54,18 +57,21 @@ public class TaskController extends BaseController {
 
     @PostMapping(value = "/add", produces = "application/json;charset=utf-8")
     @ResponseBody
+    @ApiOperationSupport(includeParameters = {"task.taskName","task.deadline","task.groupId","task.creatorId","task.description"})
     @ApiOperation(value = "发布任务接口",notes = "应传入：taskName，deadline，groupId，creatorId，description")
-    public ResultInfo addTask(@RequestBody @Valid Task task) {
+    public ResultInfo addTask(@RequestBody Task task) {
         taskService.addTask(task);
         //统计
         systemRecordService.addTaskCreateCount();
         return success("发布任务成功", 200, null);
     }
 
+
     @PostMapping(value = "/alterTask", produces = "application/json;charset=utf-8")
     @ResponseBody
+    @ApiOperationSupport(includeParameters = {"task.taskName","task.deadline","task.description"})
     @ApiOperation(value = "修改任务接口",notes = "应传入：taskName，deadline，description")
-    public ResultInfo alterTask(@RequestBody @Valid Task task) {
+    public ResultInfo alterTask(@RequestBody Task task) {
         task.setCreateDate(null);
         task.setCreator(null);
         task.setGroupId(null);
@@ -79,7 +85,8 @@ public class TaskController extends BaseController {
     @PostMapping(value = "/dropTask", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "删除任务接口",notes = "应传入：taskId, creatorId,不会删除任务的提交记录")
-    public ResultInfo dropTask(@RequestBody @Valid Task task) {
+    @ApiOperationSupport(includeParameters = {"task.taskId","task.creatorId"})
+    public ResultInfo dropTask(@RequestBody Task task) {
 
         taskService.dropTask(task);
 
@@ -89,7 +96,8 @@ public class TaskController extends BaseController {
     @PostMapping(value = "/queryGroupTask", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "分页查询小组的任务",notes = "需包含，groupId, 还可传入非必须的page,limit")
-    public ResultInfo pageQueryGroupTask(@RequestBody @Valid TaskQuery taskQuery) {
+    @ApiOperationSupport(includeParameters = {"taskQuery.groupId","taskQuery.page","taskQuery.limit"})
+    public ResultInfo pageQueryGroupTask(@RequestBody TaskQuery taskQuery) {
         PageInfo<Task> tasks = taskService.queryGroupTask(taskQuery);
         return success("查询小组任务成功", 200, tasks);
     }
@@ -97,10 +105,11 @@ public class TaskController extends BaseController {
 
     @PostMapping(value = "/pageQueryUserTask", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "分页查询用户接口",notes = "该方法包含了多种查询方式，type类型：（2.查询用户创建的任务，3.查询还没过期的任务，" +
+    @ApiOperation(value = "分页查询任务接口",notes = "该方法包含了多种查询方式，type类型：（2.查询用户创建的任务，3.查询还没过期的任务，" +
             "4，查询用户已经提交过的任务，5.查询过期的任务、6。查看小组的任务，7、查看未提交的任务, 1、或其他，查看所有任务)" +
             "对应的其他需要的参数有（1或其他.userId, 2.userId,3.userId,4.userId,5.userId,6.groupId,7.userId")
-    public ResultInfo pageQueryUserTask(@RequestBody @Valid TaskQuery taskQuery) {
+    @ApiOperationSupport(includeParameters = {"taskQuery.type","taskQuery.userId","taskQuery.groupId"})
+    public ResultInfo pageQueryUserTask(@RequestBody TaskQuery taskQuery) {
         PageInfo<Task> tasks = taskService.pageQueryUserTask(taskQuery);
         return success("查询用户任务成功", 200, tasks);
     }
@@ -127,7 +136,8 @@ public class TaskController extends BaseController {
     @PostMapping(value = "/userSubmitRecord", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "分页查询用户所有提交记录接口",notes = "需包含userId, 还可选择传入page,limit")
-    public ResultInfo userSubmitRecord(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
+    @ApiOperationSupport(includeParameters = {"taskRecordQuery.userId","taskRecordQuery.page","taskRecordQuery.limit"})
+    public ResultInfo userSubmitRecord(@RequestBody TaskRecordQuery taskRecordQuery) {
         PageInfo<TaskRecord> info = taskService.queryUserTaskRecord(taskRecordQuery);
         return success("查询用户所有提交记录成功", 200, info);
     }
@@ -136,7 +146,8 @@ public class TaskController extends BaseController {
     @PostMapping(value = "/taskSubmitRecord", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "分页查询任务的所有提交记录接口",notes = "需包含taskId, 还可选择传入page,limit")
-    public ResultInfo taskSubmitRecord(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
+    @ApiOperationSupport(includeParameters = {"taskRecordQuery.taskId","taskRecordQuery.page","taskRecordQuery.limit"})
+    public ResultInfo taskSubmitRecord(@RequestBody TaskRecordQuery taskRecordQuery) {
         PageInfo<TaskRecord> all = taskService.taskRecord(taskRecordQuery);
         return success("查询任务提交记录成功", 200, all);
     }
@@ -145,7 +156,8 @@ public class TaskController extends BaseController {
     @PostMapping(value = "/userRecordOfTask", produces = "application/json;charset=utf-8")
     @ResponseBody
     @ApiOperation(value = "分页查阅用户在某任务中的提交记录接口",notes = "需包含userId,taskId, 还可选择传入page,limit")
-    public ResultInfo userRecordOfTask(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
+    @ApiOperationSupport(includeParameters = {"taskRecordQuery.userId","taskRecordQuery.taskId","taskRecordQuery.page","taskRecordQuery.limit"})
+    public ResultInfo userRecordOfTask(@RequestBody TaskRecordQuery taskRecordQuery) {
         PageInfo<TaskRecord> all = taskService.userRecordOfTask(taskRecordQuery);
         return success("查阅用户提交记录成功", 200, all);
     }
@@ -162,9 +174,10 @@ public class TaskController extends BaseController {
 
     @PostMapping("/deleteSelectedRecord")
     @ResponseBody
-    public ResultInfo deleteSelectedRecord(@RequestBody Map<String,Object> s){
-        List<Integer> recordIds = (List<Integer>) s.get("recordIds");
-        Integer userId = (Integer) s.get("userId");
+    @ApiOperation(value = "删除recordIds数组中值作为主键的任务提交记录",notes = "需包含taskId,recordIds[]")
+    public ResultInfo deleteSelectedRecord(@RequestBody Map<String,Object> map){
+        List<Integer> recordIds = (List<Integer>) map.get("recordIds");
+        Integer userId = (Integer) map.get("userId");
         taskService.deleteSelectedRecord(recordIds, userId);
         return success("删除选中成功", 200, null);
     }
@@ -172,14 +185,17 @@ public class TaskController extends BaseController {
     @PostMapping(value = "/queryTaskSubmitCharts")
     @ResponseBody
     @ApiOperation(value = "查询任务提交情况的echart表数据",notes = "需包含taskId")
-    public Map<String,Object> queryTaskSubmitCharts(@RequestBody @Valid TaskRecordQuery taskRecordQuery) {
+    @ApiOperationSupport(includeParameters = {"taskRecordQuery.taskId"})
+    public Map<String,Object> queryTaskSubmitCharts(@RequestBody TaskRecordQuery taskRecordQuery) {
         return taskService.queryTaskSubmitCharts(taskRecordQuery.getTaskId());
     }
 
 
     @PostMapping("/exportMyRecordExcel")
     @ResponseBody
-    public ResponseEntity<byte[]> exportMyRecordExcel(@RequestBody Map<String,String> map, HttpServletResponse response) throws UnsupportedEncodingException {
+    @ApiOperation(value = "下载用户所有任务提交记录excel表接口",notes = "userId")
+    public ResponseEntity<byte[]> exportMyRecordExcel(@RequestBody Map<String,String> map
+            , HttpServletResponse response) throws UnsupportedEncodingException {
         Integer userId = Integer.parseInt(map.get("userId"));
 
         List<TaskRecordExport> all = taskService.exportUserRecordExcel(userId);
@@ -205,6 +221,7 @@ public class TaskController extends BaseController {
 
     @PostMapping("/exportTaskRecordExcel")
     @ResponseBody
+    @ApiOperation(value = "下载任务的所有提交记录excel表接口",notes = "taskId")
     public ResponseEntity<byte[]> exportTaskRecordExcel(@RequestBody Map<String,String> map, HttpServletResponse response) throws UnsupportedEncodingException {
         Integer taskId = Integer.parseInt(map.get("taskId"));
 

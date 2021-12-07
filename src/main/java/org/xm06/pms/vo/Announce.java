@@ -1,20 +1,25 @@
 package org.xm06.pms.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
+@ApiModel(value = "Announce",description = "公告实体类")
 public class Announce {
+    @ApiModelProperty("公告主键id")
     private Integer id;
-
+    @ApiModelProperty("公告创建人id， 也可以在修改等操作中传入修改者的userId进行接收")
     private Integer userId;
-
+    @ApiModelProperty("公告标题")
     private String title;
-
+    @ApiModelProperty("公告内容")
     private String mainBody;
-
+    @ApiModelProperty("公告创建时间")
     private Date createDate;
-
+    @ApiModelProperty("公告更新时间")
     private Date updateDate;
-
+    @ApiModelProperty("公告是否有效")
     private Boolean isValid;
 
     public Integer getId() {
