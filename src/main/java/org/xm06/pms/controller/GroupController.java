@@ -54,6 +54,12 @@ public class GroupController extends BaseController {
 
     @RequestMapping(value = "/alterGroupInfo",method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "groupName", value = "修改的小组名",required = true,dataType = "String",dataTypeClass = String.class),
+            @ApiImplicitParam(name = "userId", value = "修改人的id",required = true,dataType = "Integer",dataTypeClass = Integer.class),
+            @ApiImplicitParam(name = "described", value = "小组描述",dataType = "String",dataTypeClass = String.class),
+            @ApiImplicitParam(name = "groupName", value = "小组名",dataType = "String",dataTypeClass = String.class)
+    })
     public ResultInfo alterGroupInfo(Integer groupId, Integer userId,
                                      String groupName, String described){
 
@@ -247,11 +253,13 @@ public class GroupController extends BaseController {
     @ResponseBody
     @ApiOperation("小组的管理员解散小组接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="managerId",value = "用户id,为小组管理用户", required = true, dataType = "Integer",dataTypeClass = Integer.class),
-            @ApiImplicitParam(name="groupId",value = "小组id", required = true, dataType = "Integer",dataTypeClass = Integer.class)
+            @ApiImplicitParam(name="managerId",value = "用户id,为小组管理用户", required = true, dataTypeClass = Integer.class),
+            @ApiImplicitParam(name="groupId",value = "小组id", required = true, dataTypeClass = Integer.class),
+            @ApiImplicitParam(name="userPwd",value = "用户密码", required = true, dataTypeClass = String.class)
     })
-    public ResultInfo dissolveGroup(Integer managerId, Integer groupId){
-        String dissolveGroup = groupService.dissolveGroup(managerId, groupId);
+    public ResultInfo dissolveGroup(Integer managerId, Integer groupId, String userPwd){
+        System.out.println(userPwd);
+        String dissolveGroup = groupService.dissolveGroup(managerId, groupId,userPwd);
         return success("解散小组成功", 200, dissolveGroup);
     }
 }

@@ -84,8 +84,8 @@ public class TaskController extends BaseController {
 
     @PostMapping(value = "/dropTask", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiOperation(value = "删除任务接口",notes = "应传入：taskId, creatorId,不会删除任务的提交记录")
-    @ApiOperationSupport(includeParameters = {"task.taskId","task.creatorId"})
+    @ApiOperation(value = "删除任务接口",notes = "应传入：taskId, creatorId,userPwd不会删除任务的提交记录")
+    @ApiOperationSupport(includeParameters = {"task.taskId","task.creatorId","task.userPwd"})
     public ResultInfo dropTask(@RequestBody Task task) {
 
         taskService.dropTask(task);

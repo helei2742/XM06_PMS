@@ -271,9 +271,17 @@ public class GroupService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public String dissolveGroup(Integer managerId, Integer groupId) {
+    public String dissolveGroup(Integer managerId, Integer groupId, String userPwd) {
         AssertUtil.isTrue(managerId==null, "请求缺少管理员id");
         AssertUtil.isTrue(groupId == null, "请求缺少小组id");
+        AssertUtil.isTrue(userPwd==null,"未输入密码");
+
+        User user = userMapper.selectByPrimaryKey(managerId);
+        AssertUtil.isTrue(user==null, "用户不存在");
+
+        String encode = Md5Util.encode(userPwd);
+        AssertUtil.isTrue(!encode.equals(user.getUserPwd()), "密码输入错误");
+
         Group group = groupMapper.selectByPrimaryKey(groupId);
         AssertUtil.isTrue(group == null, "没有该小组的信息");
         AssertUtil.isTrue(managerId!=group.getManagerId(), "只有小组管理员才能解散小组");
@@ -293,6 +301,7 @@ public class GroupService {
             groupMapper.removeMember(userId, groupId);
         }
 
+        //清除数据库记录
         AssertUtil.isTrue(groupMapper.deleteByPrimaryKey(groupId)<1, "解散小组失败");
 
         return group.getGroupName();

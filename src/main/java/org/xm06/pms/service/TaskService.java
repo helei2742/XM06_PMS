@@ -213,8 +213,16 @@ public class TaskService{
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void dropTask(Task task) {
+        AssertUtil.isTrue(task.getUserPwd() == null, "请输入登录密码");
+
+        User user = userMapper.selectByPrimaryKey(task.getCreatorId());
+        AssertUtil.isTrue(user == null, "不存在该用户或已失效");
+        String encode = Md5Util.encode(task.getUserPwd());
+        AssertUtil.isTrue(!encode.equals(user.getUserPwd()), "密码错误");
+
         Task select = taskMapper.selectByPrimaryKey(task.getId());
         AssertUtil.isTrue(select == null, "不存在该任务");
+
         AssertUtil.isTrue(!select.getCreatorId().equals(task.getCreatorId()), "该用户不能删除此任务");
 
         taskMapper.deleteByPrimaryKey(task.getId());

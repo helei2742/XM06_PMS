@@ -17,6 +17,9 @@ public class Task {
 
     @ApiModelProperty("创建者id")
     private Integer creatorId;
+    @ApiModelProperty("删除等需要校验操作用的密码")
+    private String userPwd;
+
     @ApiModelProperty("创建者实体类")
     private User creator;
 
@@ -26,12 +29,19 @@ public class Task {
     @ApiModelProperty("任务描述")
     private String description;
 
-    private Date createDate;
-
     @ApiModelProperty(value = "截至日期",notes = "")
     private Date deadline;
 
+    private Date createDate;
     private Boolean isValid;
+
+    public String getUserPwd() {
+        return userPwd;
+    }
+
+    public void setUserPwd(String userPwd) {
+        this.userPwd = userPwd;
+    }
 
     public User getCreator() {
         return creator;
