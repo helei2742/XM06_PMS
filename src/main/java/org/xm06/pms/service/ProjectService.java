@@ -103,6 +103,23 @@ public class ProjectService{
     static private final Hashtable<Integer, CheckCodeModel> PROJECTIDMAPCODE = new Hashtable<>();
 
     /**
+     * 清除过期验证码方法
+      * @return
+     */
+    public int deleteCheckCode(){
+        Set<Integer> keySet = ProjectService.PROJECTIDMAPCODE.keySet();
+        int count = 0;
+        for (Integer key : keySet) {
+            CheckCodeModel codeModel = ProjectService.PROJECTIDMAPCODE.get(key);
+            if(new Date().getTime() - codeModel.getCreateTime()*1.0/60/1000>5){
+                ProjectService.PROJECTIDMAPCODE.remove(key);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
      * 删除项目方法
      * @param projectId
      * @param userId
@@ -130,7 +147,7 @@ public class ProjectService{
 
         String code = RandomUtil.generateVerCode();
         mailService.sendSimpleMail(user.getEmail(),"删除项目确认","尊敬的用户,您好:\n"
-                + "\n本次请求的邮件验证码为:" + code + ",本验证码5分钟内有效，请及时输入。（请勿泄露此验证码）\n"
+                + "\n本次请求的邮件验证码为: " + code + ",本验证码5分钟内有效，请及时输入。（请勿泄露此验证码）\n"
                 + "\n如非本人操作，请忽略该邮件。\n(这是一封自动发送的邮件，请不要直接回复）");
 
         CheckCodeModel ccm = new CheckCodeModel();
@@ -160,7 +177,7 @@ public class ProjectService{
         projectMapper.removeAllGroup(projectId);
         //删除项目
         projectMapper.deleteByPrimaryKey(projectId);
-        //删除提交记录
+        //删除提交记录(交给用户删算了)
 
     }
 

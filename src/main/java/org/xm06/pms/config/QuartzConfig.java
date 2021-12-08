@@ -3,6 +3,7 @@ package org.xm06.pms.config;
 import org.quartz.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.xm06.pms.jobs.DeleteProjectCheckCodeJob;
 import org.xm06.pms.jobs.RestoreInformJob;
 import org.xm06.pms.jobs.SystemRecordSaveJob;
 import org.xm06.pms.vo.SystemRecord;
@@ -19,6 +20,10 @@ public class QuartzConfig {
     public JobDetail jobDetail2(){
         //记录系统信息
         return JobBuilder.newJob(SystemRecordSaveJob.class).storeDurably().build();
+    }
+    @Bean
+    public JobDetail jobDetail3(){
+        return JobBuilder.newJob(DeleteProjectCheckCodeJob.class).storeDurably().build();
     }
     /*
      * 每3天执行一次
@@ -45,5 +50,17 @@ public class QuartzConfig {
                 .build();
     }
 
+    /**
+     * 每天23 点执行一次
+     * @return
+     */
+    @Bean
+    public Trigger trigger3(){
+        return TriggerBuilder.newTrigger()
+                .withIdentity("trigger3","xmo6-heleidage")
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 23 * * ?"))
+                .forJob(jobDetail3())
+                .build();
+    }
 }
 
