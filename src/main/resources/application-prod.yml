@@ -51,3 +51,7 @@ pagehelper:
 logging:
   file:
     name: D:/webapps/teach/yjykfsj2021/XM06_log/mapping.log
+
+
+knife4j:
+  enable: true
