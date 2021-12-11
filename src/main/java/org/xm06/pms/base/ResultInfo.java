@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class ResultInfo {
     @ApiModelProperty("响应消息")
     private String msg;
-    @ApiModelProperty(value = "响应代码",notes = "值为200代表响应成功，其他为失败")
+    @ApiModelProperty(value = "响应代码,值为200代表响应成功，其他为失败")
     private int code;
     @ApiModelProperty("响应数据")
     private Object result;

@@ -22,11 +22,15 @@ import java.util.Map;
 @ApiSupport(author = "914577981@qq.com")
 public class InitController extends BaseController {
     @RequestMapping(value = "/",method={RequestMethod.GET,RequestMethod.POST})
-    @ResponseBody
     @ApiOperation("跳转到默认主页")
     public String index(HttpServletResponse response) throws IOException {
         response.sendRedirect("index.html");
         return null;
+    }
+    @RequestMapping(value = "/error",method={RequestMethod.GET,RequestMethod.POST})
+    @ApiOperation("响应错误页面，可在前端收到响应代码为500等调用该接口")
+    public String error(HttpServletResponse response) throws IOException {
+        return "error";
     }
 
     @Autowired
@@ -38,10 +42,12 @@ public class InitController extends BaseController {
     public Map<String, Object> systemRecord7day() {
         return systemRecordService.last7DaySystemRecord();
     }
+
     @RequestMapping(value = "/systemRecord/total",method={RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     @ApiOperation("系统的总记录数据接口")
     public Map<String, Object> systemRecordTotal() {
         return systemRecordService.systemTotalRecord();
     }
+
 }

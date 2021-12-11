@@ -43,7 +43,7 @@ public class GroupService {
         AssertUtil.isTrue(group.getManagerId() == null, "管理员id不能为空");
 
         Group selectByGroupName = groupMapper.findGroupByGroupName(group.getGroupName());
-        AssertUtil.isTrue(selectByGroupName != null, "改组名已被使用");
+        AssertUtil.isTrue(selectByGroupName != null, group.getGroupName()+"已被使用");
 
         User selectManager = userMapper.selectByPrimaryKey(group.getManagerId());
         AssertUtil.isTrue(selectManager == null, "管理员不存在");
@@ -317,8 +317,14 @@ public class GroupService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void alterGroupInfo(Integer groupId, Integer userId, String groupName, String groupDesc) {
+
+        AssertUtil.isTrue(StringUtils.isBlank(groupName), "小组名不能为控");
+
+        Integer dbGroupId = groupMapper.queryIdByName(groupName);
+        AssertUtil.isTrue(dbGroupId!=null, groupName+"已被使用");
+
         Group group = groupMapper.selectByPrimaryKey(groupId);
-        AssertUtil.isTrue(group == null, "小组不存在");
+        AssertUtil.isTrue(group == null, "修改的小组不存在");
         AssertUtil.isTrue(!userId.equals(group.getManagerId()), "非小组管理员不能修改");
 
         group.setUpdateDate(new Date());

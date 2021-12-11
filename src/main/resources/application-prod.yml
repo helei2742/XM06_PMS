@@ -34,6 +34,9 @@ spring:
     username: 914577981@qq.com
     password: jwvgwxhhnhnhbdhe
     default-encoding: UTF-8
+  servlet:
+    multipart:
+      max-file-size: 100MB
 
 
 ## mybatis的配置

@@ -106,6 +106,13 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
                     }
                     return null;
                 }
+                else{
+                    try {
+                        response.sendRedirect("/error");
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
             }
         }
 
