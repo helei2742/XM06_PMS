@@ -108,59 +108,58 @@ public class ConferenceService {
      *
      * @return
      */
-    public PageInfo<Conference> pageQueryAllConference(ConferenceQuery conferenceQuery){
+    public List<Conference> pageQueryAllConference(ConferenceQuery conferenceQuery){
         Integer type = conferenceQuery.getType();
 
         AssertUtil.isTrue(type == null, "必须传入参数type");
 //        User user = userMapper.selectByPrimaryKey(conferenceQuery.getCreatorId());
 //        AssertUtil.isTrue(user == null, "该用户不存在");
 
-        PageHelper.startPage(conferenceQuery.getPage(), conferenceQuery.getLimit());
         List<Conference> all = null;
 
-        PageInfo<Conference> pageInfo = null;
-        if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID && type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID
-        && type == ConferenceQuery.PAGEQUERYCONFERENCEBYALL) {
+        List<Conference> pageInfo = null;
+        if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID) && type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID)
+        && type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYALL)) {
             Group group = groupMapper.selectByPrimaryKey(conferenceQuery.getGroupId());
             AssertUtil.isTrue(group == null, "小组不存在");
         }
-        if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYUSERID) {
+        if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYUSERID)) {
             // 1表示查询用户创建会议
             all = conferenceMapper.queryUserCreateConference(conferenceQuery.getCreatorId());
-        } else if (type == ConferenceQuery.PAGEQUERYCOMINGCONFERENCE) {
+        } else if (type.equals(ConferenceQuery.PAGEQUERYCOMINGCONFERENCE)) {
             // 2表示查询还未开始的会议
             all = conferenceMapper.queryComingConference();
-        } else if (type == ConferenceQuery.PAGEQUERYFINISHCONFERENCE) {
+        } else if (type.equals(ConferenceQuery.PAGEQUERYFINISHCONFERENCE)) {
             // 3表示查询已经结束的会议
             all = conferenceMapper.queryFinishConference();
-        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID) {
+        } else if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID)) {
             // 4表示查询小组会议
             all = conferenceMapper.queryGroupConference(conferenceQuery.getGroupId());
-        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAME) {
+        } else if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYNAME)) {
             // 5表示查询会议名字关键字
             all = conferenceMapper.queryConferenceByName(conferenceQuery.getConferenceName());
-        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDCREATORID) {
+        } else if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDCREATORID)) {
             // 6表示查询会议名字关键字和创建人ID
             System.out.println(conferenceMapper.queryByConferenceNameAndCreatorId(conferenceQuery.getConferenceName(),
                     conferenceQuery.getCreatorId()));
             all = new ArrayList<Conference>();
             all.add(conferenceMapper.queryByConferenceNameAndCreatorId(conferenceQuery.getConferenceName(),
                     conferenceQuery.getCreatorId()));
-        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID) {
+        } else if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID)) {
             // 7表示查询会议名字关键字和小组ID
             all = conferenceMapper.queryGroupConferenceByName(conferenceQuery.getConferenceName(), conferenceQuery.getGroupId());
-        } else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYALL) {
+        } else if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYALL)) {
             // 8表示全条件查询会议
             all = conferenceMapper.queryConferenceByAll(conferenceQuery.getConferenceName(), conferenceQuery.getGroupId(),
                     conferenceQuery.getCreatorId());
-        }  else if (type == ConferenceQuery.PAGEQUERYCONFERENCEBYCREATORIDANDGROUPID) {
+        }  else if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYCREATORIDANDGROUPID)) {
             // 9表示按照小组ID和创建人ID查询会议
             all = conferenceMapper.queryConferenceByGroupIdAndCreatorId(conferenceQuery.getGroupId(), conferenceQuery.getCreatorId());
         } else {
             // 查询全部任务
             all = conferenceMapper.queryAllConference();
         }
-        return new PageInfo<>(all);
+        return all;
     }
 
 }

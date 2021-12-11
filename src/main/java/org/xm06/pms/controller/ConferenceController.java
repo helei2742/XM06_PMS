@@ -15,6 +15,7 @@ import org.xm06.pms.service.ConferenceService;
 import org.xm06.pms.vo.Conference;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -28,15 +29,14 @@ public class ConferenceController extends BaseController{
     @PostMapping(value = "/pageQueryAllConference", produces = "application/json;charset=utf-8")
     @ResponseBody
     public ResultInfo conference_index(@RequestBody @Valid ConferenceQuery conferenceQuery) {
-        PageInfo<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
-        // System.out.println(conferences.getList().get(0));
+        List<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
         return success("查询会议成功", 200, conferences);
     }
 
     @PostMapping(value = "/pageQueryBeforeConference", produces = "application/json;charset=utf-8")
     @ResponseBody
     public ResultInfo before_conference(@RequestBody @Valid ConferenceQuery conferenceQuery) {
-        PageInfo<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
+        List<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
         // System.out.println(conferences.getList().get(0));
         return success("查询会议成功", 200, conferences);
     }
@@ -44,7 +44,7 @@ public class ConferenceController extends BaseController{
     @PostMapping(value = "/pageQueryAfterConference", produces = "application/json;charset=utf-8")
     @ResponseBody
     public ResultInfo after_conference(@RequestBody @Valid ConferenceQuery conferenceQuery) {
-        PageInfo<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
+        List<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
         // System.out.println(conferences.getList().get(0));
         return success("查询会议成功", 200, conferences);
     }

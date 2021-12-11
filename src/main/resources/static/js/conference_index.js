@@ -2,7 +2,7 @@ jQuery(document).ready(function() {
     Page.init();
 });
 
-var date_flage = "";
+var date_flag = "";
 var resultList = [];
 var user = {};
 
@@ -35,7 +35,6 @@ var Page = function() {
         $("#query_button").click(function (){onQueryRecord()});
         $("#before_date_button").click(function (){queryBeforeConference()});
         $("#after_date_button").click(function (){queryAfterConference()});
-        $("#out_login").click(function () {outLogin()});
         $("#print_table").click(function () {printTable()});
         $("#output_table").click(function (){outputTable()} );
     }
@@ -47,17 +46,17 @@ var Page = function() {
 
     // 业务函数
     var queryBeforeConference = function () {
-        date_flage = "before";
+        date_flag = "before";
         getConferenceRecordDatatable();
     }
     var queryAfterConference = function () {
-        date_flage = "after";
+        date_flag = "after";
         getConferenceRecordDatatable();
     }
     var outLogin = function () {
         if(confirm("您确定要退出登录吗？")){
             delCookie("userIdStr");
-            window.location.href = "http://localhost:8080/#/index/login";
+            window.location.href = baseUrl + "/#/index/login";
         }
 
     }
@@ -124,7 +123,7 @@ var Page = function() {
         };
     }
     var loadingIndex = function () {
-        window.location.href = "http://localhost:8080/#/index/welcome";
+        window.location.href = baseUrl + "/#/index/welcome";
     }
 
 
@@ -142,12 +141,12 @@ var Page = function() {
                     // console.log(user);
                     document.getElementById('user_name').innerText = user.userName;
                     var data = {};
-                    if (date_flage === "before"){
+                    if (date_flag === "before"){
                         data.type = 2;
-                        date_flage = "";
-                    } else if (date_flage === "after"){
+                        date_flag = "";
+                    } else if (date_flag === "after"){
                         data.type = 3;
-                        date_flage = "";
+                        date_flag = "";
                     } else {
                         data.conferenceName = $("#record_query_setup #conference_name").val();
                         data.creatorId = $("#record_query_setup #creator_id").val();
@@ -194,8 +193,8 @@ var Page = function() {
                         contentType: "application/json;charset=UTF-8",
                         success: function (json){
                             if(json.code === 200) {
-
-                                var list = json.result.list;
+                                date_flag = ""
+                                var list = json.result;
                                 var html = "";
                                 var item = 1;
                                 if (list !== undefined && list.length > 0) {
