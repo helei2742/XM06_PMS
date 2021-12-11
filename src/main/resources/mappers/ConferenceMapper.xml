@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.xm06.pms.dao.ConferenceMapper">
+  <resultMap id="BaseResultMap" type="org.xm06.pms.vo.Conference">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="conference_name" jdbcType="VARCHAR" property="conferenceName" />
+    <result column="conference_info" jdbcType="VARCHAR" property="conferenceInfo" />
+    <result column="conference_date" jdbcType="TIMESTAMP" property="conferenceDate" />
+    <result column="hour_long" jdbcType="VARCHAR" property="hourLong" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="group_id" jdbcType="INTEGER" property="groupId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, conference_name, conference_info, conference_date, hour_long, address, creator_id, 
+    create_date, group_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from xm06_t_conference
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from xm06_t_conference
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.xm06.pms.vo.Conference">
+    insert into xm06_t_conference (id, conference_name, conference_info, 
+      conference_date, hour_long, address, 
+      creator_id, create_date, group_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{conferenceName,jdbcType=VARCHAR}, #{conferenceInfo,jdbcType=VARCHAR}, 
+      #{conferenceDate,jdbcType=TIMESTAMP}, #{hourLong,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{creatorId,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP}, #{groupId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xm06.pms.vo.Conference">
+    insert into xm06_t_conference
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="conferenceName != null">
+        conference_name,
+      </if>
+      <if test="conferenceInfo != null">
+        conference_info,
+      </if>
+      <if test="conferenceDate != null">
+        conference_date,
+      </if>
+      <if test="hourLong != null">
+        hour_long,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="creatorId != null">
+        creator_id,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="conferenceName != null">
+        #{conferenceName,jdbcType=VARCHAR},
+      </if>
+      <if test="conferenceInfo != null">
+        #{conferenceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="conferenceDate != null">
+        #{conferenceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hourLong != null">
+        #{hourLong,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Conference">
+    update xm06_t_conference
+    <set>
+      <if test="conferenceName != null">
+        conference_name = #{conferenceName,jdbcType=VARCHAR},
+      </if>
+      <if test="conferenceInfo != null">
+        conference_info = #{conferenceInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="conferenceDate != null">
+        conference_date = #{conferenceDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hourLong != null">
+        hour_long = #{hourLong,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorId != null">
+        creator_id = #{creatorId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Conference">
+    update xm06_t_conference
+    set conference_name = #{conferenceName,jdbcType=VARCHAR},
+      conference_info = #{conferenceInfo,jdbcType=VARCHAR},
+      conference_date = #{conferenceDate,jdbcType=TIMESTAMP},
+      hour_long = #{hourLong,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      group_id = #{groupId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <resultMap id="conferenceMap" type="org.xm06.pms.vo.Conference">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="conference_name" jdbcType="VARCHAR" property="conferenceName" />
+        <result column="conference_info" jdbcType="VARCHAR" property="conferenceInfo" />
+        <result column="conference_date" jdbcType="TIMESTAMP" property="conferenceDate" />
+        <result column="hour_long" jdbcType="VARCHAR" property="hourLong" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    </resultMap>
+
+  <!--内嵌查找用户-->
+  <select id="selectUser" parameterType="java.lang.Integer"
+          resultType="org.xm06.pms.vo.User">
+    select
+      u.id,
+      u.user_name,
+      u.true_name,
+      u.email,
+      u.phone,
+      u.create_date,
+      u.update_date,
+      u.is_valid
+    from
+      xm06_t_user u
+    where
+      u.id = #{userId}
+  </select>
+
+  <select id="queryAllConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.*
+    FROM
+    xm06_t_conference c
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryGroupConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT * FROM xm06_t_conference
+    WHERE group_id = #{groupId}
+    order by create_date desc
+  </select>
+
+  <select id="queryUserCreateConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.* FROM xm06_t_conference c
+    WHERE c.creator_id = #{creatorId}
+    order by create_date desc
+  </select>
+
+  <select id="queryComingConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.* FROM xm06_t_conference c
+    WHERE c.conference_date > NOW()
+    ORDER BY create_date DESC
+  </select>
+  
+  <select id="queryFinishConference" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    SELECT c.* FROM xm06_t_conference c
+    WHERE  c.conference_date &lt; NOW()<!--小于符号-->
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryByConferenceNameAndCreatorId" resultType="org.xm06.pms.vo.Conference">
+    select * from xm06_t_conference
+    where
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+      and
+      creator_id = #{creatorId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryConferenceByName" parameterType="java.lang.String" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryGroupConferenceByName" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+    AND
+        group_id = #{groupId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryConferenceByAll" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+      AND
+      group_id = #{groupId, jdbcType=INTEGER}
+      AND
+        creator_id = #{creatorId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
+  </select>
+
+  <select id="queryConferenceByGroupIdAndCreatorId" parameterType="java.lang.Integer" resultMap="conferenceMap">
+    select * from xm06_t_conference
+    where
+      group_id = #{groupId, jdbcType=INTEGER}
+      AND
+      creator_id = #{creatorId, jdbcType=INTEGER}
+    ORDER BY create_date DESC
+  </select>
+
+</mapper>
