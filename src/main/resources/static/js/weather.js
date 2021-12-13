@@ -2,6 +2,14 @@ jQuery(document).ready(function() {
     Page.init();
 });
 
+var date_flag = "";
+var resultList = [];
+var user = {};
+
+// var baseURL = 'http://www.ylxteach.net/XM06';
+// var baseUrl = 'http://localhost:9000/XM06';
+var baseUrl = "/XM06";
+
 var Page = function() {
 
     // 页面分流进行余下操作
