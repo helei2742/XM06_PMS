@@ -133,53 +133,66 @@ var Page = function() {
     }
 
     var getWeatherDatatable = function () {
-        // 获取列表
-        var city = $("#city").val();
-        city = city.replace("市", "");
-        city = city.replace("省", "");
-        city = city.replace("特别行政区", "");
-        city = city.replace("区", "");
-        if (city === "") {
-            $.ajax({
-                url: 'http://api.map.baidu.com/location/ip?ak=ia6HfFL660Bvh43exmH9LrI6',
-                type: 'POST',
-                dataType: 'jsonp',
-                success:function(data) {
-                    city = data.content.address_detail.city;
+        let userIdStr = getUserIdStr();
+        const uri =  encodeURIComponent (userIdStr)
+        $.ajax({
+            url: baseUrl+'/user/findByIdStr?userIdStr=' + uri,
+            type: "get",
+            success: function (json) {
+                if (json.code === 200) {
+                    user = json.result;
+                    // console.log(user);
+                    document.getElementById('user_name').innerText = user.userName;
+                    // 获取列表
+                    var city = $("#city").val();
                     city = city.replace("市", "");
                     city = city.replace("省", "");
-                    city = city.replace("区", "");
                     city = city.replace("特别行政区", "");
-                    $.ajax({
-                        type:'get',
-                        url:'http://wthrcdn.etouch.cn/weather_mini',
-                        data:{city:city},
-                        dataType:"jsonp",
-                        success:function(data) {
-                            if (city === "香港" || city === "香港特别行政区"){
-                                city = "hongkong";
+                    city = city.replace("区", "");
+                    if (city === "") {
+                        $.ajax({
+                            url: 'http://api.map.baidu.com/location/ip?ak=ia6HfFL660Bvh43exmH9LrI6',
+                            type: 'POST',
+                            dataType: 'jsonp',
+                            success:function(data) {
+                                city = data.content.address_detail.city;
+                                city = city.replace("市", "");
+                                city = city.replace("省", "");
+                                city = city.replace("区", "");
+                                city = city.replace("特别行政区", "");
+                                $.ajax({
+                                    type:'get',
+                                    url:'http://wthrcdn.etouch.cn/weather_mini',
+                                    data:{city:city},
+                                    dataType:"jsonp",
+                                    success:function(data) {
+                                        if (city === "香港" || city === "香港特别行政区"){
+                                            city = "hongkong";
+                                        }
+                                        $("#weather").html("<iframe width=\"280\" height=\"300\" frameborder=\"0\" scrolling=\"no\" hspace=\"0\" src=\"https://i.tianqi.com/?c=code&a=getcode&id=55&py=" + pinyin.getFullChars(city).toLowerCase() + "&icon=2\"></iframe>")
+                                        html_div(data)
+                                    }
+                                })
                             }
-                            $("#weather").html("<iframe width=\"280\" height=\"300\" frameborder=\"0\" scrolling=\"no\" hspace=\"0\" src=\"https://i.tianqi.com/?c=code&a=getcode&id=55&py=" + pinyin.getFullChars(city).toLowerCase() + "&icon=2\"></iframe>")
-                            html_div(data)
-                        }
-                    })
-                }
-            });
-        } else {
-            $.ajax({
-                type: 'get',
-                url: 'http://wthrcdn.etouch.cn/weather_mini',
-                data: {city: city},
-                dataType: "jsonp",
-                success: function (data) {
-                    if (city === "香港"){
-                        city = "hongkong";
+                        });
+                    } else {
+                        $.ajax({
+                            type: 'get',
+                            url: 'http://wthrcdn.etouch.cn/weather_mini',
+                            data: {city: city},
+                            dataType: "jsonp",
+                            success: function (data) {
+                                if (city === "香港"){
+                                    city = "hongkong";
+                                }
+                                $("#weather").html("<iframe width=\"280\" height=\"300\" frameborder=\"0\" scrolling=\"no\" hspace=\"0\" src=\"https://i.tianqi.com/?c=code&a=getcode&id=55&py=" + pinyin.getFullChars(city).toLowerCase() + "&icon=2\"></iframe>")
+                                html_div(data)
+                            }
+                        })
                     }
-                    $("#weather").html("<iframe width=\"280\" height=\"300\" frameborder=\"0\" scrolling=\"no\" hspace=\"0\" src=\"https://i.tianqi.com/?c=code&a=getcode&id=55&py=" + pinyin.getFullChars(city).toLowerCase() + "&icon=2\"></iframe>")
-                    html_div(data)
                 }
-            })
-        }
+            }
+        })
     }
 
     var onQueryRecord = function (){
@@ -199,3 +212,21 @@ var Page = function() {
         },
     }
 }()
+
+function getCookie(objName) {
+    //获取指定名称的cookie的值
+    var arrStr = document.cookie.split("; ");
+    for (var i = 0; i < arrStr.length; i++) {
+        var temp = arrStr[i].split("=");
+        if (temp[0] === objName) return unescape(temp[1]);
+    }
+}
+
+function getUserIdStr(){
+    var userIdStr;
+    let localUserIdStr = getCookie('userIdStr')
+    if(localUserIdStr != null){
+        userIdStr = localUserIdStr
+    }
+    return userIdStr
+}

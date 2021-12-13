@@ -53,13 +53,7 @@ var Page = function() {
         date_flag = "after";
         getConferenceRecordDatatable();
     }
-    var outLogin = function () {
-        if(confirm("您确定要退出登录吗？")){
-            delCookie("userIdStr");
-            window.location.href = baseUrl + "/#/index/login";
-        }
 
-    }
     var printTable = function () {
         var bdHtml = $("#datatable_tab").html();
         var sprnStr = "<!--startprint-->";   //开始打印标识字符串有17个字符
@@ -454,16 +448,6 @@ function getCookie(objName) {//获取指定名称的cookie的值
         if (temp[0] === objName) return unescape(temp[1]);
     }
 
-}
-
-function delCookie (name) {
-    var exp=new Date();
-    console.log('cookie')
-    exp.setTime(exp.getTime()-10000);
-    var cval = getCookie(name)
-    if (cval != null) {
-        document.cookie = name + '=' + cval + ';expires=' + exp.toUTCString()+";path=/";
-    }
 }
 
 function getUserIdStr(){
