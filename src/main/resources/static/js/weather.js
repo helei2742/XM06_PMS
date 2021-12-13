@@ -21,6 +21,7 @@ var Page = function() {
     // 具体操作函数（button事件）
     var initWeatherListControlEvent = function (){
         $("#query_button").click(function (){onQueryRecord()});
+        $("#submit_button").click(function () {QueryWeather()});
         $("#print_table").click(function () {printTable()});
         $("#output_table").click(function (){outputTable()} );
     }
@@ -94,8 +95,6 @@ var Page = function() {
         var weather = data.data.forecast;
         var city_div = data.data.city;
         var tips = data.data.ganmao;
-        var temperature = data.data.wendu + "℃";
-
         $.each(weather, function(i,e) {
             if (item === 1){
                 html = html + "<tr class=\"active\">";
@@ -119,17 +118,11 @@ var Page = function() {
             html = html + "<td>";
             html = html + e.type;
             html = html + "</td>"
-            html = html + "<td>";
-            html = html + temperature;
-            html = html + "</td>"
             html = html + "<td>"
             html = html + e.high.replace("高温", "");
             html = html + "</td>";
             html = html + "<td>"
             html = html + e.low.replace("低温", "");
-            html = html + "</td>";
-            html = html + "<td>"
-            html = html + e.fengxiang;
             html = html + "</td>";
             html = html + "<td>"
             html = html + tips;
@@ -142,6 +135,10 @@ var Page = function() {
     var getWeatherDatatable = function () {
         // 获取列表
         var city = $("#city").val();
+        city = city.replace("市", "");
+        city = city.replace("省", "");
+        city = city.replace("特别行政区", "");
+        city = city.replace("区", "");
         if (city === "") {
             $.ajax({
                 url: 'http://api.map.baidu.com/location/ip?ak=ia6HfFL660Bvh43exmH9LrI6',
@@ -150,12 +147,19 @@ var Page = function() {
                 success:function(data) {
                     city = data.content.address_detail.city;
                     city = city.replace("市", "");
+                    city = city.replace("省", "");
+                    city = city.replace("区", "");
+                    city = city.replace("特别行政区", "");
                     $.ajax({
                         type:'get',
                         url:'http://wthrcdn.etouch.cn/weather_mini',
                         data:{city:city},
                         dataType:"jsonp",
                         success:function(data) {
+                            if (city === "香港" || city === "香港特别行政区"){
+                                city = "hongkong";
+                            }
+                            $("#weather").html("<iframe width=\"280\" height=\"300\" frameborder=\"0\" scrolling=\"no\" hspace=\"0\" src=\"https://i.tianqi.com/?c=code&a=getcode&id=55&py=" + pinyin.getFullChars(city).toLowerCase() + "&icon=2\"></iframe>")
                             html_div(data)
                         }
                     })
@@ -168,6 +172,10 @@ var Page = function() {
                 data: {city: city},
                 dataType: "jsonp",
                 success: function (data) {
+                    if (city === "香港"){
+                        city = "hongkong";
+                    }
+                    $("#weather").html("<iframe width=\"280\" height=\"300\" frameborder=\"0\" scrolling=\"no\" hspace=\"0\" src=\"https://i.tianqi.com/?c=code&a=getcode&id=55&py=" + pinyin.getFullChars(city).toLowerCase() + "&icon=2\"></iframe>")
                     html_div(data)
                 }
             })
@@ -175,7 +183,12 @@ var Page = function() {
     }
 
     var onQueryRecord = function (){
+        $("#query_weather_div").modal("show");
+    }
+
+    var QueryWeather = function () {
         // 获取查询结果
+        $("#query_weather_div").modal("hide");
         getWeatherDatatable();
     }
 

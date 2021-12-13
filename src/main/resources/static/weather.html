@@ -54,6 +54,38 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
 <!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
 <body class="page-header-fixed page-quick-sidebar-over-content ">
+
+<!--添加会议弹窗-->
+<div class="modal fade draggable-modal" id="query_weather_div" name="query_weather_div" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">获取城市的天气</h4>
+            </div>
+            <div class="modal-body">
+                <div class="portlet-body form">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">城市</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入城市（仅支持国内城市或区）" id="city" name="city">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn blue" id="submit_button" name="submit_button">查询天气</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
     <!-- BEGIN HEADER INNER -->
@@ -136,26 +168,12 @@ License: You must have a valid license purchased only from themeforest(the above
             <!-- BEGIN PAGE CONTENT-->
             <div class="row">
                 <div class="col-md-6">
-                    <div class="portlet-body form" id="record_query_setup" name="record_query_setup">
-                        <form class="form-horizontal" role="form">
-                            <div class="form-body">
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">城市</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" placeholder="请输入城市" id="city" name="city">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
+                    <div id="weather"></div>
                     <button type="button" class="btn btn-primary" id="query_button" name="query_button">查询天气</button>
                 </div>
             </div>
             <hr>
+
             <div class="row"  id="datatable_tab">
                 <div class="col-md-6" style="width:100%">
                     <!-- BEGIN SAMPLE TABLE PORTLET-->
@@ -173,7 +191,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         </div>
                         <!--startprint-->
                         <div class="portlet-body" id="datatable">
-                            <div class="table-scrollable">
+                            <div class="table-scrollable" >
                                 <table class="table table-bordered table-hover" border="1" cellspacing="0">
                                     <div class="hidden">
                                         最近5天的天气情况
@@ -190,16 +208,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                             天气
                                         </th>
                                         <th>
-                                            当前气温
-                                        </th>
-                                        <th>
                                             最高温度
                                         </th>
                                         <th>
                                             最低温度
-                                        </th>
-                                        <th>
-                                            风向
                                         </th>
                                         <th>
                                             小贴士
@@ -209,7 +221,6 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <tbody id="record_table_content_div" name="record_table_content_div">
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                         <!--endprint-->
@@ -245,6 +256,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
 <script src="js/weather.js" type="text/javascript"></script>
+<script src="js/Convert_Pinyin.js"></script>
 
 <!--打印iframe-->
 <iframe id="iframe1" style="display: none"></iframe>
