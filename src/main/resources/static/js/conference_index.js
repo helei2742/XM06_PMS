@@ -116,7 +116,7 @@ var Page = function() {
         });
         var oA = document.getElementById("output_table");
         oA.href = URL.createObjectURL(excelBlob);
-        oA.download = "datatable.xls";
+        oA.download = "conference_list.xls";
 
         oA.click = function () {
             this.click();
