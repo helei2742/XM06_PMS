@@ -24,6 +24,10 @@ spring:
     user: Administrator
     password: XWClassroom20202023
     jdbcUrl: jdbc:mysql://127.0.0.1:3366/yjykfsj2021?useUnicode=true&characterEncoding=gbk&autoReconnect=true&failOverReadOnly=false
+    testConnectionOnCheckin: true
+    preferredTestQuery: SELECT 1
+    idleConnectionTestPeriod: 3500000
+    maxIdleTime: 55
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
