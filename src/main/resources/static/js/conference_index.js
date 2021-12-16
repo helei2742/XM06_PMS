@@ -366,7 +366,7 @@ var Page = function() {
                 success: function (json){
                     if(json.code === 200){
                         // console.log(111111111111111111)
-                        alert("已经完成任务信息修改！");
+                        alert("已经完成会议信息修改！");
                         window.location.reload();
                     } else {
                         json.msg = decodeURI(json.msg);

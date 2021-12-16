@@ -113,9 +113,8 @@ public class ConferenceService {
 //        User user = userMapper.selectByPrimaryKey(conferenceQuery.getCreatorId());
 //        AssertUtil.isTrue(user == null, "该用户不存在");
 
-        List<Conference> all = null;
+        List<Conference> all;
 
-        List<Conference> pageInfo = null;
         if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID) && type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID)
         && type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYALL)) {
             Group group = groupMapper.selectByPrimaryKey(conferenceQuery.getGroupId());

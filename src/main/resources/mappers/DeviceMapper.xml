@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.xm06.pms.dao.DeviceMapper">
+    <resultMap id="BaseResultMap" type="org.xm06.pms.vo.Device">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+        <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, device_id, device_name, creator_id, create_date, group_id
+    </sql>
+    <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from xm06_t_device
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" >
+        delete from xm06_t_device
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="org.xm06.pms.vo.Device">
+        insert into xm06_t_device (id, device_id, device_name, creator_id, create_date, group_id
+        )
+        values (#{id,jdbcType=INTEGER}, #{deviceId,jdbcType=VARCHAR}, #{deviceName,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+                #{createDate,jdbcType=TIMESTAMP}, #{groupId,jdbcType=INTEGER}
+               )
+    </insert>
+    <insert id="insertSelective" parameterType="org.xm06.pms.vo.Device">
+        insert into xm06_t_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="deviceId != null">
+                device_id,
+            </if>
+            <if test="deviceName != null">
+                device_name,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="groupId != null">
+                group_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="deviceId != null">
+                #{deviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceName != null">
+                #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupId != null">
+                #{groupId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xm06.pms.vo.Device">
+        update xm06_t_device
+        <set>
+            <if test="deviceId != null">
+                device_id = #{deviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceName != null">
+                device_name = #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xm06.pms.vo.Device">
+        update xm06_t_device
+        set device_id = #{deviceId,jdbcType=VARCHAR},
+            device_name = #{deviceName,jdbcType=VARCHAR},
+            creator_id = #{creatorId,jdbcType=INTEGER},
+            create_date = #{createDate,jdbcType=TIMESTAMP},
+            group_id = #{groupId,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <resultMap id="deviceMap" type="org.xm06.pms.vo.Device">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName" />
+        <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="group_id" jdbcType="INTEGER" property="groupId" />
+    </resultMap>
+
+    <!--内嵌查找用户-->
+    <select id="selectUser" 
+            resultType="org.xm06.pms.vo.User">
+        select
+            u.id,
+            u.user_name,
+            u.true_name,
+            u.email,
+            u.phone,
+            u.create_date,
+            u.update_date,
+            u.is_valid
+        from
+            xm06_t_user u
+        where
+            u.id = #{userId}
+    </select>
+
+    <select id="queryDeviceByAll" resultMap="deviceMap">
+        select
+            d.*
+        from
+            xm06_t_device d
+        where
+            d.device_id LIKE CONCAT('%', #{deviceId}, '%')
+        AND
+            d.device_name  LIKE CONCAT('%', #{deviceName}, '%')
+        AND
+            d.creator_id = #{creatorId}
+        AND
+            d.group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryAllDevice" resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceById"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_id LIKE CONCAT('%', #{deviceId}, '%')
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByName"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_name LIKE CONCAT('%', #{deviceName}, '%')
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByCreatorId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            creator_id = #{creatorId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByGroupId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByIdAndName"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_id LIKE CONCAT('%', #{deviceId}, '%')
+        AND
+            device_name LIKE CONCAT('%', #{deviceName}, '%')
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByIdAndCreatorId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_id LIKE CONCAT('%', #{deviceId}, '%')
+          AND
+            creator_id = #{creatorId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByIdAndGroupId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_id LIKE CONCAT('%', #{deviceId}, '%')
+          AND
+            group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByNameAndCreatorId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_name LIKE CONCAT('%', #{deviceName}, '%')
+        AND
+            creator_id = #{creatorId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByNameAndGroupId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_name LIKE CONCAT('%', #{deviceName}, '%')
+          AND
+            group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByCreatorIdAndGroupId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            creator_id = #{creatorId}
+          AND
+            group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByIdAndNameAndCreatorId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_id LIKE CONCAT('%', #{deviceId}, '%')
+          AND
+            device_name LIKE CONCAT('%', #{deviceName}, '%')
+          AND
+            creator_id = #{creatorId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByIdAndNameAndGroupId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_id LIKE CONCAT('%', #{deviceId}, '%')
+          AND
+            device_name LIKE CONCAT('%', #{deviceName}, '%')
+          AND
+            group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByIdAndCreatorIdAndGroupId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_id LIKE CONCAT('%', #{deviceId}, '%')
+          AND
+            creator_id = #{creatorId}
+          AND
+            group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+    <select id="queryDeviceByNameAndCreatorIdAndGroupId"  resultMap="deviceMap">
+        SELECT d.*
+        FROM
+            xm06_t_device d
+        WHERE
+            device_name LIKE CONCAT('%', #{deviceName}, '%')
+          AND
+            creator_id = #{creatorId}
+          AND
+            group_id = #{groupId}
+        ORDER BY create_date DESC
+    </select>
+
+</mapper>

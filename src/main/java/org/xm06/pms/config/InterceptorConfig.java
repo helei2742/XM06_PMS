@@ -1,17 +1,12 @@
 package org.xm06.pms.config;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.*;
 
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Configuration
