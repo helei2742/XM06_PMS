@@ -45,7 +45,6 @@ public class DeviceController  extends BaseController {
     @ResponseBody
     @ApiModelProperty(value = "删除设备记录")
     public ResultInfo deleteDevice(@RequestBody @Valid Device device) {
-        System.out.println(device.getUserId());
         deviceService.deleteDevice(device.getId(), device.getUserId());
         return success("删除设备成功", 200, null);
     }
@@ -53,7 +52,7 @@ public class DeviceController  extends BaseController {
     @ResponseBody
     @ApiModelProperty(value = "修改设备记录")
     public ResultInfo modifyDevice(@RequestBody @Valid Device device) {
-        deviceService.modifyDevice(device, device.getCreatorId());
+        deviceService.modifyDevice(device, device.getUserId());
         return success("修改设备信息成功", 200, null);
     }
 
