@@ -203,7 +203,7 @@
   <select id="queryByConferenceNameAndCreatorId" resultType="org.xm06.pms.vo.Conference">
     select * from xm06_t_conference
     where
-      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+      conference_name LIKE CONCAT('%',#{conferenceName, jdbcType=VARCHAR},'%')
       and
       creator_id = #{creatorId, jdbcType=INTEGER}
     ORDER BY create_date DESC
@@ -212,14 +212,14 @@
   <select id="queryConferenceByName" parameterType="java.lang.String" resultMap="conferenceMap">
     select * from xm06_t_conference
     where
-      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+      conference_name LIKE CONCAT('%',#{conferenceName, jdbcType=VARCHAR},'%')
     ORDER BY create_date DESC
   </select>
 
   <select id="queryGroupConferenceByName" resultMap="conferenceMap">
     select * from xm06_t_conference
     where
-      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+      conference_name LIKE CONCAT('%',#{conferenceName, jdbcType=VARCHAR},'%')
     AND
         group_id = #{groupId, jdbcType=INTEGER}
     ORDER BY create_date DESC
@@ -228,7 +228,7 @@
   <select id="queryConferenceByAll" resultMap="conferenceMap">
     select * from xm06_t_conference
     where
-      conference_name LIKE #{conferenceName, jdbcType=VARCHAR}
+      conference_name LIKE CONCAT('%',#{conferenceName, jdbcType=VARCHAR},'%')
       AND
       group_id = #{groupId, jdbcType=INTEGER}
       AND
