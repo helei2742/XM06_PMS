@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.3.5
+Version: 4.1.0
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+License: You must have a valid license purchased only from themeforest(the above link) in order to legally use the theme for your project.
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>天气管理</title>
+    <meta content="text/html">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+    <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+    <link href="plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <!-- BEGIN THEME STYLES -->
+    <link href="css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+    <link href="css/plugins.css" rel="stylesheet" type="text/css"/>
+    <link href="css/layout.css" rel="stylesheet" type="text/css"/>
+    <link href="css/light2.css" rel="stylesheet" type="text/css"/>
+    <link href="css/custom.css" rel="stylesheet" type="text/css"/>
+    <!-- END THEME STYLES -->
+    <link rel="shortcut icon" href="img/favicon.ico"/>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<!-- DOC: Apply "page-header-fixed-mobile" and "page-footer-fixed-mobile" class to body element to force fixed header or footer in mobile devices -->
+<!-- DOC: Apply "page-sidebar-closed" class to the body and "page-sidebar-menu-closed" class to the sidebar menu element to hide the sidebar by default -->
+<!-- DOC: Apply "page-sidebar-hide" class to the body to make the sidebar completely hidden on toggle -->
+<!-- DOC: Apply "page-sidebar-closed-hide-logo" class to the body element to make the logo hidden on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-hide" class to body element to completely hide the sidebar on sidebar toggle -->
+<!-- DOC: Apply "page-sidebar-fixed" class to have fixed sidebar -->
+<!-- DOC: Apply "page-footer-fixed" class to the body element to have fixed footer -->
+<!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
+<!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
+<body class="page-header-fixed page-quick-sidebar-over-content ">
+
+<!--添加会议弹窗-->
+<div class="modal fade draggable-modal" id="query_weather_div" name="query_weather_div" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">获取城市的天气</h4>
+            </div>
+            <div class="modal-body">
+                <div class="portlet-body form">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">城市</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入城市（仅支持国内城市或区）" id="city" name="city">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn blue" id="submit_button" name="submit_button">查询天气</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<!-- BEGIN HEADER -->
+<div class="page-header navbar navbar-fixed-top">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner">
+        <!-- BEGIN LOGO -->
+        <div class="page-logo">
+            <a href="/XM06/#/index/welcome">
+                <img src="./img/favicon.ico" alt="icon" class="icon"/>
+            </a>
+            <div class="menu-toggler sidebar-toggler hide">
+                <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+            </div>
+        </div>
+        <!-- END LOGO -->
+        <!-- BEGIN TOP NAVIGATION MENU -->
+        <div class="top-menu">
+            <ul class="nav navbar-nav pull-right">
+                <!-- BEGIN USER LOGIN DROPDOWN -->
+                <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                <li class="dropdown dropdown-user">
+                    <a href="/XM06/#/index" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <img alt="" class="img-circle" src="./img/head_default.png"/>
+                        <span class="username username-hide-on-mobile" id="user_name">
+					未登录 </span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        <li>
+                            <a href="/XM06/#/index/myinfo">
+                                <i class="icon-user"></i> 我的信息 </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- END USER LOGIN DROPDOWN -->
+            </ul>
+        </div>
+        <!-- END TOP NAVIGATION MENU -->
+    </div>
+    <!-- END HEADER INNER -->
+</div>
+<!-- END HEADER -->
+<div class="clearfix">
+</div>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar navbar-collapse collapse">
+                <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                    <li class="active open">
+                        <a href="/XM06/#/index/welcome">
+                            <i class="icon-home"></i>
+                            <span class="title">返回首页</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-content">
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                天气管理 <small>获取您想要的城市天气</small>
+            </h3>
+            <div class="page-bar">
+                <ul class="page-breadcrumb">
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="/XM06/#/index/welcome">主页</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">天气</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="weather"></div>
+                    <button type="button" class="btn btn-primary" id="query_button" name="query_button">查询天气</button>
+                </div>
+            </div>
+            <hr>
+
+            <div class="row"  id="datatable_tab">
+                <div class="col-md-6" style="width:100%">
+                    <!-- BEGIN SAMPLE TABLE PORTLET-->
+                    <div class="portlet box blue-dark">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-comments"></i>最近5天的天气情况
+                            </div>
+                            <div class="tools">
+                                <a class="icon-printer" id="print_table">打印表格
+                                </a>
+                                <a class="icon-note" id="output_table">导出为excel
+                                </a>
+                            </div>
+                        </div>
+                        <!--startprint-->
+                        <div class="portlet-body" id="datatable">
+                            <div class="table-scrollable" >
+                                <table class="table table-bordered table-hover" border="1" cellspacing="0">
+                                    <div class="hidden">
+                                        最近5天的天气情况
+                                    </div>
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            城市
+                                        </th>
+                                        <th>
+                                            日期
+                                        </th>
+                                        <th>
+                                            天气
+                                        </th>
+                                        <th>
+                                            最高温度
+                                        </th>
+                                        <th>
+                                            最低温度
+                                        </th>
+                                        <th>
+                                            小贴士
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="record_table_content_div" name="record_table_content_div">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--endprint-->
+                    </div>
+                    <!-- END SAMPLE TABLE PORTLET-->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<input type="hidden" id="page_id" name="page_id" value="weather">
+<!-- END CONTAINER -->
+
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+<script src="plugins/respond.min.js"></script>
+<script src="plugins/excanvas.min.js"></script>
+<![endif]-->
+<script src="plugins/jquery.min.js" type="text/javascript"></script>
+<script src="plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="plugins/jquery.tablesorter.js" type="text/javascript"></script>
+<script src="plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<script src="js/weather.js" type="text/javascript"></script>
+<script src="js/Convert_Pinyin.js"></script>
+
+<!--打印iframe-->
+<iframe id="iframe1" style="display: none"></iframe>
+</body>
+<!-- END BODY -->
+</html>

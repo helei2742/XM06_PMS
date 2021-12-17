@@ -5,6 +5,7 @@ jQuery(document).ready(function() {
 var date_flag = "";
 var resultList = [];
 var user = {};
+var create_user = {};
 
 // var baseURL = 'http://www.ylxteach.net/XM06';
 // var baseUrl = 'http://localhost:9000/XM06';
@@ -16,7 +17,6 @@ var Page = function() {
     var initPageControl = function(){
         var pageId = $("#page_id").val();
         if(pageId === "conference_list"){
-            // console.log(baseUrl)
             initConferenceList();
         }
     };
@@ -33,7 +33,6 @@ var Page = function() {
         $('#record_modify_div_submit_button').click(function() {onModifyDivSubmit();});
         $('#record_add_div_submit_button').click(function() {onAddDivSubmit();});
         $("#query_button").click(function (){onQueryRecord()});
-        $("#log_out").click(function () {LogOut()});
         $("#before_date_button").click(function (){queryBeforeConference()});
         $("#after_date_button").click(function (){queryAfterConference()});
         $("#print_table").click(function () {printTable()});
@@ -54,13 +53,7 @@ var Page = function() {
         date_flag = "after";
         getConferenceRecordDatatable();
     }
-    var LogOut = function () {
-        if(confirm("您确定要退出登录吗？")){
-            delCookie("userIdStr");
-            window.location.href = baseUrl + "/#/index/login";
-        }
 
-    }
     var printTable = function () {
         var bdHtml = $("#datatable_tab").html();
         var sprnStr = "<!--startprint-->";   //开始打印标识字符串有17个字符
@@ -117,7 +110,7 @@ var Page = function() {
         });
         var oA = document.getElementById("output_table");
         oA.href = URL.createObjectURL(excelBlob);
-        oA.download = "datatable.xls";
+        oA.download = "conference_list.xls";
 
         oA.click = function () {
             this.click();
@@ -130,7 +123,6 @@ var Page = function() {
 
     var getConferenceRecordDatatable = function () {
         // 获取列表
-        // console.log(user.id);
         let userIdStr = getUserIdStr();
         const uri =  encodeURIComponent (userIdStr)
         $.ajax({
@@ -139,13 +131,14 @@ var Page = function() {
             success: function (json) {
                 if (json.code === 200) {
                     user = json.result;
-                    // console.log(user);
                     document.getElementById('user_name').innerText = user.userName;
                     var data = {};
                     if (date_flag === "before"){
                         data.type = 2;
+                        date_flag = "";
                     } else if (date_flag === "after"){
                         data.type = 3;
+                        date_flag = "";
                     } else {
                         data.conferenceName = $("#record_query_setup #conference_name").val();
                         data.creatorId = $("#record_query_setup #creator_id").val();
@@ -191,56 +184,64 @@ var Page = function() {
                         contentType: "application/json;charset=UTF-8",
                         success: function (json){
                             if(json.code === 200) {
-                                date_flag = "";
+                                date_flag = ""
                                 var list = json.result;
-                                // console.log(list)
                                 var html = "";
                                 var item = 1;
                                 if (list !== undefined && list.length > 0) {
                                     for (var i = 0; i < list.length; i++) {
-                                        var record = list[i];
+                                        record = list[i];
                                         resultList.push(record);
-                                        if (item === 1){
-                                            html = html + "<tr class=\"active\">";
-                                            item++;
-                                        } else if (item === 2){
-                                            html = html + "<tr class=\"success\">";
-                                            item++;
-                                        } else if (item === 3){
-                                            html = html + "<tr class=\"warning\">";
-                                            item++;
-                                        } else {
-                                            html = html + "<tr class=\"danger\">";
-                                            item = 1;
-                                        }
-                                        html = html + "<td>";
-                                        html = html + record.conferenceName;
-                                        html = html + "</td>“"
-                                        html = html + "<td>"
-                                        html = html + record.groupId;
-                                        html = html + "</td>";
-                                        html = html + "<td>"
-                                        html = html + record.conferenceInfo;
-                                        html = html + "</td>";
-                                        html = html + "<td>"
-                                        html = html + new Date(record.conferenceDate);
-                                        html = html + "</td>";
-                                        html = html + "<td>"
-                                        html = html + record.hourLong;
-                                        html = html + "</td>";
-                                        html = html + "<td>"
-                                        html = html + record.address;
-                                        html = html + "</td>";
-                                        html = html + "<td>"
-                                        html = html + record.creatorId;
-                                        html = html + "</td>";
-                                        html = html + "<td>"
-                                        html = html + new Date(record.createDate);
-                                        html = html + "</td>";
-                                        html = html + "<td>";
-                                        html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
-                                        html = html + "</td>";
-                                        html = html + "</tr>";
+                                        var user_id = record.creatorId;
+                                        $.ajax({
+                                            url: baseUrl + "/user/queryUserById?userId=" + user_id,
+                                            type: "GET",
+                                            async: false,
+                                            success: function (json){
+                                                create_user = json.result;
+                                                if (item === 1){
+                                                    html = html + "<tr class=\"active\">";
+                                                    item++;
+                                                } else if (item === 2){
+                                                    html = html + "<tr class=\"success\">";
+                                                    item++;
+                                                } else if (item === 3){
+                                                    html = html + "<tr class=\"warning\">";
+                                                    item++;
+                                                } else {
+                                                    html = html + "<tr class=\"danger\">";
+                                                    item = 1;
+                                                }
+                                                html = html + "<td>";
+                                                html = html + record.conferenceName;
+                                                html = html + "</td>“"
+                                                html = html + "<td>"
+                                                html = html + record.groupId;
+                                                html = html + "</td>";
+                                                html = html + "<td>"
+                                                html = html + record.conferenceInfo;
+                                                html = html + "</td>";
+                                                html = html + "<td>"
+                                                html = html + new Date(record.conferenceDate);
+                                                html = html + "</td>";
+                                                html = html + "<td>"
+                                                html = html + record.hourLong;
+                                                html = html + "</td>";
+                                                html = html + "<td>"
+                                                html = html + record.address;
+                                                html = html + "</td>";
+                                                html = html + "<td>"
+                                                html = html + create_user.userName;
+                                                html = html + "</td>";
+                                                html = html + "<td>"
+                                                html = html + new Date(record.createDate);
+                                                html = html + "</td>";
+                                                html = html + "<td>";
+                                                html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
+                                                html = html + "</td>";
+                                                html = html + "</tr>";
+                                            }
+                                        })
                                     }
                                 }
                                 $("#record_table_content_div").html(html);
@@ -268,7 +269,6 @@ var Page = function() {
         var data = {};
         data.conferenceName = $("#record_add_div #conference_name").val();
         data.conferenceInfo = $("#record_add_div #conference_info").val();
-        // console.log(($("#record_add_div #conference_date").val()).type);
         data.conferenceDate = new Date($("#record_add_div #conference_date").val()).getTime();
         data.hourLong = $("#record_add_div #hour_long").val();
         data.address = $("#record_add_div #address").val();
@@ -283,7 +283,6 @@ var Page = function() {
             contentType: "application/json;charset=UTF-8",
             success: function (json){
                 if(json.code === 200){
-                    // console.log(data)
                     alert("已经完成会议添加。");
                     window.location.reload();
                 } else {
@@ -303,7 +302,6 @@ var Page = function() {
                 var data = {};
                 data.id = id;
                 data.userId = user.id;
-                // console.log(data);
                 $.ajax({
                     url: baseUrl + "/conference/delete",
                     type: "POST",
@@ -328,7 +326,6 @@ var Page = function() {
     };
 
     var onModifyRecord = function(id){
-        // console.log(resultlist)
         for (var i = 0; i < resultList.length; i++){
             if(id === parseInt(resultList[i].id)){
                 // 读取到的result[i].id为string类型，要转化为number类型才能比较
@@ -361,7 +358,6 @@ var Page = function() {
             data.userId = user.id;
             data.creatorId = $("#record_modify_div #creator_id").val();
             data.groupId = $("#record_modify_div #group_id").val();
-            // console.log(data)
             $.ajax({
                 url: baseUrl + "/conference/modify",
                 type: "POST",
@@ -370,8 +366,7 @@ var Page = function() {
                 contentType: "application/json;charset=UTF-8",
                 success: function (json){
                     if(json.code === 200){
-                        // console.log(111111111111111111)
-                        alert("已经完成任务信息修改！");
+                        alert("已经完成会议信息修改！");
                         window.location.reload();
                     } else {
                         json.msg = decodeURI(json.msg);
@@ -399,7 +394,6 @@ var Page = function() {
             success: function (json) {
                 if (json.code === 200) {
                     user = json.result;
-                    // console.log(user);
                     document.getElementById('user_name').innerText = user.userName;
                     // 展开添加界面
                     if (user.id !== undefined){
@@ -455,22 +449,11 @@ function getCookie(objName) {//获取指定名称的cookie的值
 
 }
 
-function delCookie (name) {
-    var exp=new Date();
-    console.log('cookie')
-    exp.setTime(exp.getTime()-10000);
-    var cval = getCookie(name)
-    if (cval != null) {
-        document.cookie = name + '=' + cval + ';expires=' + exp.toUTCString()+";path=/";
-    }
-}
-
 function getUserIdStr(){
     var userIdStr;
     let localUserIdStr = getCookie('userIdStr')
     if(localUserIdStr != null){
         userIdStr = localUserIdStr
     }
-    // console.log(userIdStr)
     return userIdStr
 }

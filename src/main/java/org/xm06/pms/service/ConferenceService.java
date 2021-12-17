@@ -1,7 +1,5 @@
 package org.xm06.pms.service;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -115,9 +113,8 @@ public class ConferenceService {
 //        User user = userMapper.selectByPrimaryKey(conferenceQuery.getCreatorId());
 //        AssertUtil.isTrue(user == null, "该用户不存在");
 
-        List<Conference> all = null;
+        List<Conference> all;
 
-        List<Conference> pageInfo = null;
         if (type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYGROUPID) && type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYNAMEANDGROUPID)
         && type.equals(ConferenceQuery.PAGEQUERYCONFERENCEBYALL)) {
             Group group = groupMapper.selectByPrimaryKey(conferenceQuery.getGroupId());

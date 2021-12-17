@@ -45,7 +45,6 @@ public class ConferenceController extends BaseController{
     @ResponseBody
     public ResultInfo after_conference(@RequestBody @Valid ConferenceQuery conferenceQuery) {
         List<Conference> conferences = conferenceService.pageQueryAllConference(conferenceQuery);
-        // System.out.println(conferences.getList().get(0));
         return success("查询会议成功", 200, conferences);
     }
 
@@ -54,7 +53,7 @@ public class ConferenceController extends BaseController{
     @ApiOperation(value = "发布会议接口",notes = "应传入：conferenceName，conferenceInfo, conferenceDate，hourLong, groupId，" +
             "address, creatorId, createDate, groupId")
     public ResultInfo addConference(@RequestBody @Valid Conference conference) {
-        System.out.println(conference);
+        // System.out.println(conference);
         conferenceService.addConference(conference);
         return success("发布会议成功", 200, null);
     }
@@ -69,9 +68,9 @@ public class ConferenceController extends BaseController{
 
     @PostMapping(value = "/modify", produces = "application/json;charset=utf-8")
     @ResponseBody
-    @ApiModelProperty(value = "删除会议记录")
+    @ApiModelProperty(value = "修改会议记录")
     public ResultInfo modifyConference(@RequestBody @Valid Conference conference) {
         conferenceService.modifyConference(conference, conference.getUserId());
-        return success("删除会议成功", 200, null);
+        return success("修改会议信息成功", 200, null);
     }
 }
