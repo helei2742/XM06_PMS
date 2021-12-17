@@ -36,7 +36,6 @@ public class DeviceController  extends BaseController {
     @ResponseBody
     @ApiOperation(value = "新建设备接口")
     public ResultInfo addDevice(@RequestBody @Valid Device device) {
-        // System.out.println(device);
         deviceService.addDevice(device);
         return success("新建设备成功", 200, null);
     }

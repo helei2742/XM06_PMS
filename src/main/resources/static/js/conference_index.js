@@ -16,7 +16,6 @@ var Page = function() {
     var initPageControl = function(){
         var pageId = $("#page_id").val();
         if(pageId === "conference_list"){
-            // console.log(baseUrl)
             initConferenceList();
         }
     };
@@ -123,7 +122,6 @@ var Page = function() {
 
     var getConferenceRecordDatatable = function () {
         // 获取列表
-        // console.log(user.id);
         let userIdStr = getUserIdStr();
         const uri =  encodeURIComponent (userIdStr)
         $.ajax({
@@ -132,7 +130,6 @@ var Page = function() {
             success: function (json) {
                 if (json.code === 200) {
                     user = json.result;
-                    // console.log(user);
                     document.getElementById('user_name').innerText = user.userName;
                     var data = {};
                     if (date_flag === "before"){
@@ -145,7 +142,6 @@ var Page = function() {
                         data.conferenceName = $("#record_query_setup #conference_name").val();
                         data.creatorId = $("#record_query_setup #creator_id").val();
                         data.groupId = $("#record_query_setup #group_id").val();
-                        // console.log(data)
                         if (data.conferenceName === "" && data.creatorId === "" && data.groupId === ""){
                             // 查找全部会议
                             data.type = 10000;
@@ -263,7 +259,6 @@ var Page = function() {
         var data = {};
         data.conferenceName = $("#record_add_div #conference_name").val();
         data.conferenceInfo = $("#record_add_div #conference_info").val();
-        // console.log(($("#record_add_div #conference_date").val()).type);
         data.conferenceDate = new Date($("#record_add_div #conference_date").val()).getTime();
         data.hourLong = $("#record_add_div #hour_long").val();
         data.address = $("#record_add_div #address").val();
@@ -278,7 +273,6 @@ var Page = function() {
             contentType: "application/json;charset=UTF-8",
             success: function (json){
                 if(json.code === 200){
-                    // console.log(data)
                     alert("已经完成会议添加。");
                     window.location.reload();
                 } else {
@@ -298,7 +292,6 @@ var Page = function() {
                 var data = {};
                 data.id = id;
                 data.userId = user.id;
-                // console.log(data);
                 $.ajax({
                     url: baseUrl + "/conference/delete",
                     type: "POST",
@@ -323,7 +316,6 @@ var Page = function() {
     };
 
     var onModifyRecord = function(id){
-        // console.log(resultlist)
         for (var i = 0; i < resultList.length; i++){
             if(id === parseInt(resultList[i].id)){
                 // 读取到的result[i].id为string类型，要转化为number类型才能比较
@@ -356,7 +348,6 @@ var Page = function() {
             data.userId = user.id;
             data.creatorId = $("#record_modify_div #creator_id").val();
             data.groupId = $("#record_modify_div #group_id").val();
-            // console.log(data)
             $.ajax({
                 url: baseUrl + "/conference/modify",
                 type: "POST",
@@ -365,7 +356,6 @@ var Page = function() {
                 contentType: "application/json;charset=UTF-8",
                 success: function (json){
                     if(json.code === 200){
-                        // console.log(111111111111111111)
                         alert("已经完成会议信息修改！");
                         window.location.reload();
                     } else {
@@ -394,7 +384,6 @@ var Page = function() {
             success: function (json) {
                 if (json.code === 200) {
                     user = json.result;
-                    // console.log(user);
                     document.getElementById('user_name').innerText = user.userName;
                     // 展开添加界面
                     if (user.id !== undefined){
@@ -456,6 +445,5 @@ function getUserIdStr(){
     if(localUserIdStr != null){
         userIdStr = localUserIdStr
     }
-    // console.log(userIdStr)
     return userIdStr
 }

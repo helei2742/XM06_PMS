@@ -16,7 +16,6 @@ var Page = function() {
     var initPageControl = function(){
         var pageId = $("#page_id").val();
         if(pageId === "device_list"){
-            // console.log(baseUrl)
             initDeviceList();
         }
     };
@@ -130,16 +129,13 @@ var Page = function() {
             type: "get",
             success: function (json) {
                 if (json.code === 200) {
-                    console.log(json)
                     user = json.result;
-                    // console.log(user);
                     document.getElementById('user_name').innerText = user.userName;
                     var data = {};
                     data.deviceId = $("#record_query_setup #device_id").val();
                     data.deviceName = $("#record_query_setup #device_name").val();
                     data.creatorId = $("#record_query_setup #creator_id").val();
                     data.groupId = $("#record_query_setup #group_id").val();
-                    // console.log(data)
                     if (data.deviceId === "" && data.deviceName === "" && data.creatorId === "" && data.groupId === ""){
                         // 查找全部设备
                         data.type = 10000;
@@ -379,7 +375,6 @@ var Page = function() {
     };
 
     var onModifyRecord = function(id){
-        // console.log(resultlist)
         for (var i = 0; i < resultList.length; i++){
             if(id === parseInt(resultList[i].id)){
                 // 读取到的result[i].id为string类型，要转化为number类型才能比较
@@ -403,7 +398,6 @@ var Page = function() {
             data.userId = user.id;
             data.creatorId = $("#record_modify_div #creator_id").val();
             data.groupId = $("#record_modify_div #group_id").val();
-            // console.log(data)
             $.ajax({
                 url: baseUrl + "/device/modify",
                 type: "POST",
@@ -412,7 +406,6 @@ var Page = function() {
                 contentType: "application/json;charset=UTF-8",
                 success: function (json){
                     if(json.code === 200){
-                        // console.log(111111111111111111)
                         alert("已经完成设备信息修改！");
                         window.location.reload();
                     } else {
@@ -441,7 +434,6 @@ var Page = function() {
             success: function (json) {
                 if (json.code === 200) {
                     user = json.result;
-                    // console.log(user);
                     document.getElementById('user_name').innerText = user.userName;
                     // 展开添加界面
                     if (user.id !== undefined){
@@ -488,7 +480,8 @@ var Page = function() {
 
 
 
-function getCookie(objName) {//获取指定名称的cookie的值
+function getCookie(objName) {
+    //获取指定名称的cookie的值
     var arrStr = document.cookie.split("; ");
     for (var i = 0; i < arrStr.length; i++) {
         var temp = arrStr[i].split("=");
@@ -503,6 +496,5 @@ function getUserIdStr(){
     if(localUserIdStr != null){
         userIdStr = localUserIdStr
     }
-    // console.log(userIdStr)
     return userIdStr
 }
