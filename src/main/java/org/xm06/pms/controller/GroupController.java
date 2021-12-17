@@ -111,6 +111,15 @@ public class GroupController extends BaseController {
         return success("查询成功", 200, group);
     }
 
+    @RequestMapping(value = "/queryLikeGroupName",produces = "application/json;charset=utf-8",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    @ApiOperation("根据小组名，模糊查询小组全部信息接口（分页前端做）")
+    @ApiImplicitParam(name = "groupName", value = "小组的名字", required = true,dataType = "String",dataTypeClass = String.class)
+    public ResultInfo queryLikeGroupName(String groupName) {
+        List<Group> list = groupService.findGroupAllInfoLikeGroupName(groupName);
+        return success("查询成功", 200, list);
+    }
+
 
     /**
      * 分页查找全部小组信息

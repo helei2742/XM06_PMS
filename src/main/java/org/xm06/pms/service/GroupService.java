@@ -141,6 +141,18 @@ public class GroupService {
     }
 
     /**
+     * 小组名模糊查找
+     * @param groupName
+     * @return
+     */
+    public List<Group> findGroupAllInfoLikeGroupName(String groupName) {
+        AssertUtil.isTrue(StringUtils.isBlank(groupName), "请输入正确小组名");
+        List<Group> list = groupMapper.findGroupLikeGroupName(groupName);
+        AssertUtil.isTrue(list == null, "该小组不存在");
+        return list;
+    }
+
+    /**
      * 获取小组总数
      * @return
      */
@@ -317,8 +329,6 @@ public class GroupService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void alterGroupInfo(Integer groupId, Integer userId, String groupName, String groupDesc) {
-
-        AssertUtil.isTrue(StringUtils.isBlank(groupName), "小组名不能为控");
 
         Integer dbGroupId = groupMapper.queryIdByName(groupName);
         AssertUtil.isTrue(dbGroupId!=null, groupName+"已被使用");

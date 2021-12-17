@@ -1,4 +1,4 @@
 spring:
   profiles:
     # 对应 application-dev.yml文件
-    active: prod
+    active: dev

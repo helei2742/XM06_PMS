@@ -120,6 +120,14 @@
     select * from xm06_t_group where group_name = #{groupName}
   </select>
 
+  <select id="findGroupLikeGroupName" resultMap="groupMap">
+    select * from xm06_t_group
+    where
+        group_name
+    LIKE
+        concat('%',#{projectName},'%')
+  </select>
+
   <insert id="userAddInGroup" parameterType="Integer">
     insert into xm06_t_user_group
     <trim prefix="(" suffix=")" suffixOverrides="," >

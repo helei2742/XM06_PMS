@@ -40,6 +40,13 @@ public interface GroupMapper extends BaseMapper<Group, Integer> {
     public Group findGroupByGroupName(String groupName);
 
     /**
+     * 名称模糊查找
+     * @param groupName
+     * @return
+     */
+    List<Group> findGroupLikeGroupName(String groupName);
+
+    /**
      * 根据小组id查找小组全部信息，包含成员信息
      * @param id
      * @return
@@ -79,4 +86,5 @@ public interface GroupMapper extends BaseMapper<Group, Integer> {
      * @return
      */
     List<Integer> queryMemberIdList(Integer groupId);
+
 }
