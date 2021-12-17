@@ -13,9 +13,9 @@ spring:
       write-dates-as-timestamps: true
   datasource:
     type: com.mchange.v2.c3p0.ComboPooledDataSource
-    driverClass: com.mysql.cj.jdbc.Driver
+    driverClass: com.mysql.jdbc.Driver
     user: root
-    password: 18789513633gtxy
+    password: 962464
     jdbcUrl: jdbc:mysql://localhost:3306/pms?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
 
   thymeleaf:
