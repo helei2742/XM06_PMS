@@ -5,6 +5,7 @@ jQuery(document).ready(function() {
 var date_flag = "";
 var resultList = [];
 var user = {};
+var create_user = {};
 
 // var baseURL = 'http://www.ylxteach.net/XM06';
 // var baseUrl = 'http://localhost:9000/XM06';
@@ -219,79 +220,97 @@ var Page = function() {
                                         for (i = 0; i < list.length; i++) {
                                             record = list[i];
                                             resultList.push(record);
-                                            if (item === 1){
-                                                html = html + "<tr class=\"active\">";
-                                                item++;
-                                            } else if (item === 2){
-                                                html = html + "<tr class=\"success\">";
-                                                item++;
-                                            } else if (item === 3){
-                                                html = html + "<tr class=\"warning\">";
-                                                item++;
-                                            } else {
-                                                html = html + "<tr class=\"danger\">";
-                                                item = 1;
-                                            }
-                                            html = html + "<td>";
-                                            html = html + record.deviceId;
-                                            html = html + "</td>";
-                                            html = html + "<td>"
-                                            html = html + record.deviceName;
-                                            html = html + "</td>";
-                                            html = html + "<td>"
-                                            html = html + record.groupId;
-                                            html = html + "</td>";
-                                            html = html + "<td>";
-                                            html = html + record.creatorId;
-                                            html = html + "</td>";
-                                            html = html + "<td>"
-                                            html = html + new Date(record.createDate);
-                                            html = html + "</td>";
-                                            html = html + "<td>";
-                                            html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
-                                            html = html + "</td>";
-                                            html = html + "</tr>";
+                                            var user_id = record.creatorId;
+                                            $.ajax({
+                                                url: baseUrl + "/user/queryUserById?userId=" + user_id,
+                                                type: "GET",
+                                                async: false,
+                                                success: function (json){
+                                                    create_user = json.result;
+                                                    if (item === 1){
+                                                        html = html + "<tr class=\"active\">";
+                                                        item++;
+                                                    } else if (item === 2){
+                                                        html = html + "<tr class=\"success\">";
+                                                        item++;
+                                                    } else if (item === 3){
+                                                        html = html + "<tr class=\"warning\">";
+                                                        item++;
+                                                    } else {
+                                                        html = html + "<tr class=\"danger\">";
+                                                        item = 1;
+                                                    }
+                                                    html = html + "<td>";
+                                                    html = html + record.deviceId;
+                                                    html = html + "</td>";
+                                                    html = html + "<td>"
+                                                    html = html + record.deviceName;
+                                                    html = html + "</td>";
+                                                    html = html + "<td>"
+                                                    html = html + record.groupId;
+                                                    html = html + "</td>";
+                                                    html = html + "<td>";
+                                                    html = html + create_user.userName;
+                                                    html = html + "</td>";
+                                                    html = html + "<td>"
+                                                    html = html + new Date(record.createDate);
+                                                    html = html + "</td>";
+                                                    html = html + "<td>";
+                                                    html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
+                                                    html = html + "</td>";
+                                                    html = html + "</tr>";
+                                                }
+                                            })
                                         }
                                     }
                                 } else {
                                     date_flag = "";
-
                                     if (list !== undefined && list.length > 0) {
                                         for (i = list.length - 1; i >= 0; i--) {
                                             record = list[i];
                                             resultList.push(record);
-                                            if (item === 1){
-                                                html = html + "<tr class=\"active\">";
-                                                item++;
-                                            } else if (item === 2){
-                                                html = html + "<tr class=\"success\">";
-                                                item++;
-                                            } else if (item === 3){
-                                                html = html + "<tr class=\"warning\">";
-                                                item++;
-                                            } else {
-                                                html = html + "<tr class=\"danger\">";
-                                                item = 1;
-                                            }
-                                            html = html + "<td>";
-                                            html = html + record.deviceId;
-                                            html = html + "</td>";
-                                            html = html + "<td>"
-                                            html = html + record.deviceName;
-                                            html = html + "</td>";
-                                            html = html + "<td>"
-                                            html = html + record.groupId;
-                                            html = html + "</td>";
-                                            html = html + "<td>";
-                                            html = html + record.creatorId;
-                                            html = html + "</td>";
-                                            html = html + "<td>"
-                                            html = html + new Date(record.createDate);
-                                            html = html + "</td>";
-                                            html = html + "<td>";
-                                            html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
-                                            html = html + "</td>";
-                                            html = html + "</tr>";
+                                            var user_id = record.creatorId;
+                                            $.ajax({
+                                                url: baseUrl + "/user/queryUserById?userId=" + user_id,
+                                                type: "GET",
+                                                async: false,
+                                                success: function (json){
+                                                    create_user = json.result;
+                                                    if (item === 1){
+                                                        html = html + "<tr class=\"active\">";
+                                                        item++;
+                                                    } else if (item === 2){
+                                                        html = html + "<tr class=\"success\">";
+                                                        item++;
+                                                    } else if (item === 3){
+                                                        html = html + "<tr class=\"warning\">";
+                                                        item++;
+                                                    } else {
+                                                        html = html + "<tr class=\"danger\">";
+                                                        item = 1;
+                                                    }
+                                                    html = html + "<td>";
+                                                    html = html + record.deviceId;
+                                                    html = html + "</td>";
+                                                    html = html + "<td>"
+                                                    html = html + record.deviceName;
+                                                    html = html + "</td>";
+                                                    html = html + "<td>"
+                                                    html = html + record.groupId;
+                                                    html = html + "</td>";
+                                                    var user_id = record.creatorId;
+                                                    html = html + "<td>";
+                                                    html = html + create_user.userName;
+                                                    html = html + "</td>";
+                                                    html = html + "<td>"
+                                                    html = html + new Date(record.createDate);
+                                                    html = html + "</td>";
+                                                    html = html + "<td>";
+                                                    html = html + "<div><a href=\"javascript:Page.onModifyRecord(" + record.id + ")\">【修改记录】</a><a href=\"javascript:Page.onDeleteRecord(" + record.id + ")\">【删除记录】</a><div>";
+                                                    html = html + "</td>";
+                                                    html = html + "</tr>";
+                                                }
+                                            })
                                         }
                                     }
                                 }
