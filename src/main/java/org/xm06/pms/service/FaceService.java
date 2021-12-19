@@ -35,6 +35,7 @@ public class FaceService {
 
     private final static String faceDetectorXML2URL =
             "D:\\ideaWorkSpace\\webhomework\\pms\\src\\main\\resources\\haarcascade_frontalface_alt.xml";
+
 //    private final static String faceDetectorXML2URL =
 //        "D:\\webapps\\teach\\yjykfsj2021\\XM06_res\\haarcascade_frontalface_alt.xml";
     private static CascadeClassifier faceCascade;
