@@ -28,4 +28,6 @@ public interface UserMapper extends BaseMapper<User, Integer> {
     Integer alterPassword(User user);
 
     Integer confirm(Integer userId);
+
+
 }

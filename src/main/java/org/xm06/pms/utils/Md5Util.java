@@ -20,8 +20,8 @@ public class Md5Util {
         }
     }
 
-    public static String getInvitationCode(String groupName, Integer managerId){
-        return encode(groupName + managerId);
+    public static String getInvitationCode(Integer groupId, Integer managerId){
+        return encode(groupId + "id"+managerId);
     }
 
 /*    *//**

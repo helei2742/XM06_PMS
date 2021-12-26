@@ -100,7 +100,7 @@ public class GroupService {
         Group group = groupMapper.selectByPrimaryKey(groupId);
         AssertUtil.isTrue(group == null, "该小组不存在");
         AssertUtil.isTrue(group.getManagerId()!=managerId, "小组id与管理员id不服");
-        return Md5Util.getInvitationCode(group.getGroupName(), group.getManagerId());
+        return Md5Util.getInvitationCode(group.getId(), group.getManagerId());
     }
 
     /**
@@ -186,7 +186,7 @@ public class GroupService {
 
         AssertUtil.isTrue(StringUtils.isBlank(invitationCode), "请输入邀请码");
 
-        String code = Md5Util.getInvitationCode(group.getGroupName(), group.getManagerId());
+        String code = Md5Util.getInvitationCode(group.getId(), group.getManagerId());
         AssertUtil.isTrue(!invitationCode.equals(code), "邀请码错误");
 
         boolean isContain = false;

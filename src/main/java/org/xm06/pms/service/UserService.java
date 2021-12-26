@@ -1,5 +1,6 @@
 package org.xm06.pms.service;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,27 @@ import org.xm06.pms.utils.AssertUtil;
 import org.xm06.pms.utils.Md5Util;
 import org.xm06.pms.utils.PhoneUtil;
 import org.xm06.pms.utils.UserIDBase64;
+import org.xm06.pms.vo.Group;
 import org.xm06.pms.vo.User;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService extends BaseService<User, Integer> {
 
     @Resource
     UserMapper userMapper;
+
+    @Autowired
+    GroupService groupService;
+
+    @Autowired
+    TaskService taskService;
+
+    @Autowired
+    ProjectService projectService;
 
     @Autowired
     private MailService mailService;
@@ -112,12 +124,14 @@ public class UserService extends BaseService<User, Integer> {
     }
 
     /**
-     * 修改用户信息，不包括修改密码
+     * 修改用户信息，不包括修改密码,只修改传入字段
      * @param user
      * @return
      */
-    public UserModel alter(User user) {
-        AssertUtil.isTrue(StringUtils.isBlank(user.getUserName()), "用户名不能为空");
+    @Transactional(propagation = Propagation.REQUIRED)
+    public UserModel alterUserInfo(User user) {
+//        AssertUtil.isTrue(StringUtils.isBlank(user.getUserName()), "用户名不能为空");
+//        AssertUtil.isTrue(StringUtils.isBlank(user.getTrueName()), "真实姓名不能为空");
         AssertUtil.isTrue(user.getPhone()!=null
                 && !PhoneUtil.isMobile(user.getPhone()), "请输入正确的手机号");
 
@@ -125,12 +139,16 @@ public class UserService extends BaseService<User, Integer> {
         AssertUtil.isTrue(selectById == null, "修改用户不存在");
 
         User selectByUsername = userMapper.findByUsername(user.getUserName());
+
         AssertUtil.isTrue(selectByUsername != null &&
                 selectById.getId() != selectByUsername.getId()
                 , "用户名已被使用");
 
         user.setUpdateDate(new Date());
-        AssertUtil.isTrue(userMapper.updateUserNoPwd(user)<1, "更新信息失败");
+        user.setCreateDate(null);
+        user.setEmail(null);
+        user.setValid(null);
+        AssertUtil.isTrue(userMapper.updateByPrimaryKeySelective(user)<1, "更新信息失败");
         return getUserModel(user);
     }
 
@@ -156,6 +174,43 @@ public class UserService extends BaseService<User, Integer> {
         user.setUserPwd(Md5Util.encode(newPwd));
         AssertUtil.isTrue(userMapper.alterPassword(user)<1, "修改密码失败");
     }
+
+
+    /**
+     * 删除账户
+     * @param userId
+     * @param userPwd
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void dropUser(Integer userId, String userPwd) {
+        AssertUtil.isTrue(StringUtils.isBlank(userPwd), "请输入密码");
+        User user = userMapper.selectByPrimaryKey(userId);
+        AssertUtil.isTrue(user==null, "不存在该用户");
+
+        String encode = Md5Util.encode(userPwd);
+        AssertUtil.isTrue(!user.getUserPwd().equals(encode), "密码输入错误");
+
+        //删除创建小组
+        List<Group> groups = groupService.queryMyGroup(userId);
+        for (Group group : groups) {
+            groupService.dissolveGroup(userId,group.getId(),userPwd);
+        }
+
+        //删除加入的小组记录
+
+        //删除创建任务
+
+        //删除任务提交记录
+
+        //删除创建项目
+
+        //删除项目提交记录
+
+
+        AssertUtil.isTrue(userMapper.deleteByPrimaryKey(userId)<1,"注销账户失败");
+    }
+
 
     public UserModel getUserModel(User user) {
         UserModel userModel = new UserModel();

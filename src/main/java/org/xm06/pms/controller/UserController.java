@@ -1,5 +1,6 @@
 package org.xm06.pms.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -7,10 +8,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.xm06.pms.base.BaseController;
 import org.xm06.pms.base.ResultInfo;
 import org.xm06.pms.model.UserModel;
@@ -64,12 +62,32 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "userName", value = "用户名", required = true, dataTypeClass = String.class),
             @ApiImplicitParam(name = "userPwd", value = "用户密码", required = true, dataTypeClass = String.class),
             @ApiImplicitParam(name = "email", value = "用户邮箱", required = true, dataTypeClass = String.class),
+            @ApiImplicitParam(name = "trueName", value = "真实姓名", required = true, dataTypeClass = String.class),
+            @ApiImplicitParam(name = "phone", value = "手机号", required = false, dataTypeClass = String.class),
     })
     public ResultInfo addUser(User user) {
         UserModel userModel = userService.addUser(user);
 
         systemRecordService.addRegisterCount();
         return success("注册成功,请前往邮箱确认", 200, userModel);
+    }
+
+    @PostMapping("/alterUserInfo")
+    @ResponseBody
+    @ApiOperation(value = "修改用户信息接口",notes = "需传入（ userName，trueName,phone ）(需修改传入值，否则不传或null) 与user的id（必传）,")
+    @ApiOperationSupport(includeParameters = {"user.userName","user.trueName","user.phone","user.id"})
+    public ResultInfo alterUserInfo(@RequestBody User user){
+        UserModel userModel = userService.alterUserInfo(user);
+        return success("", 200, userModel);
+    }
+
+    @PostMapping("/dropUser")
+    @ResponseBody
+    @ApiOperation(value = "删除用户接口(目前只顺带删除了用户创建的小组)",notes = "需传入user的id和账户密码userPwd（必传）")
+    @ApiOperationSupport(includeParameters = {"user.id","user.userPwd"})
+    public ResultInfo dropUser(@RequestBody User user){
+        userService.dropUser(user.getId(), user.getUserPwd());
+        return success("", 200, null);
     }
 
     @RequestMapping(value = "/queryUserById",produces = "application/json;charset=utf-8", method={RequestMethod.GET,RequestMethod.POST})
@@ -92,18 +110,6 @@ public class UserController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/alter",produces = "application/json;charset=utf-8",method={RequestMethod.GET,RequestMethod.POST})
-    @ResponseBody
-    @ApiOperation(value = "修改用户信息接口",notes = "不能修改密码")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userName", value = "用户名", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "phone", value = "用户手机号",  dataTypeClass = String.class),
-            @ApiImplicitParam(name = "trueName", value = "用户正式姓名",  dataTypeClass = String.class),
-    })
-    public ResultInfo alterUser(User user) {
-        UserModel alter = userService.alter(user);
-        return success("修改信息成功", 200, alter);
-    }
 
     @RequestMapping(value = "/alterPassword", produces = "application/json;charset=utf-8",method={RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
